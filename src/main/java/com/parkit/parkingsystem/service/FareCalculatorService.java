@@ -16,9 +16,6 @@ public class FareCalculatorService {
         double duration = ((test / 1000) / 60) / 60 ;
 
 
-
-
-        //TODO: Some tests are failing here. Need to check if this logic is correct
         //free 30 minutes
         if (duration <= 0.5) {
             ticket.setPrice(0);

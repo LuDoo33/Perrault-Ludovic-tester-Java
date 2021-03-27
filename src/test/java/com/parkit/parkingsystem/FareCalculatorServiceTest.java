@@ -7,6 +7,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -124,4 +125,44 @@ public class FareCalculatorServiceTest {
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
 
+    @Test
+    @DisplayName("Si le type de véhicule n'est pas identifié")
+    public void  calculateFareUnknowParking(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.TRUCK,false);
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        try{
+            fareCalculatorService.calculateFare(ticket,false);
+        }catch(Exception e){
+            final String expected = "Unkown Parking Type";
+            assertEquals(expected,e.getMessage());
+        }
+
+    }
+
+    @Test
+    @DisplayName("Gratuit les 30 premières minutes")
+    public void calculateFare30FreeTest(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - ( 01 * 30 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.BIKE,false);
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket,false);
+        fareCalculatorService.calculateFare(ticket,false);
+        assertEquals( 0 , ticket.getPrice());
+
+
+    }
+
+
+
 }
+

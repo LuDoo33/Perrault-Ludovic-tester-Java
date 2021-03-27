@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,6 +22,7 @@ public class ParkingDataBaseIT {
     private static ParkingSpotDAO parkingSpotDAO;
     private static TicketDAO ticketDAO;
     private static DataBasePrepareService dataBasePrepareService;
+    private static String registrationNumber = "ABCDEF";
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
@@ -37,7 +39,7 @@ public class ParkingDataBaseIT {
     @BeforeEach
     private void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(registrationNumber);
         dataBasePrepareService.clearDataBaseEntries();
     }
 
@@ -51,17 +53,17 @@ public class ParkingDataBaseIT {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         String vehiculeNumber = inputReaderUtil.readVehicleRegistrationNumber();
-        assertEquals(vehiculeNumber, ticketDAO.getTicket("ABCDEF").getVehicleRegNumber());
-        //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
+        assertEquals(vehiculeNumber, ticketDAO.getTicket(registrationNumber).getVehicleRegNumber());
     }
 
     @Test
-    @Disabled
-    public void testParkingLotExit(){
-//        testParkingACar();
+    public void testParkingLotExit() throws Exception {
+        testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
-        //TODO: check that the fare generated and out time are populated correctly in the database
+        assertNotNull(ticketDAO.getTicket(registrationNumber).getOutTime());
+        assertNotNull(ticketDAO.getTicket(registrationNumber).getPrice());
+
     }
 
 }

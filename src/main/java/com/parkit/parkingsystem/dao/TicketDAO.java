@@ -40,7 +40,7 @@ public class TicketDAO {
         }
     }
 
-    public boolean CheckExistID(String vehicleRegNumber) {
+    public boolean checkExistID(String vehicleRegNumber) {
         Connection con = null;
         boolean result = false;
 

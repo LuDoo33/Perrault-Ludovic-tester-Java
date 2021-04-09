@@ -11,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -43,13 +45,8 @@ public class ParkingDataBaseIT {
         dataBasePrepareService.clearDataBaseEntries();
     }
 
-    @AfterAll
-    private static void tearDown(){
-
-    }
-
     @Test
-    public void testParkingACar() throws Exception {
+    public void testParkingACarIt() throws Exception {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         String vehiculeNumber = inputReaderUtil.readVehicleRegistrationNumber();
@@ -57,13 +54,13 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingLotExit() throws Exception {
-        testParkingACar();
+    public void testParkingLotExitIt() throws Exception {
+        testParkingACarIt();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
         assertNotNull(ticketDAO.getTicket(registrationNumber).getOutTime());
+        TimeUnit.SECONDS.sleep(4);
         assertNotNull(ticketDAO.getTicket(registrationNumber).getPrice());
-
     }
 
 }

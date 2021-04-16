@@ -146,7 +146,7 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>com/parkit/parkingsystem/constants/**</exclude>
+                        <exclude>com/parkit/parkingsystem/constants/**</exclude>m
                         <exclude>com/parkit/parkingsystem/config/**</exclude>
                     </excludes>
                 </configuration>
@@ -173,7 +173,6 @@
                         <id>integration-test</id>
                         <goals>
                             <goal>test</goal>
-
                         </goals>
                         <phase>integration-test</phase>
                         <configuration>

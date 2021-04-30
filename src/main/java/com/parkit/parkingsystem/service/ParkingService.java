@@ -45,6 +45,9 @@ public class ParkingService {
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
+                if(ticketDAO.checkExistID(ticket.getVehicleRegNumber())){
+                    System.out.println("You are a regular customer, you get 5% discount");
+                }
             }
         }catch(Exception e){
             logger.error("Unable to process incoming vehicle",e);

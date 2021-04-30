@@ -7,6 +7,7 @@ public class FareCalculatorService {
 
     public void calculateFare(Ticket ticket, boolean vehicleExist){
 
+
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
@@ -23,12 +24,22 @@ public class FareCalculatorService {
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
                     //5% reduction if exist
-                    ticket.setPrice((vehicleExist)? duration * Fare.CAR_RATE_PER_HOUR * 0.95 : duration*Fare.CAR_RATE_PER_HOUR );
+                    if (vehicleExist){
+                        ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR * 0.95) ;
+                        System.out.println("You get 5% réduction");
+                    }else{
+                        ticket.setPrice(duration*Fare.CAR_RATE_PER_HOUR);
+                    }
                     break;
                 }
                 case BIKE: {
                     //5% reduction if exist
-                    ticket.setPrice((vehicleExist)? duration * Fare.BIKE_RATE_PER_HOUR * 0.95 : duration*Fare.BIKE_RATE_PER_HOUR);
+                    if (vehicleExist){
+                        ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR * 0.95) ;
+                        System.out.println("You get 5% réduction");
+                    }else{
+                        ticket.setPrice(duration*Fare.BIKE_RATE_PER_HOUR);
+                    }
                     break;
                 }
                 default:

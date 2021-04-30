@@ -22,12 +22,13 @@ public class FareCalculatorService {
         }else{
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
-                    double price = (vehicleExist == true)? duration * Fare.CAR_RATE_PER_HOUR * 0.95 : duration*Fare.CAR_RATE_PER_HOUR ;
-                    ticket.setPrice(price);
+                    //5% reduction if exist
+                    ticket.setPrice((vehicleExist)? duration * Fare.CAR_RATE_PER_HOUR * 0.95 : duration*Fare.CAR_RATE_PER_HOUR );
                     break;
                 }
                 case BIKE: {
-                    ticket.setPrice((vehicleExist == true)? duration * Fare.BIKE_RATE_PER_HOUR * 0.95 : duration*Fare.BIKE_RATE_PER_HOUR);
+                    //5% reduction if exist
+                    ticket.setPrice((vehicleExist)? duration * Fare.BIKE_RATE_PER_HOUR * 0.95 : duration*Fare.BIKE_RATE_PER_HOUR);
                     break;
                 }
                 default:

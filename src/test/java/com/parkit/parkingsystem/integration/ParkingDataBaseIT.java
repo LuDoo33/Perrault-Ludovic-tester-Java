@@ -59,8 +59,9 @@ public class ParkingDataBaseIT {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
         ticketDAO.getTicket(registrationNumber);
-        TimeUnit.SECONDS.sleep(5);
+        //TimeUnit.SECONDS.sleep(5);
         assertNotNull(ticketDAO.getTicket(registrationNumber).getPrice());
+        assertNotNull(ticketDAO.getTicket(registrationNumber).getOutTime());
     }
 
 }

@@ -50,10 +50,14 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testParkingLotExitIt() throws Exception {
-        testParkingACarIt();
+        //testParkingACarIt();
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("Test");
+
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processExitingVehicle();
-        Ticket ticket = ticketDAO.getTicket(registrationNumber);
+        parkingService.processIncomingVehicle();
+        String vehiculeNumber = inputReaderUtil.readVehicleRegistrationNumber();
+
+        Ticket ticket = ticketDAO.getTicket(vehiculeNumber);
         Date date = ticket.getInTime();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -61,13 +65,16 @@ public class ParkingDataBaseIT {
         Date newDate = c.getTime();
 
         ticket.setInTime(newDate);
-        ticketDAO.saveTicket(ticket);
+        ticketDAO.updateTicket(ticket);
+
+        parkingService.processExitingVehicle();
 
 
         //TimeUnit.SECONDS.sleep(5);
-        assertNotNull(ticketDAO.getTicket(registrationNumber).getPrice());
-        assertNotNull(ticketDAO.getTicket(registrationNumber).getOutTime());
+        assertNotNull(ticketDAO.getTicket(vehiculeNumber).getPrice());
+        assertNotNull(ticketDAO.getTicket(vehiculeNumber).getOutTime());
     }
+
 
     @Test
     public void testParkingACarIt() throws Exception {
@@ -76,7 +83,6 @@ public class ParkingDataBaseIT {
         String vehiculeNumber = inputReaderUtil.readVehicleRegistrationNumber();
         assertEquals(vehiculeNumber, ticketDAO.getTicket(registrationNumber).getVehicleRegNumber());
     }
-
 
 
 }

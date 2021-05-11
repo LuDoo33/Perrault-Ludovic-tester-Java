@@ -175,7 +175,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket,false);
-        // Vérification du prix
+        // Vérification du prix voiture sur 24h
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
 
@@ -196,26 +196,24 @@ public class FareCalculatorServiceTest {
             final String expected = "Unkown Parking Type";
             assertEquals(expected,e.getMessage());
         }
-
     }
 
     @Test
     @DisplayName("Test des 30 premières minutes")
     public void calculateFare30FreeTest(){
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - ( 01 * 30 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
+        inTime.setTime( System.currentTimeMillis() - ( 01 * 30 * 60 * 1000) );
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.BIKE,false);
+        
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket,false);
         fareCalculatorService.calculateFare(ticket,false);
-        // Vérification que
+        // Vérification des 30 premiers minutes gratuites
         assertEquals( 0 , ticket.getPrice());
-
-
     }
-    
+
 }
 

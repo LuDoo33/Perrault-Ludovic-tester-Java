@@ -18,8 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,32 +44,44 @@ public class ParkingDataBaseIT {
 
     @BeforeEach
     private void setUpPerTest() throws Exception {
+        // Simulation de la saisie utilisateur : CAR
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(registrationNumber);
+        //Nettoyage de la base de donnée
         dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test
+    @DisplayName("Test de d'entrée du véhicule de type CAR")
     public void testParkingLotExitIt() throws Exception {
+        //Execution du testParkingACarIt pour simuler un nouveau véhicule
         testParkingACarIt();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+        // Pause du thread pour obtenir une date differente entre  l'arrivé du véhicule et la sortie de celui-ci
         Thread.sleep(1000);
+        // Processus de sortie du véhicule.
         parkingService.processExitingVehicle();
         ticketDAO.getTicket(registrationNumber);
 
         int availableSlot = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
-
-        assertNotNull(ticketDAO.getTicket(registrationNumber).getPrice());
+        // Vérication que le prix du ticket est à 0
+        assertEquals(0,ticketDAO.getTicket(registrationNumber).getPrice());
+        // Vérification que le slot est disponible.
         assertEquals(1, availableSlot);
-        assertNotNull(ticketDAO.getTicket(registrationNumber).getOutTime());
+        // Vérification qu'une date de sortie n'est pas égal à la date d'entrée
+        assertNotEquals(ticketDAO.getTicket(registrationNumber).getInTime(),ticketDAO.getTicket(registrationNumber).getOutTime());
     }
 
 
     @Test
+    @DisplayName("Test de d'entrée du véhicule de type CAR")
     public void testParkingACarIt() throws Exception {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        // Processus d"entrée du véhicule.
         parkingService.processIncomingVehicle();
         String vehiculeNumber = inputReaderUtil.readVehicleRegistrationNumber();
+        // Vérification entre le numéro du ticket fournis et celui présent en base de donnée
         assertEquals(vehiculeNumber, ticketDAO.getTicket(registrationNumber).getVehicleRegNumber());
     }
 

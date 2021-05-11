@@ -17,13 +17,13 @@ public class FareCalculatorService {
         double duration = ((test / 1000) / 60) / 60 ;
 
 
-        //free 30 minutes
+        //Gratuit les 30 premières minutes
         if (duration <= 0.5) {
             ticket.setPrice(0);
         }else{
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
-                    //5% reduction if exist
+                    //5% reduction si la voiture existe.
                     if (vehicleExist){
                         ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR * 0.95) ;
                         System.out.println("You get 5% réduction");
@@ -33,7 +33,7 @@ public class FareCalculatorService {
                     break;
                 }
                 case BIKE: {
-                    //5% reduction if exist
+                    //5% reduction si la moto existe.
                     if (vehicleExist){
                         ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR * 0.95) ;
                         System.out.println("You get 5% réduction");

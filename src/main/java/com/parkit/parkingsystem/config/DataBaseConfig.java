@@ -2,7 +2,6 @@ package com.parkit.parkingsystem.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.sonatype.plexus.components.sec.dispatcher.model.ConfigProperty;
 
 import java.io.*;
 import java.sql.*;

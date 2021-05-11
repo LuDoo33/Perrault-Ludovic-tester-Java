@@ -1,20 +1,11 @@
 package com.parkit.parkingsystem.util;
 
-
-import com.parkit.parkingsystem.service.InteractiveShell;
-import com.parkit.parkingsystem.util.InputReaderUtil;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
-
-import static org.mockito.Mockito.when;
-
 
 public class InputReaderUtilTest {
 

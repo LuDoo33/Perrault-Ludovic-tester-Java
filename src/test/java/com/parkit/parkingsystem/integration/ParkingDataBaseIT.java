@@ -4,6 +4,7 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
+import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.*;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,6 +49,27 @@ public class ParkingDataBaseIT {
     }
 
     @Test
+    public void testParkingLotExitIt() throws Exception {
+        testParkingACarIt();
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processExitingVehicle();
+        Ticket ticket = ticketDAO.getTicket(registrationNumber);
+        Date date = ticket.getInTime();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.HOUR,-1);
+        Date newDate = c.getTime();
+
+        ticket.setInTime(newDate);
+        ticketDAO.saveTicket(ticket);
+
+
+        //TimeUnit.SECONDS.sleep(5);
+        assertNotNull(ticketDAO.getTicket(registrationNumber).getPrice());
+        assertNotNull(ticketDAO.getTicket(registrationNumber).getOutTime());
+    }
+
+    @Test
     public void testParkingACarIt() throws Exception {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
@@ -53,15 +77,6 @@ public class ParkingDataBaseIT {
         assertEquals(vehiculeNumber, ticketDAO.getTicket(registrationNumber).getVehicleRegNumber());
     }
 
-    @Test
-    public void testParkingLotExitIt() throws Exception {
-        testParkingACarIt();
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processExitingVehicle();
-        ticketDAO.getTicket(registrationNumber);
-        //TimeUnit.SECONDS.sleep(5);
-        assertNotNull(ticketDAO.getTicket(registrationNumber).getPrice());
-        assertNotNull(ticketDAO.getTicket(registrationNumber).getOutTime());
-    }
+
 
 }

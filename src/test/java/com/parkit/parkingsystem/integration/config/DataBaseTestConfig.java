@@ -4,22 +4,37 @@ import com.parkit.parkingsystem.config.DataBaseConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 public class DataBaseTestConfig extends DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
 
-    public Connection getConnection() {
+    public Connection getConnection() throws SQLException {
         logger.info("Create DB connection");
+        String user = null;
+        String pass = null;
+        Properties properties = new Properties();
+        String path = "./src/test/resources/Config.properties";
+
         try{
+            FileInputStream test = new FileInputStream(new File(path));
+            properties.load(test);
+            user = properties.getProperty("username");
+            pass = properties.getProperty("password");
             Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC","root","root");
-        }catch( ClassNotFoundException | SQLException e){
-            logger.error(e.getMessage());
+            test.close();
+
+        }catch( IOException | ClassNotFoundException e ){
+            logger.error(e);
         }
-    return null;
+        return DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/prod?useLegacyDatetimeCode=false&serverTimezone=UTC",user,pass);
+
     }
 
     public void closeConnection(Connection con){

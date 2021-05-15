@@ -47,14 +47,14 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    @DisplayName("Test de d'entrée du véhicule de type CAR")
+    @DisplayName("Test de sortie du véhicule")
     public void testParkingLotExitIt() throws Exception {
         //Execution du testParkingACarIt pour simuler un nouveau véhicule
         testParkingACarIt();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
         // Pause du thread pour obtenir une date differente entre  l'arrivé du véhicule et la sortie de celui-ci
-        Thread.sleep(1000);
+       // Thread.sleep(1000);
         // Processus de sortie du véhicule.
         parkingService.processExitingVehicle();
         ticketDAO.getTicket(registrationNumber);
@@ -70,7 +70,7 @@ public class ParkingDataBaseIT {
 
 
     @Test
-    @DisplayName("Test de d'entrée du véhicule de type CAR")
+    @DisplayName("Test de d'entrée du véhicule")
     public void testParkingACarIt() throws Exception {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         // Processus d"entrée du véhicule.

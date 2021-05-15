@@ -33,7 +33,7 @@ public class DataBaseTestConfig extends DataBaseConfig {
             logger.error(e);
         }
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/prod?useLegacyDatetimeCode=false&serverTimezone=UTC",user,pass);
+                "jdbc:mysql://db4free.net:3306/test_projet4?useLegacyDatetimeCode=false&serverTimezone=UTC",user,pass);
 
     }
 

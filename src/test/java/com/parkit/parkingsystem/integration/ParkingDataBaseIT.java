@@ -62,10 +62,10 @@ public class ParkingDataBaseIT {
         int availableSlot = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
         // Vérication que le prix du ticket est à 0
         assertEquals(0,ticketDAO.getTicket(registrationNumber).getPrice());
-        // Vérification que le slot est disponible.
+        // Vérification que la place de parking est disponible.
         assertEquals(1, availableSlot);
-        // Vérification qu'une date de sortie n'est pas égal à la date d'entrée
-        assertNotEquals(ticketDAO.getTicket(registrationNumber).getInTime(),ticketDAO.getTicket(registrationNumber).getOutTime());
+        // Vérification qu'une date de sortie existe'
+        assertNotNull(ticketDAO.getTicket(registrationNumber).getOutTime());
     }
 
 

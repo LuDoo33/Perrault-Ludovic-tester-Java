@@ -108,7 +108,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
@@ -133,12 +132,12 @@
                     <execution>
                         <goals>
                             <goal>prepare-agent</goal>
-                            <goal> report-integration</goal>
+                            <goal>report-integration</goal>
                         </goals>
                     </execution>
                     <execution>
                         <id>jacoco-report</id>
-                        <phase>test</phase>
+                        <phase>site</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
@@ -184,11 +183,24 @@
                             </includes>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>site</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <phase>site</phase>
+                        <configuration>
+                            <excludes>
+                                <exclude>none</exclude>
+                            </excludes>
+                            <includes>
+                                <include>**/*IT.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
-
         </plugins>
-
     </build>
 
     <reporting>
@@ -210,5 +222,4 @@
             </plugin>
         </plugins>
     </reporting>
-
 </project>

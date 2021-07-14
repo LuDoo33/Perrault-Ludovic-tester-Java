@@ -10,8 +10,8 @@ public class FareCalculatorService {
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
 
-        long inTime = ticket.getInTime().getTime(); // Time in milliseconds
-        long outTime = ticket.getOutTime().getTime(); // Time in milliseconds
+        long inTime = ticket.getInTime().getTime();
+        long outTime = ticket.getOutTime().getTime();
 
         double durationTime = (double) outTime - (double) inTime;
         // milliseconds - (/1000) -> seconds - (/60) -> minutes - (/60) -> hours

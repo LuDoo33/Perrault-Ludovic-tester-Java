@@ -48,22 +48,32 @@ public class ParkingDataBaseIT {
 
     }
 
+    
     @Test
     void testParkingACar() {
+    	
+    	// TODO : vérifier qu'un ticket est bien enregistré dans la base de données et que la table Parking est mise à jour en fonction des disponibilités
+    	
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
-        // Cette place est celle utilisée dans le bouchon de saisie de plaque, à l'entrée d'un véhicule
+        
+        // Cette place est celle utilisée dans le setup, à l'entrée du véhicule au moment du test
         Assertions.assertTrue(dataBasePrepareService.ticketExistsForVehicleRegNumber("ABCDEF"));
-        // La DB étant purgé avant, la place affectée est censé être la # 1
+        
+        // La DB étant purgé avant, la place affectée est censé être la numéro 1
         Assertions.assertFalse(dataBasePrepareService.slotAvailable(1));
     }
 
     @Test
     void testParkingLotExit() {
+    	
+    	// TODO : vérifier que le tarif généré et l'heure de sortie sont correctement renseignés dans la base de données
+    	
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
-        // Si le véhicule est sorti, le ticket doit avoir ces 2 colonne non nulles
+        
+        // Si le véhicule est sorti, le ticket doit avoir les colonne price et out time non nulles
         Assertions.assertTrue(dataBasePrepareService.checkPriceAndOutTimeNotNull("ABCDEF"));
     }
 

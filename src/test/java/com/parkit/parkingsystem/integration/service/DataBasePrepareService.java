@@ -29,6 +29,11 @@ public class DataBasePrepareService {
         }
     }
 
+    /**
+     * Connect to DB and send SQL request to find out if the vehicle plate exists
+     * @param vehicleRegNumber
+     * @return true or false
+     */
     public boolean ticketExistsForVehicleRegNumber(final String vehicleRegNumber) {
         try (Connection connection = dataBaseTestConfig.getConnection()) {
             final PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) as quantity FROM ticket WHERE ticket.VEHICLE_REG_NUMBER = ?");
@@ -45,9 +50,14 @@ public class DataBasePrepareService {
         }
     }
 
+    /**
+     * Connect to DB and send SQL request to find out if the slot is available or not
+     * @param parkingNumber
+     * @return true or false
+     */
     public boolean slotAvailable(final int parkingNumber) {
         try (Connection connection = dataBaseTestConfig.getConnection()) {
-            final PreparedStatement ps = connection.prepareStatement("select * from parking where PARKING_NUMBER = ?;");
+            final PreparedStatement ps = connection.prepareStatement("SELECT * FROM parking WHERE PARKING_NUMBER = ?;");
             ps.setInt(1, parkingNumber);
             final ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -61,12 +71,16 @@ public class DataBasePrepareService {
         }
     }
 
-    public boolean checkPriceAndOutTimeNotNull(String parkingNumber) {
+    /**
+     * Connect to DB and send SQL request to find out if the column price and out time are well informed for the vehicle plate
+     * @param vehicleRegNumber
+     * @return true or false
+     */
+    public boolean checkPriceAndOutTimeNotNull(String vehicleRegNumber) {
         try (Connection connection = dataBaseTestConfig.getConnection()) {
-            final PreparedStatement ps = connection.prepareStatement(
-                    "select count(*) as quantity from ticket where VEHICLE_REG_NUMBER = ? and price is not null and out_time is not null;");
-            ps.setString(1, parkingNumber);
-            final ResultSet rs = ps.executeQuery();
+            final PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) as quantity FROM ticket WHERE VEHICLE_REG_NUMBER = ? and price is not null and out_time is not null;");
+            ps.setString(1, vehicleRegNumber);
+            final ResultSet rs = ps.executeQuery();     
             if (rs.next()) {
                 return rs.getInt("quantity") > 0;
             } else {

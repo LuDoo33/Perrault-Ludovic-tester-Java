@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.NoSuchElementException;
 
 public class TicketDAO {
 
@@ -19,7 +20,8 @@ public class TicketDAO {
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-    public boolean saveTicket(Ticket ticket){
+    @SuppressWarnings("finally")
+	public boolean saveTicket(Ticket ticket){
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
@@ -40,7 +42,8 @@ public class TicketDAO {
         }
     }
 
-    public Ticket getTicket(String vehicleRegNumber) {
+    @SuppressWarnings("finally")
+	public Ticket getTicket(String vehicleRegNumber) {
         Connection con = null;
         Ticket ticket = null;
         try {
@@ -85,5 +88,25 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+    
+    public int countByVehicleRegNumber(final String vehicleRegNumber) throws Exception {
+        final int result;
+        try (Connection con = dataBaseConfig.getConnection()) {
+            final PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) as quantity FROM ticket WHERE ticket.VEHICLE_REG_NUMBER = ?");
+            ps.setString(1, vehicleRegNumber);
+            final ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt("quantity");
+            } else {
+                throw new NoSuchElementException("Empty ResultSet");
+            }
+        }catch (Exception ex){
+            logger.error("Error counting tickets by Vehicle Reg Number",ex);
+            throw new Exception("Error counting tickets by Vehicle Reg Number", ex);
+        }finally {
+            dataBaseConfig.closeConnection(dataBaseConfig.getConnection());
+        }
+        return result;
     }
 }

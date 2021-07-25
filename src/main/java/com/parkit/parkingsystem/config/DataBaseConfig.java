@@ -12,8 +12,10 @@ public class DataBaseConfig {
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         logger.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
+        String password = "rootroot";
+        String user = "root";
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/prod","root","rootroot");
+                "jdbc:mysql://localhost:3306/prod?serverTimezone=UTC",user,password);
     }
 
     public void closeConnection(Connection con){

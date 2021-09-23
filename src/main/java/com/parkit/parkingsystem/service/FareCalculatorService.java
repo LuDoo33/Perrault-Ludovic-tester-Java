@@ -11,15 +11,13 @@ public class FareCalculatorService {
 		}
 
 		/*******
-		 * getTime() is in milliseconds 
-		 * type of getTime() is long
+		 * getTime() is in milliseconds type of getTime() is long
 		 */
 		long inHour = ticket.getInTime().getTime();
 		long outHour = ticket.getOutTime().getTime();
 
 		/*******
-		 * get duration is in ms 
-		 * type of duration must be double
+		 * get duration is in ms type of duration must be double
 		 */
 		double duration = outHour - inHour;
 

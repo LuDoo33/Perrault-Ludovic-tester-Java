@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -28,6 +29,7 @@ public class ParkingDataBaseIT {
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static DataBasePrepareService dataBasePrepareService;
     private static Ticket ticket;
+    private static ParkingSpot parkingSpot;
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
@@ -45,8 +47,9 @@ public class ParkingDataBaseIT {
         ticketDAO = new TicketDAO();
         ticketDAO.dataBaseConfig = dataBaseTestConfig;
         dataBasePrepareService = new DataBasePrepareService();
-       
+        
         ticket= new Ticket();
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
     }
 
@@ -60,6 +63,7 @@ public class ParkingDataBaseIT {
         
 		when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(true);
 		
+		ticket.setParkingSpot(parkingSpot);
 		
         dataBasePrepareService.clearDataBaseEntries();
     }
@@ -80,6 +84,17 @@ public class ParkingDataBaseIT {
          */
         verify(ticketDAO, Mockito.times(1)).saveTicket(any(Ticket.class));
         assertTrue(ticketDAO.saveTicket(ticket));
+        
+        /*
+         *Verify that a Parking table is update 
+         */
+        verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
+        assertTrue(parkingSpotDAO.updateParking(parkingSpot));
+        
+        /*
+         *Check that a Parking is actually not available
+         */
+        assertFalse(parkingSpot.isAvailable());
     }
 
     @Test

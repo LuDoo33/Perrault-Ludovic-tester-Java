@@ -21,19 +21,25 @@ public class FareCalculatorService {
 		 */
 		double duration = outHour - inHour;
 
-		switch (ticket.getParkingSpot().getParkingType()) {
-		case CAR: {
+		// Free if 30-min parking
+		if (duration > 30 * 60 * 1000) {
+			switch (ticket.getParkingSpot().getParkingType()) {
+			case CAR: {
 
-			ticket.setPrice(duration / (60 * 60 * 1000) * Fare.CAR_RATE_PER_HOUR);
+				ticket.setPrice(duration / (60 * 60 * 1000) * Fare.CAR_RATE_PER_HOUR);
 
-			break;
+				break;
+			}
+			case BIKE: {
+				ticket.setPrice(duration / (60 * 60 * 1000) * Fare.BIKE_RATE_PER_HOUR);
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unkown Parking Type");
+			}
+		} else {
+			ticket.setPrice(0);
 		}
-		case BIKE: {
-			ticket.setPrice(duration / (60 * 60 * 1000) * Fare.BIKE_RATE_PER_HOUR);
-			break;
-		}
-		default:
-			throw new IllegalArgumentException("Unkown Parking Type");
-		}
+
 	}
 }

@@ -31,13 +31,14 @@ public class TicketDAO {
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
             ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
-            return ps.execute();
+            ps.execute();
+            return true;
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return false;
         }
+        return false;
     }
 
     public Ticket getTicket(String vehicleRegNumber) {
@@ -86,4 +87,28 @@ public class TicketDAO {
         }
         return false;
     }
+
+    public boolean isRecurrentUser(String vehicleRegNumber) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            ps = con.prepareStatement(DBConstants.IS_RECURRENT_USER);
+            ps.setString(1,vehicleRegNumber);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt(1) > 0;
+            }
+
+        }catch (Exception ex){
+            logger.error("Error checking recurrent user",ex);
+        }finally {
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+            dataBaseConfig.closeConnection(con);
+        }
+        return false;
+    }
+
 }

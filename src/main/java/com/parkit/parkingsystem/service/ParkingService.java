@@ -14,17 +14,16 @@ import java.util.Date;
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
-
-    private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
-
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
-    private  TicketDAO ticketDAO;
+    private TicketDAO ticketDAO;
+    private FareCalculatorService fareCalculatorService;
 
-    public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
+    public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO,FareCalculatorService fareCalculatorService){
         this.inputReaderUtil = inputReaderUtil;
         this.parkingSpotDAO = parkingSpotDAO;
         this.ticketDAO = ticketDAO;
+        this.fareCalculatorService=fareCalculatorService;
     }
 
     public void processIncomingVehicle() {
@@ -32,6 +31,9 @@ public class ParkingService {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
+                if (IsRecurrentUser(vehicleRegNumber)){
+                    System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+                }
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
@@ -116,5 +118,9 @@ public class ParkingService {
         }catch(Exception e){
             logger.error("Unable to process exiting vehicle",e);
         }
+    }
+
+    private boolean IsRecurrentUser(String vehicleRegNumber){
+        return ticketDAO.isRecurrentUser(vehicleRegNumber);
     }
 }

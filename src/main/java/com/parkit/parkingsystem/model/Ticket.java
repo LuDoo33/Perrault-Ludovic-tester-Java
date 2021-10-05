@@ -7,6 +7,7 @@ public class Ticket {
     private int id;
     private ParkingSpot parkingSpot;
     private String vehicleRegNumber;
+    private boolean recuringMember;
     private double price;
     private Date inTime;
     private Date outTime;
@@ -57,5 +58,13 @@ public class Ticket {
 
     public void setOutTime(Date outTime) {
         this.outTime = outTime;
+    }
+    
+    public void setRecuringMember(boolean recuringMember) {
+    	this.recuringMember = recuringMember;
+    }
+    
+    public boolean isRecuringMember() {
+    	return this.recuringMember;
     }
 }

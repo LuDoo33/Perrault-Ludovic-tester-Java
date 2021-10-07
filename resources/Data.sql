@@ -4,7 +4,7 @@ use prod;
 
 create table parking(
 PARKING_NUMBER int PRIMARY KEY,
-AVAILABLE bool NOT NULL,
+AVAILABLE boolean NOT NULL,
 TYPE varchar(10) NOT NULL
 );
 
@@ -31,7 +31,7 @@ use test;
 
 create table parking(
 PARKING_NUMBER int PRIMARY KEY,
-AVAILABLE bool NOT NULL,
+AVAILABLE boolean NOT NULL,
 TYPE varchar(10) NOT NULL
 );
 

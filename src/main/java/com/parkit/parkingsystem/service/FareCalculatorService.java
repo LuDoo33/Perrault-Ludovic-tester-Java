@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
 /**
@@ -21,13 +22,33 @@ public class FareCalculatorService {
 
         int durationWithoutBonusTime = this.bonusTime(duration);
 
+        double discount = 5.0;
+        double priceDiscount;
+        boolean isRecurrent = false;
+        double price;
+
+        TicketDAO ticketDAO = new TicketDAO();
+        if (2 <= ticketDAO.countTicket(ticket.getVehicleRegNumber())) {
+            isRecurrent = true;
+        }
+
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
-                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                price = duration * Fare.CAR_RATE_PER_HOUR;
+                if (isRecurrent) {
+                    ticket.setPrice(price - this.discount(price, discount));
+                } else {
+                    ticket.setPrice(price);
+                }
                 break;
             }
             case BIKE: {
-                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+                price = duration * Fare.BIKE_RATE_PER_HOUR;
+                if (isRecurrent) {
+                    ticket.setPrice(price - this.discount(price, discount));
+                } else {
+                    ticket.setPrice(price);
+                }
                 break;
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");
@@ -42,5 +63,13 @@ public class FareCalculatorService {
         }
 
         return 1;
+    }
+
+    public double discount(double intialPrice, double discount) {
+        if (0 != discount) {
+            return intialPrice - (intialPrice * discount)/100;
+        }
+
+        return 0;
     }
 }

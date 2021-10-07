@@ -47,11 +47,11 @@ public class ParkingService {
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
                 System.out.println("Generated Ticket and saved in DB");
-                System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
-                System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:"+inTime);
+                System.out.println("Please park your vehicle in spot number: " + parkingSpot.getId());
+                System.out.println("Recorded in-time for vehicle number: " + vehicleRegNumber + " is: "+inTime);
             }
         }catch(Exception e){
-            logger.error("Unable to process incoming vehicle", e);
+            logger.error("Unable to process incoming vehicle ", e);
         }
     }
 
@@ -72,9 +72,9 @@ public class ParkingService {
                 throw new Exception("Error fetching parking number from DB. Parking slots might be full");
             }
         }catch(IllegalArgumentException ie){
-            logger.error("Error parsing user input for type of vehicle", ie);
+            logger.error("Error parsing user input for type of vehicle ", ie);
         }catch(Exception e){
-            logger.error("Error fetching next available parking slot", e);
+            logger.error("Error fetching next available parking slot ", e);
         }
         return parkingSpot;
     }
@@ -109,13 +109,13 @@ public class ParkingService {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
-                System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
+                System.out.println("Please pay the parking fare: " + ticket.getPrice());
+                System.out.println("Recorded out-time for vehicle number: " + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");
             }
         }catch(Exception e){
-            logger.error("Unable to process exiting vehicle", e);
+            logger.error("Unable to process exiting vehicle ", e);
         }
     }
 }

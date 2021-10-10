@@ -19,13 +19,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.parkit.parkingsystem.constants.ParkingType;
-import com.parkit.parkingsystem.dao.ParkingSpotDAO;
-import com.parkit.parkingsystem.dao.TicketDAO;
-import com.parkit.parkingsystem.model.ParkingSpot;
-import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.service.ParkingService;
-import com.parkit.parkingsystem.util.InputReaderUtil;
+import com.parkit.parkingsystem.constants.*;
+import com.parkit.parkingsystem.dao.*;
+import com.parkit.parkingsystem.model.*;
+import com.parkit.parkingsystem.service.*;
+import com.parkit.parkingsystem.util.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
@@ -177,6 +175,7 @@ public class ParkingServiceTest {
 
 		Ticket ticket = new Ticket();
 		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
+		ticket.setOutTime(new Date());
 		ticket.setParkingSpot(parkingSpot);
 		ticket.setVehicleRegNumber("ABCDEF");
 

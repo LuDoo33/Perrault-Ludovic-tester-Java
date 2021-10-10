@@ -3,16 +3,16 @@ package com.parkit.parkingsystem.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
+import java.sql.Connection;
 import java.util.Date;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
@@ -23,58 +23,94 @@ public class TicketDAOTest {
 
 	private static TicketDAO ticketDAO;
 	private static Ticket ticket;
-	private static Date inTime;
-	private static Date outTime;
+	
 
-	public DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+	public static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+	Connection con = null;
+	private static final Logger logger = LogManager.getLogger("TicketDAOTest");
 
-	@Mock
 	private static ParkingSpot parkingSpot;
+
+	@BeforeAll
+	private static void setUp() throws Exception {
+		ticketDAO = new TicketDAO();
+		ticket = new Ticket();
+		ticketDAO.dataBaseConfig = dataBaseTestConfig;
+
+	}
 
 	@BeforeEach
 	public void setUpPerTest() {
-		ticketDAO = new TicketDAO();
-		ticket = new Ticket();
+		try {
+			con = dataBaseTestConfig.getConnection();
+		} catch (Exception ex) {
+			logger.error("Error connecting to data base", ex);
 
+		}
+	}
+
+	@AfterEach
+	private void tearDownPerTest() {
+		dataBaseTestConfig.closeConnection(con);
 	}
 
 	/*
-	 * Test that the ticket is not saved
+	 * check that this operation does not save the Ticket in DB
 	 */
 	@Test
-	public void saveTicketTest() {
+	public void saveTicketTest() throws Exception {
+
 		// GIVEN
-		parkingSpot = mock(ParkingSpot.class);
+		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
-		inTime = new Date(System.currentTimeMillis() - (60 * 60 * 1000));
-		outTime = new Date();
-
-		ticket.setParkingSpot(parkingSpot);
-		ticket.setVehicleRegNumber("ABCDEF");
-		ticket.setInTime(inTime);
-		ticket.setOutTime(outTime);
-		ticket.setPrice(1.5);
+		Date inTime = new Date();
+		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
+		Date outTime = new Date();
+		outTime.setTime(System.currentTimeMillis());
 
 		// WHEN
-		boolean saved = ticketDAO.saveTicket(ticket);
+		ticketDAO.saveTicket(ticket);
 
 		// THEN
-		assertFalse(saved);
-		verify(parkingSpot, times(1)).getId();
+		assertFalse(ticketDAO.saveTicket(ticket));
+
 	}
 
 	/*
-	 * Check that getTicket method take vehicle reg number as parameter
+	 * the following test should return an Exception when the date of inTime and
+	 * outTime are null
+	 */
+	@Test
+	public void saveTicketTest_shouldReturnException() {
+
+		// GIVEN
+		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+
+		try {
+			Date inTime = new Date();
+			inTime.setTime(0);
+			Date outTime = new Date();
+			outTime.setTime(0);
+
+			// WHEN
+			ticketDAO.saveTicket(ticket);
+
+			// THEN
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			assertTrue(e.getMessage().contains("Error fetching next available slot"));
+		}
+
+	}
+
+	/*
+	 * Check that getTicket method take vehicle register number as parameter
 	 */
 	@Test
 	public void getTicketTest() {
-		// GIVEN
-		parkingSpot = mock(ParkingSpot.class);
-		
 
-		when(parkingSpot.getId()).thenReturn(1);
-		when(parkingSpot.getParkingType()).thenReturn(ParkingType.CAR);
-		when(parkingSpot.isAvailable()).thenReturn(false);
+		// GIVEN
+		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
 		ticket.setParkingSpot(parkingSpot);
 		ticket.setVehicleRegNumber("ABCDEF");
@@ -89,10 +125,9 @@ public class TicketDAOTest {
 
 	@Test
 	public void updateTicketTest() {
-		// GIVEN
-		ticket = new Ticket();
 
-		outTime = new Date();
+		// GIVEN
+		Date outTime = new Date();
 		ticket.setOutTime(outTime);
 		ticket.setPrice(1.5);
 
@@ -104,10 +139,32 @@ public class TicketDAOTest {
 	}
 
 	/*
+	 * the updateTicket should failure when the date of out time is null
+	 */
+
+	@Test
+	public void updateTicketTest_shouldReturnNullPointerException() {
+
+		// GIVEN
+		// ALL is already done in Before Each and Before All!
+
+		// WHEN
+		try {
+			ticket.setOutTime(null);
+			ticketDAO.updateTicket(ticket);
+		} catch (NullPointerException e) {
+			// THEN
+			assertTrue(e instanceof NullPointerException);
+			assertFalse(ticketDAO.updateTicket(ticket));
+		}
+	}
+
+	/*
 	 * Check that a vehicle register number is for a recurring user
 	 */
 	@Test
 	public void isRecurringTest_forRecurringUser_shouldReturnTrue() {
+
 		// GIVEN
 		ticket.setVehicleRegNumber("ABCDEF");
 
@@ -123,6 +180,7 @@ public class TicketDAOTest {
 	 */
 	@Test
 	public void isRecurringTest_forNewUser_shouldReturnFalse() {
+
 		// GIVEN
 		ticket.setVehicleRegNumber("IMNEWUSER");
 
@@ -138,6 +196,7 @@ public class TicketDAOTest {
 	 */
 	@Test
 	public void isSavedTest() {
+
 		// GIVEN
 		ticket.setVehicleRegNumber("ABCDEF");
 
@@ -150,10 +209,12 @@ public class TicketDAOTest {
 	}
 
 	/*
-	 * Check if vehicle Reg Number is saved
+	 * the following test of the vehicle Register Number should return an Exception
+	 * and should not save it in the DB
 	 */
 	@Test
-	public void isSavedTest_no() {
+	public void isSavedTest_shouldReturnException() {
+
 		// GIVEN
 		ticket.setVehicleRegNumber(null);
 
@@ -166,8 +227,9 @@ public class TicketDAOTest {
 		catch (Exception e) {
 
 			assertTrue(e instanceof IllegalArgumentException);
-			assertFalse(ticketDAO.isSaved(ticket.getVehicleRegNumber()));
 		}
+		assertFalse(ticketDAO.isSaved(ticket.getVehicleRegNumber()));
+
 	}
 
 }

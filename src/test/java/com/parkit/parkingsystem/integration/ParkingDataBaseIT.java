@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
@@ -27,17 +28,15 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 public class ParkingDataBaseIT {
 
 	private static ParkingSpot parkingSpot;
-	private static Ticket ticket;
+//	private static Ticket ticket;
 
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	private static ParkingSpotDAO parkingSpotDAO;
 	private static TicketDAO ticketDAO;
 	private static DataBasePrepareService dataBasePrepareService;
-	private static Date date;
-	
+
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
-
 
 	@BeforeAll
 	private static void setUp() throws Exception {
@@ -47,7 +46,7 @@ public class ParkingDataBaseIT {
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
 
-		ticket = new Ticket();
+//		ticket = new Ticket();
 		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 	}
 
@@ -64,33 +63,58 @@ public class ParkingDataBaseIT {
 	}
 
 	@Test
-	public void testParkingACar() {
+	public void testProcessIncomingVehicle() {
+		// GIVEN
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+		// WHEN
 		parkingService.processIncomingVehicle();
 
-		// check that a ticket is actualy saved in DB and Parking table is updated
-		// with availability
-
+		// THEN
+		/*
+		 * check that a ticket is actually saved in DB and Parking table is updated with
+		 * availability
+		 */
 		boolean saved = ticketDAO.isSaved("ABCDEF");
 		assertEquals(true, saved);
-		
+
 		boolean available = parkingSpot.isAvailable();
 		assertEquals(false, available);
 
 	}
 
 	@Test
-	public void testParkingLotExit() {
-		testParkingACar();
+	public void testProcessExitingVehicle() {
+		// GIVEN
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+		parkingService.processIncomingVehicle();
+
+		// THEN
+		/*
+		 * check that a ticket is actually saved in DB and Parking table is updated with
+		 * availability
+		 */
+//		boolean saved = ticketDAO.isSaved("ABCDEF");
+//		assertEquals(true, saved);
+//
+//		boolean available = parkingSpot.isAvailable();
+//		assertEquals(false, available);
+
+
+
+		// WHEN
 		parkingService.processExitingVehicle();
+//		ticket.setVehicleRegNumber(null);
 
-		// check that the fare generated and out time are populated correctly in
-		// the database
+		
+		Ticket ticket2 = ticketDAO.getTicket("ABCDEF");
+		
+		
+		Date generatedTime = ticket2.getOutTime();
+		double faregenerated = ticket2.getPrice();
 
-		double faregenerated = ticket.getPrice();
-		Date generatedTime = ticket.getOutTime();
-		assertEquals(generatedTime, date);
+		assertNotNull(generatedTime);
 		assertEquals(0.0, faregenerated);
 	}
 

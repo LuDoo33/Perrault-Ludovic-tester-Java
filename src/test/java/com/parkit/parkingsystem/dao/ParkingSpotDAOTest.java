@@ -3,11 +3,6 @@ package com.parkit.parkingsystem.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.sql.Connection;
 
@@ -18,7 +13,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
@@ -28,11 +22,10 @@ public class ParkingSpotDAOTest {
 
 	private static ParkingSpotDAO parkingSpotDAO;
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
-	private static final Logger logger = LogManager.getLogger("PArkingSpotDAOTest");
+	private static final Logger logger = LogManager.getLogger("ParkingSpotDAOTest");
 	Connection con = null;
 
-	@Mock
-	private static ParkingSpot parkingSpot;
+	private ParkingSpot parkingSpot;
 
 	@BeforeAll
 	private static void setUp() throws Exception {
@@ -62,21 +55,18 @@ public class ParkingSpotDAOTest {
 	}
 
 	/*
-	 * Testing of id number parking type CAR should return 2 because 1 is not
-	 * available in DB test
+	 * Testing of id number parking type CAR should return 1 because 1
 	 */
 	@Test
 	public void getNextAvailableSlotTest_Car() {
 		// GIVEN
-		parkingSpot = mock(ParkingSpot.class);
-		when(parkingSpot.getParkingType()).thenReturn(ParkingType.CAR);
+		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
 		// WHEN
 		int parkingId = parkingSpotDAO.getNextAvailableSlot(parkingSpot.getParkingType());
 
 		// THEN
-		verify(parkingSpot, times(1)).getParkingType();
-		assertEquals(2, parkingId);
+		assertEquals(1, parkingId);
 	}
 
 	/*
@@ -86,33 +76,42 @@ public class ParkingSpotDAOTest {
 	@Test
 	public void getNextAvailableSlotTest_BIKE() {
 		// GIVEN
-		parkingSpot = mock(ParkingSpot.class);
-		when(parkingSpot.getParkingType()).thenReturn(ParkingType.BIKE);
+		parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 
 		// WHEN
 		int parkingId = parkingSpotDAO.getNextAvailableSlot(parkingSpot.getParkingType());
 
 		// THEN
-		verify(parkingSpot, times(1)).getParkingType();
 		assertEquals(4, parkingId);
 	}
 
 	/*
-	 * Testing the updating of any type of the parking
+	 * Testing the update car parking of the parking
 	 */
 	@Test
-	public void updateParkingTest() {
+	public void updateParkingTest_forCAR() {
 		// GIVEN
-		parkingSpot = mock(ParkingSpot.class);
-		when(parkingSpot.isAvailable()).thenReturn(true);
-		when(parkingSpot.getParkingType()).thenReturn(any(ParkingType.class));
-		parkingSpot.setId(1);
+		parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
 
 		// WHEN
 		parkingSpotDAO.updateParking(parkingSpot);
 
 		// THEN
-		verify(parkingSpot, times(1)).isAvailable();
+		assertTrue(parkingSpot.isAvailable());
+	}
+
+	/*
+	 * Testing the update BIKE parking of the parking
+	 */
+	@Test
+	public void updateParkingTest_forBIKE() {
+		// GIVEN
+		parkingSpot = new ParkingSpot(1, ParkingType.BIKE, true);
+
+		// WHEN
+		parkingSpotDAO.updateParking(parkingSpot);
+
+		// THEN
 		assertTrue(parkingSpot.isAvailable());
 	}
 
@@ -121,8 +120,7 @@ public class ParkingSpotDAOTest {
 	 */
 	@Test
 	public void updateParkingTestFailour() {
-		ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
-		ParkingSpot parkingSpot = mock(ParkingSpot.class);
+		parkingSpot = new ParkingSpot(0, null, false);
 		assertFalse(parkingSpotDAO.updateParking(parkingSpot));
 
 	}

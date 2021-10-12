@@ -28,8 +28,6 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 public class ParkingDataBaseIT {
 
 	private static ParkingSpot parkingSpot;
-//	private static Ticket ticket;
-
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	private static ParkingSpotDAO parkingSpotDAO;
 	private static TicketDAO ticketDAO;
@@ -46,7 +44,6 @@ public class ParkingDataBaseIT {
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
 
-//		ticket = new Ticket();
 		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 	}
 
@@ -90,32 +87,22 @@ public class ParkingDataBaseIT {
 
 		parkingService.processIncomingVehicle();
 
-		// THEN
-		/*
-		 * check that a ticket is actually saved in DB and Parking table is updated with
-		 * availability
-		 */
-//		boolean saved = ticketDAO.isSaved("ABCDEF");
-//		assertEquals(true, saved);
-//
-//		boolean available = parkingSpot.isAvailable();
-//		assertEquals(false, available);
-
-
-
 		// WHEN
 		parkingService.processExitingVehicle();
-//		ticket.setVehicleRegNumber(null);
 
-		
 		Ticket ticket2 = ticketDAO.getTicket("ABCDEF");
-		
-		
+
 		Date generatedTime = ticket2.getOutTime();
 		double faregenerated = ticket2.getPrice();
+
+		// THEN
+		/*
+		 * check that the fare generated and out time are populated correctly in the
+		 * database
+		 */
 
 		assertNotNull(generatedTime);
 		assertEquals(0.0, faregenerated);
 	}
-
+	
 }

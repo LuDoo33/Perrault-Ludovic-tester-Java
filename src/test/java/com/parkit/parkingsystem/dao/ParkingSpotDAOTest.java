@@ -55,7 +55,7 @@ public class ParkingSpotDAOTest {
 	}
 
 	/*
-	 * Testing of id number parking type CAR should return 1 because 1
+	 * Testing of id number parking type CAR should return 1
 	 */
 	@Test
 	public void getNextAvailableSlotTest_Car() {

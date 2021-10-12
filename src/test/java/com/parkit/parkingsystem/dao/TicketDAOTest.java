@@ -23,7 +23,6 @@ public class TicketDAOTest {
 
 	private static TicketDAO ticketDAO;
 	private static Ticket ticket;
-	
 
 	public static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	Connection con = null;

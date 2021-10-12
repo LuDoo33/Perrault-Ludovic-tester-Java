@@ -143,8 +143,8 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<exclude>**/*App.java</exclude>
-						<exclude>**/*DataBaseConfig.java</exclude>
+						<exclude>**/*App.class</exclude>
+						<exclude>**/*DataBaseConfig.class</exclude>
 						<exclude>**/constants/*.java</exclude>
 					</excludes>
 				</configuration>

@@ -14,14 +14,18 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
 
     private static ParkingService parkingService;
+    private Ticket ticket;
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
@@ -36,11 +40,12 @@ public class ParkingServiceTest {
             when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
             ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-            Ticket ticket = new Ticket();
+            ticket = new Ticket();
             ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("ABCDEF");
-            when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
+            when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
+			when(ticketDAO.getTicketCount("ABCDEF")).thenReturn(2);
             when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 
             when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
@@ -57,5 +62,13 @@ public class ParkingServiceTest {
         parkingService.processExitingVehicle();
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
+    
+	@Test
+	public void processExitingRecurringVehicleTest() {
+		parkingService.processExitingVehicle();
+		BigDecimal bd = new BigDecimal(1.5 / 100 * 95).setScale(2, RoundingMode.HALF_UP);
+		double priceExpected = bd.doubleValue();
+		assertEquals(priceExpected, ticket.getPrice());
+	}
 
 }

@@ -9,6 +9,8 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 public class ParkingService {
@@ -32,6 +34,7 @@ public class ParkingService {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
+				if (ticketDAO.getTicket(vehicleRegNumber) != null) System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
@@ -104,6 +107,11 @@ public class ParkingService {
             Date outTime = new Date();
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket);
+			if (ticketDAO.getTicketCount(vehicleRegNumber) > 1) {
+				BigDecimal bd = new BigDecimal(ticket.getPrice() / 100 * 95).setScale(2, RoundingMode.HALF_UP);
+				double price = bd.doubleValue();
+				ticket.setPrice(price);
+			}
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);

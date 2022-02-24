@@ -11,13 +11,10 @@ public class FareCalculatorService {
         }
 
         long inMilliseconds = ticket.getInTime().getTime();
-        System.out.println(inMilliseconds);
         long outMilliseconds= ticket.getOutTime().getTime();
-        System.out.println(outMilliseconds);
 
         //TODO: Some tests are failing here. Need to check if this logic is correct
         long duration =  (outMilliseconds - inMilliseconds) ;
-        System.out.println("fare:" + duration);
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {

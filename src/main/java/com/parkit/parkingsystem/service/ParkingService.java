@@ -10,10 +10,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
+import java.util.List;
 
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
+
+    private static final Integer NB_JOURS_MINI = 5;
 
     private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
@@ -32,18 +35,31 @@ public class ParkingService {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
+
+                if(ticketDAO.checkIfVehicleAlreadyInTheParking(vehicleRegNumber)){
+                    System.out.println("\nThis Reg Number is currently in the parking lot.\n");
+                    return;
+                }
+
+                //Verify if is regular vehicle
+                if(isRegularVehicle(vehicleRegNumber)){
+                    System.out.println("\nWelcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.\n");
+                }
+
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
                 Date inTime = new Date();
                 Ticket ticket = new Ticket();
                 //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-                //ticket.setId(ticketID);
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
-                ticket.setPrice(0);
+                ticket.setPrice(0.0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
+
+
+
                 ticketDAO.saveTicket(ticket);
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
@@ -98,12 +114,23 @@ public class ParkingService {
     }
 
     public void processExitingVehicle() {
+        Ticket ticket = null;
+        Date outTime = null;
         try{
             String vehicleRegNumber = getVehichleRegNumber();
-            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-            Date outTime = new Date();
+            ticket = ticketDAO.getTicket(vehicleRegNumber);
+            outTime = new Date();
             ticket.setOutTime(outTime);
+
             fareCalculatorService.calculateFare(ticket);
+
+            //Verify if is regular vehicle
+            if(isRegularVehicle(ticket.getVehicleRegNumber())){
+                //Apply the discount 5%
+                ticket.setPrice(ticket.getPrice() - ( ticket.getPrice() * 5.0 / 100.0));
+                System.out.println("\nYou have benefit from a 5% discount.\n");
+            }
+
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
@@ -117,4 +144,20 @@ public class ParkingService {
             logger.error("Unable to process exiting vehicle",e);
         }
     }
+
+
+    /**
+     * Vérify if VEHICLE_REG_NUMBER is  regular
+     *
+     * @param vehicleRegNumber
+     * @return return true if is reccurent else return false
+     * @author Abel
+     */
+    public boolean isRegularVehicle(String vehicleRegNumber){
+        Integer differentdaysFound1 =  ticketDAO.getReccurentTicket(vehicleRegNumber);
+
+        return differentdaysFound1 >= NB_JOURS_MINI;
+    }
+
+
 }

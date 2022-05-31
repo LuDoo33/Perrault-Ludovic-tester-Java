@@ -136,10 +136,9 @@
                 <version>0.8.5</version>
                 <configuration>
                     <excludes>
+                        <exclude>/**/dao/*</exclude>
                         <exclude>/**/config/*</exclude>
                         <exclude>/**/model/*</exclude>
-                        <exclude>/**/util/*</exclude>
-                        <exclude>com/parkit/parkingsystem/**/InteractiveShell.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -150,7 +149,7 @@
                     </execution>
                     <execution>
                         <id>jacoco-report</id>
-                        <phase>test</phase>
+                        <phase>site</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>

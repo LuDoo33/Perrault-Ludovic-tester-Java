@@ -12,6 +12,7 @@ public class FareCalculatorService {
 
 	long inHour = ticket.getInTime().getTime();
 	long outHour = ticket.getOutTime().getTime();
+
 	// TODO: Some tests are failing here. Need to check if this logic is correct
 	long duration = outHour - inHour;
 

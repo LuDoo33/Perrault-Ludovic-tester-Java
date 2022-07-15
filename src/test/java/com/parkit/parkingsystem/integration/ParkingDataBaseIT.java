@@ -59,6 +59,11 @@ public class ParkingDataBaseIT {
 
 	// ARRANGE
 	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+	String plaque = "";
+	try {
+	    plaque = inputReaderUtil.readVehicleRegistrationNumber();
+	} catch (Exception e) {
+	}
 
 	Date inTime = new Date();
 	Ticket ticket = new Ticket();
@@ -71,6 +76,10 @@ public class ParkingDataBaseIT {
 	 */
 	// ACT
 	parkingService.processIncomingVehicle();
+	Ticket t = ticketDAO.getTicket(plaque);
+	if (t != null) {
+	    t.getId();
+	}
 
 	// ASSERT
 	// COMMENCER PAR LE ASSERT : VERIFIER QU'UN TICKET EST BIEN ENREGISTRE DANS LA

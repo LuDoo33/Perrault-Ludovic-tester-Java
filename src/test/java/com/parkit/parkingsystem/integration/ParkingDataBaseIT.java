@@ -2,8 +2,6 @@ package com.parkit.parkingsystem.integration;
 
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,29 +55,17 @@ public class ParkingDataBaseIT {
 	// TODO: check that a ticket is actually saved in DB and Parking table is
 	// updated with availability
 
-	// ARRANGE
+	// ARRANGE - GIVEN
 	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 	String plaque = "";
 	try {
 	    plaque = inputReaderUtil.readVehicleRegistrationNumber();
 	} catch (Exception e) {
 	}
-
-	Date inTime = new Date();
-	Ticket ticket = new Ticket();
-	// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-	// ticket.setId(ticketID);
-	/*
-	 * ticket.setParkingSpot(parkingSpot);
-	 * ticket.setVehicleRegNumber(vehicleRegNumber); ticket.setPrice(0);
-	 * ticket.setInTime(inTime); ticket.setOutTime(null);
-	 */
 	// ACT
 	parkingService.processIncomingVehicle();
 	Ticket t = ticketDAO.getTicket(plaque);
-	if (t != null) {
-	    t.getId();
-	}
+	// Assert(notNull(t));
 
 	// ASSERT
 	// COMMENCER PAR LE ASSERT : VERIFIER QU'UN TICKET EST BIEN ENREGISTRE DANS LA

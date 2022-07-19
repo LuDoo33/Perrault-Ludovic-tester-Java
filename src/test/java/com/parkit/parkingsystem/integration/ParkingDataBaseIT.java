@@ -1,5 +1,9 @@
 package com.parkit.parkingsystem.integration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterAll;
@@ -27,7 +31,7 @@ public class ParkingDataBaseIT {
     private static DataBasePrepareService dataBasePrepareService;
 
     @Mock
-    private static InputReaderUtil inputReaderUtil;
+    private static InputReaderUtil inputReaderUtil; // ON SIMULE LA CLASSE InputReaderUtil
 
     @BeforeAll
     private static void setUp() throws Exception {
@@ -47,7 +51,6 @@ public class ParkingDataBaseIT {
 
     @AfterAll
     private static void tearDown() {
-
     }
 
     @Test
@@ -55,22 +58,26 @@ public class ParkingDataBaseIT {
 	// TODO: check that a ticket is actually saved in DB and Parking table is
 	// updated with availability
 
-	// ARRANGE - GIVEN
-	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-	String plaque = "";
-	try {
-	    plaque = inputReaderUtil.readVehicleRegistrationNumber();
-	} catch (Exception e) {
-	}
-	// ACT
-	parkingService.processIncomingVehicle();
-	Ticket t = ticketDAO.getTicket(plaque);
-	// Assert(notNull(t));
+	// GIVEN - ARRANGE
+	// DEJA FAIT DANS @BeforeEach
 
-	// ASSERT
-	// COMMENCER PAR LE ASSERT : VERIFIER QU'UN TICKET EST BIEN ENREGISTRE DANS LA
-	// BASE DE DONNEE
-	// assertEquals(Exception e, NULL);
+	// WHEN - ACT
+	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+	Ticket ticketBeforeProcess = ticketDAO.getTicket("ABCDEF");
+	assertNull(ticketBeforeProcess);
+
+	parkingService.processIncomingVehicle();
+
+	// THEN - ASSERT
+
+	Ticket ticket = ticketDAO.getTicket("ABCDEF");
+	String vehiculeRegNumber = ticket.getVehicleRegNumber();
+
+	assertNotNull(ticket); // VERIFIER QU'UN TICKET EST BIEN ENREGISTRE DANS BDD
+	assertEquals(ticket.getVehicleRegNumber(), "ABCDEF");
+
+	assertFalse(ticket.getParkingSpot().isAvailable());
+
     }
 
     @Test

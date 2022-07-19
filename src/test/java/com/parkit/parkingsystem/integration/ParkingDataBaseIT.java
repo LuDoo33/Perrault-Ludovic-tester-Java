@@ -1,11 +1,14 @@
 package com.parkit.parkingsystem.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -46,6 +49,12 @@ public class ParkingDataBaseIT {
 	dataBasePrepareService.clearDataBaseEntries();
     }
 
+    @AfterEach
+    private void verifyPerTest() throws Exception {
+	verify(inputReaderUtil).readSelection();
+	verify(inputReaderUtil).readVehicleRegistrationNumber();
+    }
+
     @AfterAll
     private static void tearDown() {
     }
@@ -74,9 +83,11 @@ public class ParkingDataBaseIT {
 								     // availability
     }
 
+    @Disabled
     @Test
     public void testParkingLotExit() {
-	testParkingACar(); // UNE PARTIE D'UN TEST NE DOIT PAS ETRE UTILISE DANS UN AUTRE
+	testParkingACar(); // UNE PARTIE D'UN TEST NE DOIT PAS ETRE UTILISE DANS UN
+	// AUTRE
 	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 	parkingService.processExitingVehicle();
 	// TODO: check that the fare generated and out time are populated correctly in

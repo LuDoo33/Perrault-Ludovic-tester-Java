@@ -1,9 +1,6 @@
 package com.parkit.parkingsystem.integration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterAll;
@@ -58,26 +55,23 @@ public class ParkingDataBaseIT {
 	// TODO: check that a ticket is actually saved in DB and Parking table is
 	// updated with availability
 
-	// GIVEN - ARRANGE
-	// DEJA FAIT DANS @BeforeEach
+	// GIVEN - ARRANGE : Already done in @BeforeEach
 
 	// WHEN - ACT
 	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 	Ticket ticketBeforeProcess = ticketDAO.getTicket("ABCDEF");
-	assertNull(ticketBeforeProcess);
+	assertThat(ticketBeforeProcess).isNull();
 
 	parkingService.processIncomingVehicle();
 
 	// THEN - ASSERT
-
 	Ticket ticket = ticketDAO.getTicket("ABCDEF");
-	String vehiculeRegNumber = ticket.getVehicleRegNumber();
 
-	assertNotNull(ticket); // VERIFIER QU'UN TICKET EST BIEN ENREGISTRE DANS BDD
-	assertEquals(ticket.getVehicleRegNumber(), "ABCDEF");
+	assertThat(ticket).isNotNull(); // checking that a ticket is actually saved in DB
+	assertThat(ticket.getVehicleRegNumber()).isEqualTo("ABCDEF");
 
-	assertFalse(ticket.getParkingSpot().isAvailable());
-
+	assertThat(ticket.getParkingSpot().isAvailable()).isFalse(); // checking that Parking table is updated with
+								     // availability
     }
 
     @Test

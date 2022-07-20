@@ -1,12 +1,13 @@
 package com.parkit.parkingsystem.integration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
-
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -29,7 +30,7 @@ public class ParkingDataBaseIT {
     private static DataBasePrepareService dataBasePrepareService;
 
     @Mock
-    private static InputReaderUtil inputReaderUtil;
+    private static InputReaderUtil inputReaderUtil; // ON SIMULE LA CLASSE InputReaderUtil
 
     @BeforeAll
     private static void setUp() throws Exception {
@@ -47,54 +48,66 @@ public class ParkingDataBaseIT {
 	dataBasePrepareService.clearDataBaseEntries();
     }
 
+    @AfterEach
+    private void verifyPerTest() throws Exception {
+	// verify(inputReaderUtil).readSelection();
+	// verify(inputReaderUtil).readVehicleRegistrationNumber();
+    }
+
     @AfterAll
     private static void tearDown() {
-
     }
 
     @Test
+    @DisplayName("Test du process d'entrée d'un vehicule")
     public void testParkingACar() {
 	// TODO: check that a ticket is actually saved in DB and Parking table is
 	// updated with availability
 
-	// ARRANGE
+	// GIVEN - ARRANGE : Already done in @BeforeEach
+
+	// WHEN - ACT
 	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-	String plaque = "";
-	try {
-	    plaque = inputReaderUtil.readVehicleRegistrationNumber();
-	} catch (Exception e) {
-	}
+	Ticket ticketBeforeProcess = ticketDAO.getTicket("ABCDEF");
+	assertThat(ticketBeforeProcess).isNull();
 
-	Date inTime = new Date();
-	Ticket ticket = new Ticket();
-	// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-	// ticket.setId(ticketID);
-	/*
-	 * ticket.setParkingSpot(parkingSpot);
-	 * ticket.setVehicleRegNumber(vehicleRegNumber); ticket.setPrice(0);
-	 * ticket.setInTime(inTime); ticket.setOutTime(null);
-	 */
-	// ACT
 	parkingService.processIncomingVehicle();
-	Ticket t = ticketDAO.getTicket(plaque);
-	if (t != null) {
-	    t.getId();
-	}
 
-	// ASSERT
-	// COMMENCER PAR LE ASSERT : VERIFIER QU'UN TICKET EST BIEN ENREGISTRE DANS LA
-	// BASE DE DONNEE
-	// assertEquals(Exception e, NULL);
+	Ticket ticket = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
+	assertThat(ticket).isNotNull(); // checking that a ticket is actually saved in DB
+	assertThat(ticket.getVehicleRegNumber()).isEqualTo("ABCDEF");
+
+	assertThat(ticket.getParkingSpot().isAvailable()).isFalse(); // checking that Parking table is updated with
+								     // availability
     }
 
     @Test
+    @DisplayName("Test du process de sortie d'un vehicule")
     public void testParkingLotExit() {
-	testParkingACar(); // UNE PARTIE D'UN TEST NE DOIT PAS ETRE UTILISE DANS UN AUTRE
-	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-	parkingService.processExitingVehicle();
+
 	// TODO: check that the fare generated and out time are populated correctly in
 	// the database
 
+	// GIVEN - ARRANGE //
+	testParkingACar();
+
+	// WHEN - ACT
+	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+	parkingService.processExitingVehicle();
+
+	Ticket ticketAfterExitProcess = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
+	assertThat(ticketAfterExitProcess).isNotNull(); // ON VERIFIE QUE LE TICKET APRES PROCESS N'EST PAS VIDE
+	assertThat(ticketAfterExitProcess.getPrice()).isNotNull(); // ON VERIFIE QUE LE PRIX DU TICKET N'EST PLUS NULL
+
+	// ON PEUT VERIFIER QUE l'HEURE DE SORTIE EST BIEN PRESENTE DANS LA BDD
+	assertThat(ticketAfterExitProcess.getOutTime().toString()).isNotNull();
+	System.out.println("Affichage dans la console de l'heure de sortie : " + ticketAfterExitProcess.getOutTime());
+	// ON PEUT AUSSI VERIFIER QUE L'HEURE D'ENTREE EST AVANT L'HEURE DE SORTIE
+	assertThat(ticketAfterExitProcess.getInTime()).isBeforeOrEqualTo(ticketAfterExitProcess.getOutTime());
     }
 
 }

@@ -1,14 +1,13 @@
 package com.parkit.parkingsystem.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -51,8 +50,8 @@ public class ParkingDataBaseIT {
 
     @AfterEach
     private void verifyPerTest() throws Exception {
-	verify(inputReaderUtil).readSelection();
-	verify(inputReaderUtil).readVehicleRegistrationNumber();
+	// verify(inputReaderUtil).readSelection();
+	// verify(inputReaderUtil).readVehicleRegistrationNumber();
     }
 
     @AfterAll
@@ -60,6 +59,7 @@ public class ParkingDataBaseIT {
     }
 
     @Test
+    @DisplayName("Test du process d'entrée d'un vehicule")
     public void testParkingACar() {
 	// TODO: check that a ticket is actually saved in DB and Parking table is
 	// updated with availability
@@ -73,9 +73,9 @@ public class ParkingDataBaseIT {
 
 	parkingService.processIncomingVehicle();
 
-	// THEN - ASSERT
 	Ticket ticket = ticketDAO.getTicket("ABCDEF");
 
+	// THEN - ASSERT
 	assertThat(ticket).isNotNull(); // checking that a ticket is actually saved in DB
 	assertThat(ticket.getVehicleRegNumber()).isEqualTo("ABCDEF");
 
@@ -83,16 +83,24 @@ public class ParkingDataBaseIT {
 								     // availability
     }
 
-    @Disabled
     @Test
+    @DisplayName("Test du process de sortie d'un vehicule")
     public void testParkingLotExit() {
-	testParkingACar(); // UNE PARTIE D'UN TEST NE DOIT PAS ETRE UTILISE DANS UN
-	// AUTRE
-	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-	parkingService.processExitingVehicle();
+
 	// TODO: check that the fare generated and out time are populated correctly in
 	// the database
 
+	// GIVEN - ARRANGE //
+	testParkingACar();
+	// WHEN - ACT
+	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+	parkingService.processExitingVehicle();
+
+	Ticket ticketAfterExitProcess = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
+	assertThat(ticketAfterExitProcess.getPrice()).isNotNull();
+	System.out.println("\n" + "Affichage du prix dans la console : " + ticketAfterExitProcess.getPrice());
     }
 
 }

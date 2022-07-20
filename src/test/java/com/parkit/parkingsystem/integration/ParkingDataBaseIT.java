@@ -92,6 +92,7 @@ public class ParkingDataBaseIT {
 
 	// GIVEN - ARRANGE //
 	testParkingACar();
+
 	// WHEN - ACT
 	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 	parkingService.processExitingVehicle();
@@ -99,8 +100,14 @@ public class ParkingDataBaseIT {
 	Ticket ticketAfterExitProcess = ticketDAO.getTicket("ABCDEF");
 
 	// THEN - ASSERT
-	assertThat(ticketAfterExitProcess.getPrice()).isNotNull();
-	System.out.println("\n" + "Affichage du prix dans la console : " + ticketAfterExitProcess.getPrice());
+	assertThat(ticketAfterExitProcess).isNotNull(); // ON VERIFIE QUE LE TICKET APRES PROCESS N'EST PAS VIDE
+	assertThat(ticketAfterExitProcess.getPrice()).isNotNull(); // ON VERIFIE QUE LE PRIX DU TICKET N'EST PLUS NULL
+
+	// ON PEUT VERIFIER QUE l'HEURE DE SORTIE EST BIEN PRESENTE DANS LA BDD
+	assertThat(ticketAfterExitProcess.getOutTime().toString()).isNotNull();
+	System.out.println("Affichage dans la console de l'heure de sortie : " + ticketAfterExitProcess.getOutTime());
+	// ON PEUT AUSSI VERIFIER QUE L'HEURE D'ENTREE EST AVANT L'HEURE DE SORTIE
+	assertThat(ticketAfterExitProcess.getInTime()).isBeforeOrEqualTo(ticketAfterExitProcess.getOutTime());
     }
 
 }

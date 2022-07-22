@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterAll;
@@ -50,7 +51,7 @@ public class ParkingDataBaseIT {
 
     @AfterEach
     private void verifyPerTest() throws Exception {
-	// verify(inputReaderUtil).readSelection();
+	verify(inputReaderUtil).readSelection();
 	// verify(inputReaderUtil).readVehicleRegistrationNumber();
     }
 
@@ -90,11 +91,20 @@ public class ParkingDataBaseIT {
 	// TODO: check that the fare generated and out time are populated correctly in
 	// the database
 
-	// GIVEN - ARRANGE //
+	// GIVEN - ARRANGE // LA VOITURE RENTRE DANS LE PARKING
 	testParkingACar();
+
+	// LA VOITURE RESTE 2 SECONDES DANS LE PARKING
+	try {
+	    Thread.sleep(2000);
+	} catch (InterruptedException ie) {
+
+	}
 
 	// WHEN - ACT
 	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+	// LA VOITURE SORT DU PARKING
 	parkingService.processExitingVehicle();
 
 	Ticket ticketAfterExitProcess = ticketDAO.getTicket("ABCDEF");
@@ -104,7 +114,7 @@ public class ParkingDataBaseIT {
 	assertThat(ticketAfterExitProcess.getPrice()).isNotNull(); // ON VERIFIE QUE LE PRIX DU TICKET N'EST PLUS NULL
 
 	// ON PEUT VERIFIER QUE l'HEURE DE SORTIE EST BIEN PRESENTE DANS LA BDD
-	assertThat(ticketAfterExitProcess.getOutTime().toString()).isNotNull();
+	assertThat(ticketAfterExitProcess.getOutTime()).isNotNull();
 	System.out.println("Affichage dans la console de l'heure de sortie : " + ticketAfterExitProcess.getOutTime());
 	// ON PEUT AUSSI VERIFIER QUE L'HEURE D'ENTREE EST AVANT L'HEURE DE SORTIE
 	assertThat(ticketAfterExitProcess.getInTime()).isBeforeOrEqualTo(ticketAfterExitProcess.getOutTime());

@@ -155,4 +155,23 @@ public class FareCalculatorServiceTest {
 	assertThat(ticket.getPrice()).isEqualTo((0));
     }
 
+    @Test
+    @DisplayName("Prix pour moto moins de 30 minutes = 0 ")
+    public void calculateFareBikeWithLessThanThirtyMinutes() {
+	// GIVEN - ARRANGE
+	Date inTime = new Date();
+	Date outTime = new Date();
+	outTime.setTime(System.currentTimeMillis() + 30 * 60 * 1000); // HEURE ACTUELLE + 30 MINUTES
+	ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+	ticket.setInTime(inTime);
+	ticket.setOutTime(outTime);
+	ticket.setParkingSpot(parkingSpot);
+
+	// WHEN - ACT
+	fareCalculatorService.calculateFare(ticket);
+
+	// THEN ASSERT
+	assertThat(ticket.getPrice()).isEqualTo((0));
+    }
+
 }

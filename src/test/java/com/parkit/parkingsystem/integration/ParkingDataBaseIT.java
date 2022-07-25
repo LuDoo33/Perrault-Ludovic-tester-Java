@@ -99,6 +99,7 @@ public class ParkingDataBaseIT {
 
 	// GIVEN - ARRANGE // LA VOITURE ENTRE DANS LE PARKING
 	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+	// when
 	// LA VOITURE ENTRE DANS LE PARKING
 	parkingService.processIncomingVehicle();
 	// testParkingACar(); // UN TEST DOIT ETRE INDEPENDANT DES AUTRES --> PRINCIPE
@@ -112,8 +113,6 @@ public class ParkingDataBaseIT {
 	}
 
 	// WHEN - ACT
-	// ParkingService parkingService = new ParkingService(inputReaderUtil,
-	// parkingSpotDAO, ticketDAO);
 
 	// LA VOITURE SORT DU PARKING
 	parkingService.processExitingVehicle();

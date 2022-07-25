@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,6 +35,7 @@ public class ParkingDataBaseIT {
 
     @Mock
     private static InputReaderUtil inputReaderUtil; // ON SIMULE LA CLASSE InputReaderUtil
+    private static Date date;
 
     @BeforeAll
     private static void setUp() throws Exception {
@@ -99,18 +102,19 @@ public class ParkingDataBaseIT {
 
 	// GIVEN - ARRANGE // LA VOITURE ENTRE DANS LE PARKING
 	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-	// when
+
 	// LA VOITURE ENTRE DANS LE PARKING
 	parkingService.processIncomingVehicle();
+
 	// testParkingACar(); // UN TEST DOIT ETRE INDEPENDANT DES AUTRES --> PRINCIPE
 	// F.(I).R.S.T
 
 	// LA VOITURE RESTE 2 SECONDES DANS LE PARKING
-	try {
-	    Thread.sleep(2000);
-	} catch (InterruptedException ie) {
-
-	}
+	/*
+	 * try { Thread.sleep(2000); } catch (InterruptedException ie) {
+	 * 
+	 * }
+	 */
 
 	// WHEN - ACT
 
@@ -118,6 +122,11 @@ public class ParkingDataBaseIT {
 	parkingService.processExitingVehicle();
 
 	Ticket ticketAfterExitProcess = ticketDAO.getTicket("ABCDEF");
+
+	// MODIFICATION DE L'HEURE DE SORTIE
+	Date dateInTheFuture = new Date();
+	dateInTheFuture.setTime((System.currentTimeMillis() + 20000));
+	ticketAfterExitProcess.setOutTime(dateInTheFuture);
 
 	// THEN - ASSERT
 	assertThat(ticketAfterExitProcess).isNotNull(); // ON VERIFIE QUE LE TICKET APRES PROCESS N'EST PAS VIDE

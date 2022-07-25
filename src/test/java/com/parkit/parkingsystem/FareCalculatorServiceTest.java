@@ -170,8 +170,26 @@ public class FareCalculatorServiceTest {
 	// WHEN - ACT
 	fareCalculatorService.calculateFare(ticket);
 
-	// THEN ASSERT
+	// THEN - ASSERT
 	assertThat(ticket.getPrice()).isEqualTo((0));
+    }
+
+    @Test
+    @DisplayName("Reduction de 5% pour utilisateurs réguliers")
+    public void calculateFivePercentDiscountForRecurringUsers() {
+	// GIVEN - ARRANGE
+	Date inTime = new Date();
+	Date outTime = new Date();
+	outTime.setTime(System.currentTimeMillis() + 60 * 60 * 1000); // HEURE ACTUELLE + 1H
+	ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+	ticket.setInTime(inTime);
+	ticket.setOutTime(outTime);
+	ticket.setParkingSpot(parkingSpot);
+
+	// WHEN - ACT
+	fareCalculatorService.calculateFare(ticket);
+	// THEN - ASSERT
+	assertThat(ticket.getPrice()).isEqualTo(Fare.CAR_RATE_PER_HOUR * (5 / 100));
     }
 
 }

@@ -188,8 +188,10 @@ public class FareCalculatorServiceTest {
 
 	// WHEN - ACT
 	fareCalculatorService.calculateFare(ticket);
+
 	// THEN - ASSERT
-	assertThat(ticket.getPrice()).isEqualTo(Fare.CAR_RATE_PER_HOUR * (5 / 100));
+	System.out.println(ticket.getPrice());
+	assertThat(ticket.getPrice()).isEqualTo(ticket.getPrice() - (Fare.CAR_RATE_PER_HOUR * 5 / 100));
     }
 
 }

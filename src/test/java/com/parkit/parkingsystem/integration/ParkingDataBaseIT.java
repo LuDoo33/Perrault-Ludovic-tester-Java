@@ -101,7 +101,7 @@ public class ParkingDataBaseIT {
 	testParkingACar();
 
 	// WHEN - ACT // LA VOITURE SORT DU PARKING
-	parkingService.processExitingVehicle();
+	parkingService.processExitingVehicle(new Date());
 
 	Ticket ticketAfterExitProcess = ticketDAO.getTicket("ABCDEF");
 

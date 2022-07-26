@@ -115,5 +115,4 @@ public class ParkingDataBaseIT {
 	// ON PEUT AUSSI VERIFIER QUE L'HEURE D'ENTREE EST AVANT L'HEURE DE SORTIE
 	assertThat(ticketAfterExitProcess.getInTime()).isBeforeOrEqualTo(ticketAfterExitProcess.getOutTime());
     }
-
 }

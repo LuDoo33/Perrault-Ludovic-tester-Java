@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
@@ -35,7 +35,6 @@ public class ParkingDataBaseIT {
 
     @Mock
     private static InputReaderUtil inputReaderUtil; // ON SIMULE LA CLASSE InputReaderUtil
-    private static Date date;
 
     @BeforeAll
     private static void setUp() throws Exception {
@@ -56,12 +55,7 @@ public class ParkingDataBaseIT {
     @AfterEach
     private void verifyPerTest() throws Exception {
 	verify(inputReaderUtil).readSelection();
-	// SI verify EST APPELE 2 FOIS AU LIEU DE 1 fOIS C'EST NORMAL
-	try {
-	    verify(inputReaderUtil).readVehicleRegistrationNumber();
-	} catch (TooManyActualInvocations e) {
-	    assertThat(e.getMessage()).contains("Wanted 1 time").contains("But was 2 times");
-	}
+	verify(inputReaderUtil, atLeast(1)).readVehicleRegistrationNumber();
     }
 
     @AfterAll
@@ -104,21 +98,9 @@ public class ParkingDataBaseIT {
 	ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
 	// LA VOITURE ENTRE DANS LE PARKING
-	parkingService.processIncomingVehicle();
+	testParkingACar();
 
-	// testParkingACar(); // UN TEST DOIT ETRE INDEPENDANT DES AUTRES --> PRINCIPE
-	// F.(I).R.S.T
-
-	// LA VOITURE RESTE 2 SECONDES DANS LE PARKING
-	/*
-	 * try { Thread.sleep(2000); } catch (InterruptedException ie) {
-	 * 
-	 * }
-	 */
-
-	// WHEN - ACT
-
-	// LA VOITURE SORT DU PARKING
+	// WHEN - ACT // LA VOITURE SORT DU PARKING
 	parkingService.processExitingVehicle();
 
 	Ticket ticketAfterExitProcess = ticketDAO.getTicket("ABCDEF");

@@ -100,15 +100,10 @@ public class ParkingDataBaseIT {
 	// LA VOITURE ENTRE DANS LE PARKING
 	testParkingACar();
 
-	// WHEN - ACT // LA VOITURE SORT DU PARKING
-	parkingService.processExitingVehicle(new Date());
+	// WHEN - ACT // LA VOITURE SORT DU PARKING 1H APRES
+	parkingService.processExitingVehicle(new Date(System.currentTimeMillis() + 60 * 60 * 1000));
 
 	Ticket ticketAfterExitProcess = ticketDAO.getTicket("ABCDEF");
-
-	// MODIFICATION DE L'HEURE DE SORTIE
-	Date dateInTheFuture = new Date();
-	dateInTheFuture.setTime((System.currentTimeMillis() + 20000));
-	ticketAfterExitProcess.setOutTime(dateInTheFuture);
 
 	// THEN - ASSERT
 	assertThat(ticketAfterExitProcess).isNotNull(); // ON VERIFIE QUE LE TICKET APRES PROCESS N'EST PAS VIDE
@@ -116,8 +111,7 @@ public class ParkingDataBaseIT {
 
 	// ON PEUT VERIFIER QUE l'HEURE DE SORTIE EST BIEN PRESENTE DANS LA BDD
 	assertThat(ticketAfterExitProcess.getOutTime()).isNotNull();
-	System.out.println(
-		"Affichage dans la console de l'heure de sortie : " + ticketAfterExitProcess.getOutTime() + "\n");
+
 	// ON PEUT AUSSI VERIFIER QUE L'HEURE D'ENTREE EST AVANT L'HEURE DE SORTIE
 	assertThat(ticketAfterExitProcess.getInTime()).isBeforeOrEqualTo(ticketAfterExitProcess.getOutTime());
     }

@@ -9,8 +9,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
@@ -20,7 +18,6 @@ import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 
-@ExtendWith(MockitoExtension.class)
 public class TicketDataBaseIT {
 
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
@@ -108,7 +105,7 @@ public class TicketDataBaseIT {
 
 	// THEN - ASSERT
 	assertThat(updatedTicket.getPrice()).isEqualTo(ticketToUpdate.getPrice());
-	// ACTUAL:JAVA.SQL EXPECTED:JAVA.UTIL
+	// ACTUAL:JAVA.SQL --- EXPECTED:JAVA.UTIL
 	// assertThat(updatedTicket.getOutTime()).isEqualTo(ticketToUpdate.getOutTime());
     }
 

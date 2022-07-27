@@ -30,6 +30,7 @@ public class TicketDataBaseIT {
     private static DataBasePrepareService dataBasePrepareService;
 
     private static Ticket ticketToSave;
+    private static Ticket ticketToUpdate;
 
     @BeforeAll
     private static void setUp() throws Exception {
@@ -40,6 +41,7 @@ public class TicketDataBaseIT {
 	ticketDAO.dataBaseConfig = dataBaseTestConfig;
 	dataBasePrepareService = new DataBasePrepareService();
 	ticketToSave = new Ticket();
+	ticketToUpdate = new Ticket();
     }
 
     @BeforeEach
@@ -52,7 +54,7 @@ public class TicketDataBaseIT {
     }
 
     @Test
-    @DisplayName("Test de la sauvegarde d'un ticket")
+    @DisplayName("Test de la sauvegarde d'un ticket en BDD")
     public void testSavingATicketInDataBase() {
 	// GIVEN - ARRANGE // ON CREE UN TICKET
 	Date inTime = new Date();
@@ -73,17 +75,41 @@ public class TicketDataBaseIT {
 	// ON RECUPERE LE TICKET DANS LA BDD
 	Ticket savedTicket = ticketDAO.getTicket("AT-444-ST");
 
-	// LE FORMAT DE LA DATE CHANGE UNE FOIS EXTRAIT DE LA BDD
-	System.out.println(ticketToSave.getInTime());
-	System.out.println(savedTicket.getInTime());
-
 	// THEN - ASSERT // ON VERIFIE QUE LE TICKET A BIEN ETE SAUVEGARDE
-	assertThat(ticketToSave.getParkingSpot()).isEqualTo(savedTicket.getParkingSpot());
+	assertThat(savedTicket.getParkingSpot()).isEqualTo(ticketToSave.getParkingSpot());
 
-	// ASSERTTHAT "but was" isEqualTo "expected"
-	assertThat(ticketToSave.getPrice()).isEqualTo(savedTicket.getPrice());
+	// ASSERTTHAT(ACTUAL --- EXPECTED);
+	assertThat(savedTicket.getPrice()).isEqualTo(savedTicket.getPrice());
+
+	// LE FORMAT DE LA DATE CHANGE UNE FOIS EXTRAIT DE LA BDD
+	// CELA FAIT ECHOUER LES 2 DERNIERS TESTS
+	System.out.println("L'heure avant le passage en BDD est : " + ticketToSave.getInTime());
+	System.out.println("L'heure après le passage en BDD est : " + savedTicket.getInTime());
 
 	// assertThat(ticketToSave.getInTime()).isEqualTo(savedTicket.getInTime());
 	// assertThat(ticketToSave.getOutTime()).isEqualTo(savedTicket.getOutTime());
     }
+
+    @Test
+    @DisplayName("Test de la mise à jour d'un ticket en BDD")
+    public void testUpdatingATicketInDataBase() {
+	// GIVEN - ARRANGE
+	testSavingATicketInDataBase();
+	Date outTime = new Date();
+	outTime.setTime(System.currentTimeMillis() + (60 * 60 * 1000)); // AJOUT 1 HEURE
+
+	ticketToUpdate.setPrice(10);
+	ticketToUpdate.setOutTime(outTime);
+	ticketToUpdate.setId(1);
+
+	// WHEN - ACT
+	ticketDAO.updateTicket(ticketToUpdate);
+	Ticket updatedTicket = ticketDAO.getTicket("AT-444-ST");
+
+	// THEN - ASSERT
+	assertThat(updatedTicket.getPrice()).isEqualTo(ticketToUpdate.getPrice());
+	// ACTUAL:JAVA.SQL EXPECTED:JAVA.UTIL
+	// assertThat(updatedTicket.getOutTime()).isEqualTo(ticketToUpdate.getOutTime());
+    }
+
 }

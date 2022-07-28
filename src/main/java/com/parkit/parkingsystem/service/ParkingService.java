@@ -22,6 +22,8 @@ public class ParkingService {
     private ParkingSpotDAO parkingSpotDAO;
     private TicketDAO ticketDAO;
 
+    public boolean recurringUser;
+
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
 	this.inputReaderUtil = inputReaderUtil;
 	this.parkingSpotDAO = parkingSpotDAO;
@@ -33,7 +35,10 @@ public class ParkingService {
 	    ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 	    if (parkingSpot != null && parkingSpot.getId() > 0) {
 		String vehicleRegNumber = getVehicleRegNumber();
-		// STORY#2
+		// STORY#2 COMMENCE ICI
+
+		verifyRecurringUsers(vehicleRegNumber);
+
 		parkingSpot.setAvailable(false);
 		parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as
 							  // false
@@ -105,7 +110,13 @@ public class ParkingService {
 	    String vehicleRegNumber = getVehicleRegNumber();
 	    Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
 	    ticket.setOutTime(outTime);
-	    fareCalculatorService.calculateFare(ticket);
+
+	    if (recurringUser) {
+		fareCalculatorService.calculateFareWithFivePercentDiscount(ticket);
+	    } else {
+		fareCalculatorService.calculateFare(ticket);
+	    }
+
 	    if (ticketDAO.updateTicket(ticket)) {
 		ParkingSpot parkingSpot = ticket.getParkingSpot();
 		parkingSpot.setAvailable(true);
@@ -125,6 +136,7 @@ public class ParkingService {
 	try {
 	    Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
 	    if (ticket.getVehicleRegNumber() == vehicleRegNumber) {
+		recurringUser = true;
 		System.out.println(
 			"Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
 	    }

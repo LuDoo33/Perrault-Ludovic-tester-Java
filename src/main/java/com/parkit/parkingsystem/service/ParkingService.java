@@ -33,6 +33,7 @@ public class ParkingService {
 	    ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 	    if (parkingSpot != null && parkingSpot.getId() > 0) {
 		String vehicleRegNumber = getVehicleRegNumber();
+		// STORY#2
 		parkingSpot.setAvailable(false);
 		parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as
 							  // false
@@ -117,6 +118,18 @@ public class ParkingService {
 	    }
 	} catch (Exception e) {
 	    logger.error("Unable to process exiting vehicle", e);
+	}
+    }
+
+    public void verifyRecurringUsers(String vehicleRegNumber) {
+	try {
+	    Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+	    if (ticket.getVehicleRegNumber() == vehicleRegNumber) {
+		System.out.println(
+			"Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+	    }
+	} catch (Exception e) {
+	    System.out.println("Welcome ! \n ");
 	}
     }
 }

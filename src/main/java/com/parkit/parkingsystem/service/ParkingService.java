@@ -22,8 +22,6 @@ public class ParkingService {
     private ParkingSpotDAO parkingSpotDAO;
     private TicketDAO ticketDAO;
 
-    public boolean recurringUser;
-
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
 	this.inputReaderUtil = inputReaderUtil;
 	this.parkingSpotDAO = parkingSpotDAO;
@@ -37,7 +35,7 @@ public class ParkingService {
 		String vehicleRegNumber = getVehicleRegNumber();
 		// STORY#2 COMMENCE ICI
 
-		verifyRecurringUsers(vehicleRegNumber);
+		boolean habitue = verifyRecurringUsers(vehicleRegNumber, 1);
 
 		parkingSpot.setAvailable(false);
 		parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as
@@ -56,6 +54,10 @@ public class ParkingService {
 		System.out.println("Generated Ticket and saved in DB");
 		System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
 		System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+		if (habitue) {
+		    System.out.println(
+			    "Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+		}
 	    }
 	} catch (Exception e) {
 	    logger.error("Unable to process incoming vehicle", e);
@@ -111,7 +113,7 @@ public class ParkingService {
 	    Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
 	    ticket.setOutTime(outTime);
 
-	    if (recurringUser) {
+	    if (verifyRecurringUsers(vehicleRegNumber, 2)) {
 		fareCalculatorService.calculateFareWithFivePercentDiscount(ticket);
 	    } else {
 		fareCalculatorService.calculateFare(ticket);
@@ -132,16 +134,17 @@ public class ParkingService {
 	}
     }
 
-    public void verifyRecurringUsers(String vehicleRegNumber) {
+    public boolean verifyRecurringUsers(String vehicleRegNumber, int numberOfOccurence) {
+	boolean recurringUser = false;
 	try {
-	    Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-	    if (ticket.getVehicleRegNumber() == vehicleRegNumber) {
+	    int occurence = ticketDAO.getCountForVehicleRegNumber(vehicleRegNumber);
+	    if (occurence >= numberOfOccurence) {
 		recurringUser = true;
-		System.out.println(
-			"Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+
 	    }
 	} catch (Exception e) {
 	    System.out.println("Welcome ! \n ");
 	}
+	return recurringUser;
     }
 }

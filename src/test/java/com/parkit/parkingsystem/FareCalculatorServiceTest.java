@@ -7,7 +7,6 @@ import java.util.Date;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -175,7 +174,6 @@ public class FareCalculatorServiceTest {
 	assertThat(ticket.getPrice()).isEqualTo((0));
     }
 
-    @Disabled
     @Test
     @DisplayName("Reduction de 5% pour utilisateurs réguliers")
     public void calculateFivePercentDiscountForRecurringUsers() {
@@ -189,11 +187,13 @@ public class FareCalculatorServiceTest {
 	ticket.setParkingSpot(parkingSpot);
 
 	// WHEN - ACT
-	fareCalculatorService.calculateFare(ticket);
+	fareCalculatorService.calculateFareWithFivePercentDiscount(ticket);
 
 	// THEN - ASSERT
 	System.out.println(ticket.getPrice());
-	assertThat(ticket.getPrice()).isEqualTo(ticket.getPrice() - (Fare.CAR_RATE_PER_HOUR * 5 / 100));
+	double expectedPrice = (double) Fare.CAR_RATE_PER_HOUR - (Fare.CAR_RATE_PER_HOUR * 5 / 100);
+
+	assertThat(ticket.getPrice()).isEqualTo(1 * Fare.CAR_RATE_PER_HOUR_DISCOUNT);
     }
 
 }

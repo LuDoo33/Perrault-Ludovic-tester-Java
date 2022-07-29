@@ -33,6 +33,10 @@ public class ParkingService {
 	    ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 	    if (parkingSpot != null && parkingSpot.getId() > 0) {
 		String vehicleRegNumber = getVehicleRegNumber();
+		// STORY#2 COMMENCE ICI
+
+		boolean habitue = verifyRecurringUsers(vehicleRegNumber, 1);
+
 		parkingSpot.setAvailable(false);
 		parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as
 							  // false
@@ -50,6 +54,10 @@ public class ParkingService {
 		System.out.println("Generated Ticket and saved in DB");
 		System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
 		System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+		if (habitue) {
+		    System.out.println(
+			    "Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+		}
 	    }
 	} catch (Exception e) {
 	    logger.error("Unable to process incoming vehicle", e);
@@ -104,7 +112,13 @@ public class ParkingService {
 	    String vehicleRegNumber = getVehicleRegNumber();
 	    Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
 	    ticket.setOutTime(outTime);
-	    fareCalculatorService.calculateFare(ticket);
+
+	    if (verifyRecurringUsers(vehicleRegNumber, 2)) {
+		fareCalculatorService.calculateFareWithFivePercentDiscount(ticket);
+	    } else {
+		fareCalculatorService.calculateFare(ticket);
+	    }
+
 	    if (ticketDAO.updateTicket(ticket)) {
 		ParkingSpot parkingSpot = ticket.getParkingSpot();
 		parkingSpot.setAvailable(true);
@@ -118,5 +132,19 @@ public class ParkingService {
 	} catch (Exception e) {
 	    logger.error("Unable to process exiting vehicle", e);
 	}
+    }
+
+    public boolean verifyRecurringUsers(String vehicleRegNumber, int numberOfOccurence) {
+	boolean recurringUser = false;
+	try {
+	    int occurence = ticketDAO.getCountForVehicleRegNumber(vehicleRegNumber);
+	    if (occurence >= numberOfOccurence) {
+		recurringUser = true;
+
+	    }
+	} catch (Exception e) {
+	    System.out.println("Unable to verify recurring user ");
+	}
+	return recurringUser;
     }
 }

@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -58,8 +59,16 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleTest() {
+	// GIVEN - ARRANGE --- Already done in BeforeEeach
+
+	// WHEN - ACT
 	parkingService.processExitingVehicle(new Date());
+	Ticket ticketAfterExitingProcess = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
 	verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
+	assertThat(ticketAfterExitingProcess.getOutTime()).isNotNull();
+	assertThat(ticketAfterExitingProcess.getPrice()).isNotNull();
     }
 
 }

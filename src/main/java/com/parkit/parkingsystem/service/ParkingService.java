@@ -143,7 +143,7 @@ public class ParkingService {
 
 	    }
 	} catch (Exception e) {
-	    System.out.println("Welcome ! \n ");
+	    System.out.println("Unable to verify recurring user ");
 	}
 	return recurringUser;
     }

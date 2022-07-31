@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,7 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
+import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
@@ -87,6 +89,7 @@ public class ParkingDataBaseIT {
 								     // availability
     }
 
+    @Disabled
     @Test
     @DisplayName("Test du process de sortie d'un vehicule")
     public void testParkingLotExit() {
@@ -105,9 +108,15 @@ public class ParkingDataBaseIT {
 
 	Ticket ticketAfterExitProcess = ticketDAO.getTicket("ABCDEF");
 
+	ParkingSpot parkingSpotAfterProcess = ticketAfterExitProcess.getParkingSpot();
+	boolean availabilityOfParkingLot = parkingSpotAfterProcess.isAvailable();
+
 	// THEN - ASSERT
 	assertThat(ticketAfterExitProcess).isNotNull(); // ON VERIFIE QUE LE TICKET APRES PROCESS N'EST PAS VIDE
 	assertThat(ticketAfterExitProcess.getPrice()).isNotNull(); // ON VERIFIE QUE LE PRIX DU TICKET N'EST PLUS NULL
+
+	// ON VERIFIE QUE LA PLACE DE PARKING EST BIEN VIDE (isAvailable = TRUE)
+	assertThat(availabilityOfParkingLot).isTrue();
 
 	// ON PEUT VERIFIER QUE l'HEURE DE SORTIE EST BIEN PRESENTE DANS LA BDD
 	assertThat(ticketAfterExitProcess.getOutTime()).isNotNull();

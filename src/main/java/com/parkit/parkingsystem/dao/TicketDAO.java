@@ -54,11 +54,6 @@ public class TicketDAO {
 		ticket = new Ticket();
 		ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)),
 			rs.getBoolean(7));
-
-		System.out.println(parkingSpot.getId());
-		System.out.println(parkingSpot.getParkingType());
-		System.out.println(parkingSpot.isAvailable());
-
 		ticket.setParkingSpot(parkingSpot);
 		ticket.setId(rs.getInt(2));
 		ticket.setVehicleRegNumber(vehicleRegNumber);

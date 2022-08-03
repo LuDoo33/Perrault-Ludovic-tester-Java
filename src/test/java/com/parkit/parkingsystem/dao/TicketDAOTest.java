@@ -95,6 +95,7 @@ public class TicketDAOTest {
 	ticketToUpdate.setPrice(10);
 	ticketToUpdate.setOutTime(outTime);
 	ticketToUpdate.setId(1);
+	ticketToUpdate.getOutTime().getTime();
 
 	// WHEN - ACT
 	ticketDAO.updateTicket(ticketToUpdate);
@@ -103,6 +104,6 @@ public class TicketDAOTest {
 	// THEN - ASSERT
 	assertThat(updatedTicket.getPrice()).isEqualTo(ticketToUpdate.getPrice());
 	// ACTUAL:JAVA.SQL --- EXPECTED:JAVA.UTIL
-	// assertThat(updatedTicket.getOutTime()).isEqualTo(ticketToUpdate.getOutTime());
+	// assertThat(updatedTicket.getOutTime().getTime()).isEqualTo(ticketToUpdate.getOutTime().getTime());
     }
 }

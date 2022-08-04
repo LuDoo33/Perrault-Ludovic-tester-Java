@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem.integration;
+package com.parkit.parkingsystem.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,15 +11,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.parkit.parkingsystem.constants.ParkingType;
-import com.parkit.parkingsystem.dao.ParkingSpotDAO;
-import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 
-public class TicketDataBaseIT {
-
+public class TicketDAOTest {
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static ParkingSpotDAO parkingSpotDAO;
     private static ParkingSpot parkingSpot;
@@ -98,6 +95,7 @@ public class TicketDataBaseIT {
 	ticketToUpdate.setPrice(10);
 	ticketToUpdate.setOutTime(outTime);
 	ticketToUpdate.setId(1);
+	ticketToUpdate.getOutTime().getTime();
 
 	// WHEN - ACT
 	ticketDAO.updateTicket(ticketToUpdate);
@@ -106,7 +104,6 @@ public class TicketDataBaseIT {
 	// THEN - ASSERT
 	assertThat(updatedTicket.getPrice()).isEqualTo(ticketToUpdate.getPrice());
 	// ACTUAL:JAVA.SQL --- EXPECTED:JAVA.UTIL
-	// assertThat(updatedTicket.getOutTime()).isEqualTo(ticketToUpdate.getOutTime());
+	// assertThat(updatedTicket.getOutTime().getTime()).isEqualTo(ticketToUpdate.getOutTime().getTime());
     }
-
 }

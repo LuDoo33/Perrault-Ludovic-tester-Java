@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.17</version>
+			<version>8.0.30</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -132,8 +132,12 @@
 				<configuration>
 					<excludes>
 						<exclude>com/parkit/parkingsystem/constants/*DBConstants.class</exclude>
-						<exclude>com/baeldung/**/*DTO.*</exclude>
-						<exclude>**/config/*</exclude>
+						<exclude>com/parkit/parkingsystem/constants/*Fare.class</exclude>
+						<exclude>com/parkit/parkingsystem/constants/*ParkingType.class</exclude>
+						<exclude>com/parkit/parkingsystem/model/*ParkingSpot.class</exclude>
+						<exclude>com/parkit/parkingsystem/model/*Ticket.class</exclude>
+						<exclude>com/parkit/parkingsystem/*App.class</exclude>
+						<exclude>com/parkit/parkingsystem/service/*InteractiveShell.class</exclude>
 					</excludes>
 				</configuration>
 				<executions>

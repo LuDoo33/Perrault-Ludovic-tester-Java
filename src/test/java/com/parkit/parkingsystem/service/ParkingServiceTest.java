@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem;
+package com.parkit.parkingsystem.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

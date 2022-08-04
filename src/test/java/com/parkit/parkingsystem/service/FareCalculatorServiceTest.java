@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,6 @@ import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.service.FareCalculatorService;
 
 public class FareCalculatorServiceTest {
 
@@ -194,6 +194,24 @@ public class FareCalculatorServiceTest {
 	double expectedPrice = (double) Fare.CAR_RATE_PER_HOUR - (Fare.CAR_RATE_PER_HOUR * 5 / 100);
 
 	assertThat(ticket.getPrice()).isEqualTo(1 * Fare.CAR_RATE_PER_HOUR_DISCOUNT);
+    }
+
+    @Disabled
+    @Test
+    @DisplayName("calculateFivePercentDiscountForRecurringUsers doit lever une exception")
+    public void calculateFivePercentDiscountForRecurringUsersThrowsExeption() {
+	// GIVEN - ARRANGE
+	Date inTime = new Date();
+
+	ticket.setInTime(inTime);
+	ticket.setInTime(null);
+
+	// WHEN - ACT
+
+	// THEN - ASSERT // A VERIFIER... DOIT RENVOYER UN ILLEGAL-ARGUMENT-EXCEPTION...
+	assertThrows(NullPointerException.class,
+		() -> fareCalculatorService.calculateFareWithFivePercentDiscount(ticket));
+
     }
 
 }

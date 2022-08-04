@@ -106,4 +106,16 @@ public class TicketDAOTest {
 	// ACTUAL:JAVA.SQL --- EXPECTED:JAVA.UTIL
 	// assertThat(updatedTicket.getOutTime().getTime()).isEqualTo(ticketToUpdate.getOutTime().getTime());
     }
+
+    @Test
+    @DisplayName("Test de comptage du nombre de ticket dans la BDD")
+    public void getCountForVehicleRegNumber() {
+	// GIVEN - ARRANGE
+	testUpdatingATicketInDataBase();
+	// WHEN - ACT
+	int result = ticketDAO.getCountForVehicleRegNumber("AT-444-ST");
+	// THEN - ASSERT
+	assertThat(result).isGreaterThan(0);
+    }
+
 }

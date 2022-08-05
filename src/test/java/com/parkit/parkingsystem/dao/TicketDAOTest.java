@@ -85,6 +85,18 @@ public class TicketDAOTest {
     }
 
     @Test
+    @DisplayName("test de l'échec de l'enregistrement dans la base de données")
+    public void testFailedToSAveTicket() {
+	// GIVEN - ARRANGE
+	ticketToSave = null;
+	// WHEN - ACT
+	boolean result = ticketDAO.saveTicket(ticketToSave);
+
+	// THEN - ASSERT
+	assertThat(result).isFalse();
+    }
+
+    @Test
     @DisplayName("Test de la mise à jour d'un ticket en BDD")
     public void testUpdatingATicketInDataBase() {
 	// GIVEN - ARRANGE
@@ -106,4 +118,16 @@ public class TicketDAOTest {
 	// ACTUAL:JAVA.SQL --- EXPECTED:JAVA.UTIL
 	// assertThat(updatedTicket.getOutTime().getTime()).isEqualTo(ticketToUpdate.getOutTime().getTime());
     }
+
+    @Test
+    @DisplayName("Test de comptage du nombre de ticket dans la BDD")
+    public void getCountForVehicleRegNumber() {
+	// GIVEN - ARRANGE
+	testUpdatingATicketInDataBase();
+	// WHEN - ACT
+	int result = ticketDAO.getCountForVehicleRegNumber("AT-444-ST");
+	// THEN - ASSERT
+	assertThat(result).isGreaterThan(0);
+    }
+
 }

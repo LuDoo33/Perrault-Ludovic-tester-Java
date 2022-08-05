@@ -85,6 +85,18 @@ public class TicketDAOTest {
     }
 
     @Test
+    @DisplayName("test de l'échec de l'enregistrement dans la base de données")
+    public void testFailedToSAveTicket() {
+	// GIVEN - ARRANGE
+	ticketToSave = null;
+	// WHEN - ACT
+	boolean result = ticketDAO.saveTicket(ticketToSave);
+
+	// THEN - ASSERT
+	assertThat(result).isFalse();
+    }
+
+    @Test
     @DisplayName("Test de la mise à jour d'un ticket en BDD")
     public void testUpdatingATicketInDataBase() {
 	// GIVEN - ARRANGE

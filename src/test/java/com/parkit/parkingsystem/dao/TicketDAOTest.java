@@ -97,6 +97,19 @@ public class TicketDAOTest {
     }
 
     @Test
+    @DisplayName("Test pour de la récupération d'un ticket avec une plaque nulle")
+    public void testFailedToGetTicket() {
+	// GIVEN - ARRANGE
+
+	Ticket gettedTicket = new Ticket();
+	// WHEN - ACT
+	gettedTicket = ticketDAO.getTicket(null);
+
+	// THEN - ASSERT
+	assertThat(gettedTicket).isNull();
+    }
+
+    @Test
     @DisplayName("Test de la mise à jour d'un ticket en BDD")
     public void testUpdatingATicketInDataBase() {
 	// GIVEN - ARRANGE
@@ -117,6 +130,19 @@ public class TicketDAOTest {
 	assertThat(updatedTicket.getPrice()).isEqualTo(ticketToUpdate.getPrice());
 	// ACTUAL:JAVA.SQL --- EXPECTED:JAVA.UTIL
 	// assertThat(updatedTicket.getOutTime().getTime()).isEqualTo(ticketToUpdate.getOutTime().getTime());
+    }
+
+    @Test
+    @DisplayName("Test de l'échec de la mise à jour d'un ticket")
+    public void testFaillingToUpdateATicketInDataBase() {
+	// GIVEN - ARRANGE
+	ticketToUpdate = null;
+
+	// WHEN - ACT
+	boolean result = ticketDAO.updateTicket(ticketToUpdate);
+
+	// THEN - ASSERT
+	assertThat(result).isFalse();
     }
 
     @Test

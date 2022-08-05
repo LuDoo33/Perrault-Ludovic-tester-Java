@@ -103,7 +103,7 @@ public class TicketDAO {
 	    dataBaseConfig.closeResultSet(rs);
 	    dataBaseConfig.closePreparedStatement(ps);
 	} catch (Exception ex) {
-	    logger.error("Error geting occurences of vehicle registration number", ex);
+	    logger.error("Error getting occurences of vehicle registration number", ex);
 	} finally {
 	    dataBaseConfig.closeConnection(con);
 	}

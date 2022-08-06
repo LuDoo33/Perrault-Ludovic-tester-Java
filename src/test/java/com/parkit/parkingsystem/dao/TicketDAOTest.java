@@ -97,6 +97,19 @@ public class TicketDAOTest {
     }
 
     @Test
+    @DisplayName("Test pour de la récupération d'un ticket avec une plaque nulle")
+    public void testFailedToGetTicket() {
+	// GIVEN - ARRANGE
+
+	Ticket gettedTicket = new Ticket();
+	// WHEN - ACT
+	gettedTicket = ticketDAO.getTicket(null);
+
+	// THEN - ASSERT
+	assertThat(gettedTicket).isNull();
+    }
+
+    @Test
     @DisplayName("Test de la mise à jour d'un ticket en BDD")
     public void testUpdatingATicketInDataBase() {
 	// GIVEN - ARRANGE
@@ -120,6 +133,19 @@ public class TicketDAOTest {
     }
 
     @Test
+    @DisplayName("Test de l'échec de la mise à jour d'un ticket")
+    public void testFaillingToUpdateATicketInDataBase() {
+	// GIVEN - ARRANGE
+	ticketToUpdate = null;
+
+	// WHEN - ACT
+	boolean result = ticketDAO.updateTicket(ticketToUpdate);
+
+	// THEN - ASSERT
+	assertThat(result).isFalse();
+    }
+
+    @Test
     @DisplayName("Test de comptage du nombre de ticket dans la BDD")
     public void getCountForVehicleRegNumber() {
 	// GIVEN - ARRANGE
@@ -130,4 +156,15 @@ public class TicketDAOTest {
 	assertThat(result).isGreaterThan(0);
     }
 
+    // A CONTINUER
+    @Test
+    @DisplayName("test pour une plaque d'immatriculation inconnue")
+    public void testGetForVehicleRegNumberWithUnknownRegistrationNumber() {
+	// GIVEN - ARRANGE
+	// WHEN - ACT
+	int result = ticketDAO.getCountForVehicleRegNumber(";");
+
+	// THEN - ASSERT
+	assertThat(result).isEqualTo(0);
+    }
 }

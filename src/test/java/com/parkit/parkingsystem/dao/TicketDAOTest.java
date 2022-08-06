@@ -156,4 +156,15 @@ public class TicketDAOTest {
 	assertThat(result).isGreaterThan(0);
     }
 
+    // A CONTINUER
+    @Test
+    @DisplayName("test pour une plaque d'immatriculation inconnue")
+    public void testGetForVehicleRegNumberWithUnknownRegistrationNumber() {
+	// GIVEN - ARRANGE
+	// WHEN - ACT
+	int result = ticketDAO.getCountForVehicleRegNumber(";");
+
+	// THEN - ASSERT
+	assertThat(result).isEqualTo(0);
+    }
 }

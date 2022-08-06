@@ -175,8 +175,44 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @DisplayName("Reduction de 5% pour utilisateurs réguliers")
-    public void calculateFivePercentDiscountForRecurringUsers() {
+    @DisplayName("test echoue pour un outTime null")
+    public void calculateFareWithANullOutTime() {
+	// GIVEN - ARRANGE
+	Date inTime = new Date();
+	Date outTime = null;
+	ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+	ticket.setInTime(inTime);
+	ticket.setOutTime(outTime);
+	ticket.setParkingSpot(parkingSpot);
+
+	// WHEN - ACT
+
+	// THEN - ASSERT
+	// A VERIFIER... DOIT RENVOYER UN ILLEGAL-ARGUMENT-EXCEPTION...
+	assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
+    }
+
+    @Test
+    @DisplayName("test echoue pour un outTime avant inTime")
+    public void calculateFareWithAOutTimeBeforeInTime() {
+	// GIVEN - ARRANGE
+	Date inTime = new Date();
+	Date outTime = new Date();
+	outTime.setTime(System.currentTimeMillis() - 30 * 60 * 1000); // HEURE ACTUELLE - 30 MINUTES
+	ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+	ticket.setInTime(inTime);
+	ticket.setOutTime(outTime);
+	ticket.setParkingSpot(parkingSpot);
+
+	// WHEN - ACT
+
+	// THEN - ASSERT
+	assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
+    }
+
+    @Test
+    @DisplayName("Reduction de 5% pour utilisateurs voiture réguliers")
+    public void calculateFivePercentDiscountForCarDriverRecurringUsers() {
 	// GIVEN - ARRANGE
 	Date inTime = new Date();
 	Date outTime = new Date();
@@ -194,6 +230,101 @@ public class FareCalculatorServiceTest {
 	double expectedPrice = (double) Fare.CAR_RATE_PER_HOUR - (Fare.CAR_RATE_PER_HOUR * 5 / 100);
 
 	assertThat(ticket.getPrice()).isEqualTo(1 * Fare.CAR_RATE_PER_HOUR_DISCOUNT);
+    }
+
+    @Test
+    @DisplayName("Reduction de 5% pour utilisateurs moto réguliers")
+    public void calculateFivePercentDiscountForBikeDriverRecurringUsers() {
+	// GIVEN - ARRANGE
+	Date inTime = new Date();
+	Date outTime = new Date();
+	outTime.setTime(System.currentTimeMillis() + 60 * 60 * 1000); // HEURE ACTUELLE + 1H
+	ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+	ticket.setInTime(inTime);
+	ticket.setOutTime(outTime);
+	ticket.setParkingSpot(parkingSpot);
+
+	// WHEN - ACT
+	fareCalculatorService.calculateFareWithFivePercentDiscount(ticket);
+
+	// THEN - ASSERT
+	assertThat(ticket.getPrice()).isEqualTo(1 * Fare.BIKE_RATE_PER_HOUR_DISCOUNT);
+    }
+
+    @Test
+    @DisplayName("test echoue pour une remise avec un outTime null")
+    public void calculateDiscountFareWithANullOutTime() {
+	// GIVEN - ARRANGE
+	Date inTime = new Date();
+	Date outTime = null;
+	ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+	ticket.setInTime(inTime);
+	ticket.setOutTime(outTime);
+	ticket.setParkingSpot(parkingSpot);
+
+	// WHEN - ACT
+
+	// THEN - ASSERT
+	// A VERIFIER... DOIT RENVOYER UN ILLEGAL-ARGUMENT-EXCEPTION...
+	assertThrows(NullPointerException.class,
+		() -> fareCalculatorService.calculateFareWithFivePercentDiscount((ticket)));
+    }
+
+    @Test
+    @DisplayName("test echoue pour une reduction avec un outTime avant inTime")
+    public void calculateDiscountFareWithAOutTimeBeforeInTime() {
+	// GIVEN - ARRANGE
+	Date inTime = new Date();
+	Date outTime = new Date();
+	outTime.setTime(System.currentTimeMillis() - 30 * 60 * 1000); // HEURE ACTUELLE - 30 MINUTES
+	ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+	ticket.setInTime(inTime);
+	ticket.setOutTime(outTime);
+	ticket.setParkingSpot(parkingSpot);
+
+	// WHEN - ACT
+
+	// THEN - ASSERT
+	assertThrows(IllegalArgumentException.class,
+		() -> fareCalculatorService.calculateFareWithFivePercentDiscount(ticket));
+    }
+
+    @Test
+    @DisplayName("Prix avec remise pour moto moins de 30 minutes = 0 ")
+    public void calculateDiscountFareBikeWithLessThanThirtyMinutes() {
+	// GIVEN - ARRANGE
+	Date inTime = new Date();
+	Date outTime = new Date();
+	outTime.setTime(System.currentTimeMillis() + 30 * 60 * 1000); // HEURE ACTUELLE + 30 MINUTES
+	ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+	ticket.setInTime(inTime);
+	ticket.setOutTime(outTime);
+	ticket.setParkingSpot(parkingSpot);
+
+	// WHEN - ACT
+	fareCalculatorService.calculateFareWithFivePercentDiscount(ticket);
+
+	// THEN - ASSERT
+	assertThat(ticket.getPrice()).isEqualTo((0));
+    }
+
+    @Test
+    @DisplayName("Prix avec remise pour voiture moins de 30 minutes = 0 ")
+    public void calculateDiscountFareCarWithLessThanThirtyMinutes() {
+	// GIVEN - ARRANGE
+	Date inTime = new Date();
+	Date outTime = new Date();
+	outTime.setTime(System.currentTimeMillis() + 30 * 60 * 1000); // HEURE ACTUELLE + 30 MINUTES
+	ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+	ticket.setInTime(inTime);
+	ticket.setOutTime(outTime);
+	ticket.setParkingSpot(parkingSpot);
+
+	// WHEN - ACT
+	fareCalculatorService.calculateFareWithFivePercentDiscount(ticket);
+
+	// THEN - ASSERT
+	assertThat(ticket.getPrice()).isEqualTo((0));
     }
 
     @Disabled

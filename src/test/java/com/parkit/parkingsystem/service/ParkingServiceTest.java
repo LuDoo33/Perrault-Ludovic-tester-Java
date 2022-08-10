@@ -79,7 +79,6 @@ public class ParkingServiceTest {
 	when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
 	// WHEN - ACT
 	parkingService.processIncomingVehicle();
-	// parkingService.processExitingVehicle(new Date());
 	Ticket ticketAfterIncomingProcess = ticketDAO.getTicket("ABCDEF");
 
 	// THEN - ASSERT
@@ -96,10 +95,22 @@ public class ParkingServiceTest {
 	// WHEN - ACT
 	parkingService.processIncomingVehicle();
 
-	// parkingService.processExitingVehicle(new Date());
 	Ticket ticketAfterIncomingProcess = ticketDAO.getTicket("ABCDEF");
 
 	// THEN - ASSERT
 	assertThat(ticketAfterIncomingProcess.getPrice()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("on teste avec un parkingSpot null")
+    public void testWithANullParkingSpotInProcessIncomingVehicle() {
+	// GIVEN - ARRANGE --- Already done in BeforeEeach
+
+	// WHEN - ACT
+	parkingService.processIncomingVehicle();
+	Ticket ticketAfterIncomingProcess = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
+	assertThat(ticketAfterIncomingProcess.getInTime()).isNotNull();
     }
 }

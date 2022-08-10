@@ -85,4 +85,21 @@ public class ParkingServiceTest {
 	// THEN - ASSERT
 	assertThat(ticketAfterIncomingProcess.getInTime()).isNotNull();
     }
+
+    @Test
+    @DisplayName("on teste un utilisateur regulier")
+    public void testRecurringUserIncoming() {
+	// GIVEN - ARRANGE --- Already done in BeforeEeach
+	when(inputReaderUtil.readSelection()).thenReturn(1);
+	when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
+	when(ticketDAO.getCountForVehicleRegNumber("ABCDEF")).thenReturn(1);
+	// WHEN - ACT
+	parkingService.processIncomingVehicle();
+
+	// parkingService.processExitingVehicle(new Date());
+	Ticket ticketAfterIncomingProcess = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
+	assertThat(ticketAfterIncomingProcess.getPrice()).isEqualTo(0);
+    }
 }

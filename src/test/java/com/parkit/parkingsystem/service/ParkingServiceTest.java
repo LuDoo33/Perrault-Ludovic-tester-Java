@@ -3,12 +3,14 @@ package com.parkit.parkingsystem.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -20,7 +22,6 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,7 +39,7 @@ public class ParkingServiceTest {
     @BeforeEach
     private void setUpPerTest() {
 	try {
-	    when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+	    lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
 	    ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 	    Ticket ticket = new Ticket();
@@ -46,9 +47,9 @@ public class ParkingServiceTest {
 	    ticket.setParkingSpot(parkingSpot);
 	    ticket.setVehicleRegNumber("ABCDEF");
 	    when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
-	    when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
+	    lenient().when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 
-	    when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
+	    lenient().when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
 	    parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 	} catch (Exception e) {
@@ -58,7 +59,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processExitingVehicleTest() {
+    public void testOutTimeWhenProcessExitingVehicle() {
 	// GIVEN - ARRANGE --- Already done in BeforeEeach
 
 	// WHEN - ACT
@@ -68,7 +69,20 @@ public class ParkingServiceTest {
 	// THEN - ASSERT
 	verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 	assertThat(ticketAfterExitingProcess.getOutTime()).isNotNull();
-	assertThat(ticketAfterExitingProcess.getPrice()).isNotNull();
     }
 
+    @Test
+    @DisplayName("on teste que l'heure d'entrée n'est pas nulle")
+    public void testInTimeWhenProcessIncomingVehicle() {
+	// GIVEN - ARRANGE --- Already done in BeforeEeach
+	when(inputReaderUtil.readSelection()).thenReturn(1);
+	when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
+	// WHEN - ACT
+	parkingService.processIncomingVehicle();
+	// parkingService.processExitingVehicle(new Date());
+	Ticket ticketAfterIncomingProcess = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
+	assertThat(ticketAfterIncomingProcess.getInTime()).isNotNull();
+    }
 }

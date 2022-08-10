@@ -72,6 +72,46 @@ public class ParkingServiceTest {
     }
 
     @Test
+    @DisplayName("on teste un utilisateur regulier lors de la sortie")
+    public void testRecurringUserExiting() {
+	// GIVEN - ARRANGE --- Already done in BeforeEeach
+	when(ticketDAO.getCountForVehicleRegNumber("ABCDEF")).thenReturn(2);
+
+	// WHEN - ACT
+	parkingService.processExitingVehicle(new Date());
+	Ticket ticketAfterExitingProcess = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
+	assertThat(ticketAfterExitingProcess.getPrice()).isLessThan(1.5);
+    }
+
+    @Test
+    @DisplayName("on teste avec un get ticket null")
+    public void testProcessExitingVehicleWithANullTicket() {
+	// GIVEN - ARRANGE --- Already done in BeforeEeach
+	when(ticketDAO.getTicket(anyString())).thenReturn(null);
+	// WHEN - ACT
+	parkingService.processExitingVehicle(new Date());
+	Ticket ticketAfterIncomingProcess = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
+	assertThat(ticketAfterIncomingProcess).isNull();
+    }
+
+    @Test
+    @DisplayName("on teste avec un update ticket null")
+    public void testProcessExitingVehicleWithUpdatingANullTicket() {
+	// GIVEN - ARRANGE --- Already done in BeforeEeach
+	when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
+	// WHEN - ACT
+	parkingService.processExitingVehicle(new Date());
+	Ticket ticketAfterExitingProcess = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
+	assertThat(ticketAfterExitingProcess.getOutTime()).isNotNull();
+    }
+
+    @Test
     @DisplayName("on teste que l'heure d'entrée n'est pas nulle")
     public void testInTimeWhenProcessIncomingVehicle() {
 	// GIVEN - ARRANGE --- Already done in BeforeEeach
@@ -86,7 +126,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    @DisplayName("on teste un utilisateur regulier")
+    @DisplayName("on teste un utilisateur regulier lors de l'entrée")
     public void testRecurringUserIncoming() {
 	// GIVEN - ARRANGE --- Already done in BeforeEeach
 	when(inputReaderUtil.readSelection()).thenReturn(1);
@@ -112,5 +152,21 @@ public class ParkingServiceTest {
 
 	// THEN - ASSERT
 	assertThat(ticketAfterIncomingProcess.getInTime()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("on teste avec un parkingSpot id = 0")
+    public void testWithAZeroIdParkingSpotInProcessIncomingVehicle() {
+	// GIVEN - ARRANGE --- Already done in BeforeEeach
+	when(inputReaderUtil.readSelection()).thenReturn(1);
+	when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
+
+	// WHEN - ACT
+	parkingService.processIncomingVehicle();
+
+	Ticket ticketAfterIncomingProcess = ticketDAO.getTicket("ABCDEF");
+
+	// THEN - ASSERT
+	assertThat(ticketAfterIncomingProcess.getPrice()).isEqualTo(0);
     }
 }

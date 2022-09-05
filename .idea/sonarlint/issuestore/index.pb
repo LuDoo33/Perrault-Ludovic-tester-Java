@@ -3,8 +3,6 @@
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 7
 pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
-n
->src/test/java/com/parkit/parkingsystem/ParkingServiceTest.java,b/f/bfafa75b381d8607fc05b55227f76d809f62e699
 B
 parking-system.iml,f/3/f308a664101deca9caef9044c5b922487d1f048c
 _
@@ -17,9 +15,5 @@ Qsrc/test/java/com/parkit/parkingsystem/integration/config/DataBaseTestConfig.ja
 Vsrc/test/java/com/parkit/parkingsystem/integration/service/DataBasePrepareService.java,f/b/fbb2241be41cb3e33b3972a1e0455f171de532a4
 u
 Esrc/test/java/com/parkit/parkingsystem/FareCalculatorServiceTest.java,3/4/348a6a839f09ba349014f14ea7f0814d4e17dab7
-y
-Isrc/test/java/com/parkit/parkingsystem/integration/ParkingDataBaseIT.java,7/6/76c98b7b54c9c1b7a996ba73834a448b978db0f0
 p
 @src/main/java/com/parkit/parkingsystem/util/InputReaderUtil.java,3/c/3c54d5d7febc45facabac5e0634ff9591a676a28
-r
-Bsrc/main/java/com/parkit/parkingsystem/service/ParkingService.java,3/0/3010778988e0a8c9498c5b9ccbb0c445bb7c8f19

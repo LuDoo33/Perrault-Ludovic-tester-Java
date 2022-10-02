@@ -1,16 +1,13 @@
-package com.parkit.parkingsystem.integration.service;
+package com.parkit.parkingsystem.service;
 
-import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
+import com.parkit.parkingsystem.config.DataBaseTestConfig;
+
 
 import java.sql.Connection;
 
 public class DataBasePrepareService {
 
     DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
-    /**
-	* 
-	* @param clear the DB
-	*/
     public void clearDataBaseEntries() {
         Connection connection = null;
         

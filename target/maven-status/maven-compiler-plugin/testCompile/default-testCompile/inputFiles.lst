@@ -1,7 +1,7 @@
-D:\Programmes\eclipse-workspace\parking-system\src\test\java\com\parkit\parkingsystem\integration\config\DataBaseTestConfig.java
-D:\Programmes\eclipse-workspace\parking-system\src\test\java\com\parkit\parkingsystem\FareCalculatorServiceTest.java
-D:\Programmes\eclipse-workspace\parking-system\src\test\java\com\parkit\parkingsystem\integration\service\DataBasePrepareService.java
-D:\Programmes\eclipse-workspace\parking-system\src\test\java\com\parkit\parkingsystem\integration\ParkingDataBaseIT.java
-D:\Programmes\eclipse-workspace\parking-system\src\test\java\com\parkit\parkingsystem\ParkingServiceTest.java
-D:\Programmes\eclipse-workspace\parking-system\src\test\java\com\parkit\parkingsystem\ParkingSpotDAOTest.java
-D:\Programmes\eclipse-workspace\parking-system\src\test\java\com\parkit\parkingsystem\TicketDAOTest.java
+D:\PARCOURS JAVA\parkingsystem_terry\src\test\java\com\parkit\parkingsystem\integration\ParkingDataBaseIT.java
+D:\PARCOURS JAVA\parkingsystem_terry\src\test\java\com\parkit\parkingsystem\config\DataBaseTestConfig.java
+D:\PARCOURS JAVA\parkingsystem_terry\src\test\java\com\parkit\parkingsystem\integration\TicketDAOTest.java
+D:\PARCOURS JAVA\parkingsystem_terry\src\test\java\com\parkit\parkingsystem\integration\FareCalculatorServiceTest.java
+D:\PARCOURS JAVA\parkingsystem_terry\src\test\java\com\parkit\parkingsystem\service\DataBasePrepareService.java
+D:\PARCOURS JAVA\parkingsystem_terry\src\test\java\com\parkit\parkingsystem\integration\ParkingServiceTest.java
+D:\PARCOURS JAVA\parkingsystem_terry\src\test\java\com\parkit\parkingsystem\integration\ParkingSpotDAOTest.java

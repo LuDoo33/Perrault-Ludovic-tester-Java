@@ -6,7 +6,7 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L6">public class FareCalculatorService {</span>
 	/**
 	* 
-	* @param calculates the fare of the ticket according to the out time and the vehicle
+	* @param ticket: the fare of the ticket according to the out time and the vehicle
 	*/
 	public void calculateFare(Ticket ticket) { 
         // Display an error if the out time is null or after in time
@@ -21,7 +21,7 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L21">        duration = duration / 60;</span>
         
         // Verify the duration is greater than 30 minutes
-<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (duration &gt; 0.5) {</span>
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        if (duration &gt; 0.5) {</span>
 <span class="pc bpc" id="L25" title="1 of 3 branches missed.">            switch (ticket.getParkingSpot().getParkingType()) {</span>
                 case CAR: {
 <span class="fc" id="L27">                    ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);</span>
@@ -34,10 +34,10 @@ import com.parkit.parkingsystem.model.Ticket;
                 default:
 <span class="nc" id="L35">                    throw new IllegalArgumentException(&quot;Unkown Parking Type&quot;);</span>
             }
-<span class="nc" id="L37">        }</span>
+        }
         else {
         	// Parking free if the time is less than 30 minutes
-<span class="fc" id="L40">            ticket.setPrice(0.0);</span>
+<span class="nc" id="L40">            ticket.setPrice(0.0);</span>
         }
 <span class="fc" id="L42">	}</span>
 

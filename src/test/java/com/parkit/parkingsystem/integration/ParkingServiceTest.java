@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem;
+package com.parkit.parkingsystem.integration;
 
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
@@ -32,30 +32,40 @@ public class ParkingServiceTest {
     @BeforeEach
     private void setUpPerTest() {
         try {
-        	// Feigned a user input for the vehicle registration number
+            // Feigned a user input for the vehicle registration number
             when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-
-            ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
-            Ticket ticket = new Ticket();
-            // Set the data of the ticket
-            ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
-            ticket.setParkingSpot(parkingSpot);
-            ticket.setVehicleRegNumber("ABCDEF");
-            // Feigned taking a ticket, update the ticket and the parking spot
-            when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
-            when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
             when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
             parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to set up test mock objects");
         }
     }
 
     @Test
-    public void processExitingVehicleTest(){
+    public void processIncomingVehiculeTest() {
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        ParkingType parkingType = ParkingType.CAR;
+        when(parkingSpotDAO.getNextAvailableSlot(parkingType)).thenReturn(1);
+        parkingService.processIncomingVehicle();
+        verify(ticketDAO, Mockito.times(1)).saveTicket(any(Ticket.class));
+
+    }
+
+
+    @Test
+    public void processExitingVehicleTest() {
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        Ticket ticket = new Ticket();
+        // Set the data of the ticket
+        ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setVehicleRegNumber("ABCDEF");
+        // Feigned taking a ticket, update the ticket and the parking spot
+        when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
+        when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
+
         parkingService.processExitingVehicle();
         // Verify if the method updateParking is called at least once
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));

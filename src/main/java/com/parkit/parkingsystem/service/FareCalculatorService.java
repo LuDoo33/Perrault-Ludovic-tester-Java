@@ -6,7 +6,7 @@ import com.parkit.parkingsystem.model.Ticket;
 public class FareCalculatorService {
 	/**
 	* 
-	* @param calculates the fare of the ticket according to the out time and the vehicle
+	* @param ticket: the fare of the ticket according to the out time and the vehicle
 	*/
 	public void calculateFare(Ticket ticket) { 
         // Display an error if the out time is null or after in time

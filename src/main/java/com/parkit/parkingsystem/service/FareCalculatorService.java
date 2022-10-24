@@ -21,6 +21,9 @@ public class FareCalculatorService {
             	if (duration <= 0.5) {
             		ticket.setPrice(0);
             	}
+            	else if (ticket.isRecurentUser() == 1) {
+            		ticket.setPrice(duration*0.95*Fare.CAR_RATE_PER_HOUR);            	
+            	}
             	else {
             		ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
             	}
@@ -29,6 +32,9 @@ public class FareCalculatorService {
             case BIKE: {
             	if (duration <= 0.5) {
             		ticket.setPrice(0);
+            	}
+            	else if (ticket.isRecurentUser() == 1) {
+            		ticket.setPrice(duration*0.95*Fare.BIKE_RATE_PER_HOUR);            	
             	}
             	else {
             		ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);

@@ -79,4 +79,14 @@ public class ParkingDataBaseIT {
         Assert.assertNotNull(ticket.getPrice());
         Assert.assertNotNull(ticket.getOutTime());
     }
+    
+    @Test
+    public void testRecurentUser(){
+    	testParkingLotExit();
+    	testParkingACar();
+    	
+    	Ticket ticket = ticketDAO.getTicket("ABCDEF"); // Checking if the user is recurent (=1) on the DB
+    	
+    	Assert.assertNotNull(ticket.isRecurentUser());
+    }
 }

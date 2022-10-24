@@ -18,26 +18,26 @@ public class FareCalculatorService {
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
-            	if (duration <= 0.5) {
+            	if (duration <= 0.5) { // Free fare if user out before 30 min
             		ticket.setPrice(0);
             	}
-            	else if (ticket.isRecurentUser() == 1) {
+            	else if (ticket.isRecurentUser() == 1) { // 5% discount if user is recurent
             		ticket.setPrice(duration*0.95*Fare.CAR_RATE_PER_HOUR);            	
             	}
             	else {
-            		ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+            		ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR); // Normal fare
             	}
                 break;
             }
             case BIKE: {
-            	if (duration <= 0.5) {
+            	if (duration <= 0.5) { // Free fare if user out before 30 min
             		ticket.setPrice(0);
             	}
-            	else if (ticket.isRecurentUser() == 1) {
+            	else if (ticket.isRecurentUser() == 1) { // 5% discount if user is recurent
             		ticket.setPrice(duration*0.95*Fare.BIKE_RATE_PER_HOUR);            	
             	}
             	else {
-            		ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+            		ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR); // Normal fare
             	}
                 break;
             }

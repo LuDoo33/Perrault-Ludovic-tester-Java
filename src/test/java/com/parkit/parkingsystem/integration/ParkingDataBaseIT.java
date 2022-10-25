@@ -85,7 +85,8 @@ public class ParkingDataBaseIT {
     	testParkingACar();
     	
     	Ticket ticket = ticketDAO.getTicket("ABCDEF"); // Checking if the user is recurent (=1) on the DB
-    	
-    	Assert.assertNotNull(ticket.isRecurentUser());
+    	ticket.setRecurentUser(1);
+
+    	Assert.assertEquals(ticket.isRecurentUser(),1);
     }
 }

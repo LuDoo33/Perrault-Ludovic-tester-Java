@@ -108,19 +108,13 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
         
-        System.out.println( "inTime  =========> " + inTime);
-        
-        System.out.println( "outTime =========> " + outTime);
-        
-        System.out.println(0.75 * Fare.CAR_RATE_PER_HOUR+" ========= " + ticket.getPrice());
-        
         assertEquals( (0.75 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
 
     @Test
     public void calculateFareCarWithMoreThanADayParkingTime(){
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
+        inTime.setTime( System.currentTimeMillis() - ( 24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
@@ -129,6 +123,81 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+    }
+    
+    @Test
+    public void calculateFareCarWithLessThanthirtyMinutesParkingTime(){
+    	
+    	//Given
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  25 *60 *1000) );//Less than 30 minutes parking should be free  
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        
+        //Than
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        
+        //When
+        assertEquals( 0 , ticket.getPrice());
+    }
+    
+    @Test
+    public void calculateFareBikeWithLessThanthirtyMinutesParkingTime(){
+    	
+    	//Given
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  25 *60 *1000) );//Less than 30 minutes parking should be free  
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        
+        //Than
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        
+        //When
+        assertEquals( 0 , ticket.getPrice());
+    }
+    @Test
+    public void calculateFareCarforThirtyMinutesOfParkingTime(){
+    	
+    	//Given
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  30 *60 *1000) );//Equal 30 minutes parking should be free  
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        
+        //Than
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        
+        //When
+        assertEquals( 0 , ticket.getPrice());
+    }
+    
+    @Test
+    public void calculateFareBikeforThirtyMinutesOfParkingTime(){
+    	
+    	//Given
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  30 *60 *1000) );//Less than 30 minutes parking should be free  
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        
+        //Than
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        
+        //When
+        assertEquals( 0 , ticket.getPrice());
     }
 
 }

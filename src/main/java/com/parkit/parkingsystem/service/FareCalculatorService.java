@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
 public class FareCalculatorService {
@@ -28,9 +29,19 @@ public class FareCalculatorService {
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
-                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                TicketDAO ticketDAO = new TicketDAO();
+                int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(ticket.getVehicleRegNumber());
+                if (nbPreviousOccurence>1) {
+                    ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR * 0.95);
+                    System.out.println("Nous avons appliqué les 5% de remise!");
+                } else {
+                    ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                    System.out.println("Tarif normal.");
+                }
+                       
+
                 break;
-            }
+        }
             case BIKE: {
                 ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
                 break;

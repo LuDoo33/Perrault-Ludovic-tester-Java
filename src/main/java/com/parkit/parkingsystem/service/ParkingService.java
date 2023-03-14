@@ -33,7 +33,14 @@ public class ParkingService {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
-                //TODO Caro : recuperer ici la bonne ligne et incrémenter pour eviter les doublons de ligne si meme reg number
+                
+                //verifie si le vehicule n'est pas déjà garé et non sorti
+                int countParkedVehicule = ticketDAO.getCountParkedVehicle(vehicleRegNumber);
+                if (countParkedVehicule>0) {
+                	System.out.println("Merci de sortir le vehicule avant de le rentrer à nouveau");
+                	return;
+                }
+                
                 int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(vehicleRegNumber);
                 if(nbPreviousOccurence>0) {
                 	System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
@@ -114,7 +121,8 @@ public class ParkingService {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
+                DecimalFormat df = new DecimalFormat("###.##");
+                System.out.println("Please pay the parking fare:" + df.format(ticket.getPrice()) + "€");
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");

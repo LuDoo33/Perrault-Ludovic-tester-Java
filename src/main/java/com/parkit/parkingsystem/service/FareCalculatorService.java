@@ -53,8 +53,22 @@ public class FareCalculatorService {
                 break;
         }
             case BIKE: {
-                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
-                break;
+            	   TicketDAO ticketDAO = new TicketDAO();
+                   int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(ticket.getVehicleRegNumber());
+                   double reduc30porcent = 0.50;
+                   
+                   if (duration <= reduc30porcent) { // 30mn gratuite
+                   	ticket.setPrice (0.00);
+                   	System.out.println("Stationnement gratuit pour les 30 premières minutes");
+                   } else if (nbPreviousOccurence>1) {
+                       ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR * 0.95);
+                       System.out.println("Nous avons appliqué les 5% de remise!");
+                   } else {
+                       ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+                       System.out.println("Tarif normal.");
+                   }
+                   break;
+            	
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }

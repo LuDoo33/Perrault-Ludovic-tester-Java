@@ -10,6 +10,7 @@ public class DBConstants {
 
     // nouvelle requete pour compter le nombre de ligne de meme VEHICLE_REG_NUMBER
     public static final String COUNT_PREVIOUS_OCCURENCE = "select count(VEHICLE_REG_NUMBER) from ticket where VEHICLE_REG_NUMBER = ?";
+    public static final String COUNT_PARKED_VEHICLE = "select count(VEHICLE_REG_NUMBER) from ticket where VEHICLE_REG_NUMBER = ? AND OUT_TIME is null";
 
     
 }

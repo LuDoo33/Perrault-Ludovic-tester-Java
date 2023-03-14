@@ -32,20 +32,16 @@ public class FareCalculatorService {
         if (duration <0 ) {
         	duration = 0;
         }
+    	System.out.println("Le stationnement est gratuit pour les 30 premières minutes.");
     	System.out.println("Durée de stationnement prise encompte : " + df.format(duration) + "h ");
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
                 TicketDAO ticketDAO = new TicketDAO();
                 int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(ticket.getVehicleRegNumber());
-                double reduc30porcent = 0.50;
-                
-                if (duration <= reduc30porcent) { // 30mn gratuite
-                	ticket.setPrice (0.00);
-                	System.out.println("Stationnement gratuit pour les 30 premières minutes");
-                } else if (nbPreviousOccurence>1) {
+                if (nbPreviousOccurence>1) {
                     ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR * 0.95);
-                    System.out.println("Nous avons appliqué les 5% de remise!");
+                    System.out.println("Nous avons également appliqué les 5% de remise!");
                 } else {
                     ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
                     System.out.println("Tarif normal.");
@@ -53,22 +49,16 @@ public class FareCalculatorService {
                 break;
         }
             case BIKE: {
-            	   TicketDAO ticketDAO = new TicketDAO();
-                   int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(ticket.getVehicleRegNumber());
-                   double reduc30porcent = 0.50;
-                   
-                   if (duration <= reduc30porcent) { // 30mn gratuite
-                   	ticket.setPrice (0.00);
-                   	System.out.println("Stationnement gratuit pour les 30 premières minutes");
-                   } else if (nbPreviousOccurence>1) {
-                       ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR * 0.95);
-                       System.out.println("Nous avons appliqué les 5% de remise!");
-                   } else {
-                       ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
-                       System.out.println("Tarif normal.");
-                   }
-                   break;
-            	
+                TicketDAO ticketDAO = new TicketDAO();
+                int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(ticket.getVehicleRegNumber());
+                if (nbPreviousOccurence>1) {
+                    ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR * 0.95);
+                    System.out.println("Nous avons également appliqué les 5% de remise!");
+                } else {
+                    ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+                    System.out.println("Tarif normal.");
+                }
+                break;
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }

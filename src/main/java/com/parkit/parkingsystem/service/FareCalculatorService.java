@@ -1,5 +1,7 @@
 package com.parkit.parkingsystem.service;
 
+import java.text.DecimalFormat;
+
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
@@ -21,25 +23,33 @@ public class FareCalculatorService {
 
         //TODO: Some tests are failing here. Need to check if this logic is correct
         double duration = outHour - inHour;  // difference en millisecondes
-        
+        DecimalFormat df = new DecimalFormat("###.##");
+
         duration = duration / 1000.0 / 60.0 / 60.0; // difference en fraction d 'heure
-        
+    	System.out.println("Durée de stationnement réelle : " + df.format(duration) + "h");
 
-
+        duration = duration - 0.50; // On enlève les premières 30 minutes    
+        if (duration <0 ) {
+        	duration = 0;
+        }
+    	System.out.println("Durée de stationnement prise encompte : " + df.format(duration) + "h ");
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
                 TicketDAO ticketDAO = new TicketDAO();
                 int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(ticket.getVehicleRegNumber());
-                if (nbPreviousOccurence>1) {
+                double reduc30porcent = 0.50;
+                
+                if (duration <= reduc30porcent) { // 30mn gratuite
+                	ticket.setPrice (0.00);
+                	System.out.println("Stationnement gratuit pour les 30 premières minutes");
+                } else if (nbPreviousOccurence>1) {
                     ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR * 0.95);
                     System.out.println("Nous avons appliqué les 5% de remise!");
                 } else {
                     ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
                     System.out.println("Tarif normal.");
                 }
-                       
-
                 break;
         }
             case BIKE: {

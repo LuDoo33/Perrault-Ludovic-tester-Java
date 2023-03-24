@@ -9,19 +9,18 @@ import com.parkit.parkingsystem.model.Ticket;
 public class FareCalculatorService {
 
     public void calculateFare(Ticket ticket){
+         TicketDAO ticketDAO = new TicketDAO();
+         calculateFare(ticket, ticketDAO);
+    }
+	
+    public void calculateFare(Ticket ticket, TicketDAO ticketDAO){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
 
-//        int inHour = ticket.getInTime().getHours();
-//        int outHour = ticket.getOutTime().getHours();
-        
         double inHour = ticket.getInTime().getTime();  // temps ecoulé en millisecondes
         double outHour = ticket.getOutTime().getTime();// temps ecoulé  en millisecondes
         
-        
-
-        //TODO: Some tests are failing here. Need to check if this logic is correct
         double duration = outHour - inHour;  // difference en millisecondes
         DecimalFormat df = new DecimalFormat("###.##");
 
@@ -37,7 +36,6 @@ public class FareCalculatorService {
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
-                TicketDAO ticketDAO = new TicketDAO();
                 int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(ticket.getVehicleRegNumber());
                 if (nbPreviousOccurence>1) {
                     ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR * 0.95);
@@ -49,7 +47,6 @@ public class FareCalculatorService {
                 break;
         }
             case BIKE: {
-                TicketDAO ticketDAO = new TicketDAO();
                 int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(ticket.getVehicleRegNumber());
                 if (nbPreviousOccurence>1) {
                     ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR * 0.95);

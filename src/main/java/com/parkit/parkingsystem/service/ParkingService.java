@@ -33,7 +33,11 @@ public class ParkingService {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
-                
+                int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(vehicleRegNumber);
+                String messageDiscount = "";
+                if(nbPreviousOccurence>0) {
+                	messageDiscount = "Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.";
+                }
                 //verifie si le vehicule n'est pas déjà garé et non sorti
                 int countParkedVehicule = ticketDAO.getCountParkedVehicle(vehicleRegNumber);
                 if (countParkedVehicule>0) {
@@ -41,10 +45,7 @@ public class ParkingService {
                 	return;
                 }
                 
-                int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(vehicleRegNumber);
-                if(nbPreviousOccurence>0) {
-                	System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
-                }
+
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
@@ -58,6 +59,7 @@ public class ParkingService {
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
+               	System.out.println(messageDiscount);
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);

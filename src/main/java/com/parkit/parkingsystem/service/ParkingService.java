@@ -12,6 +12,9 @@ import org.apache.logging.log4j.Logger;
 import java.text.DecimalFormat;
 import java.util.Date;
 
+/**
+ * Classe ParkingService qui gere les services du parking
+ */
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
@@ -27,7 +30,12 @@ public class ParkingService {
         this.parkingSpotDAO = parkingSpotDAO;
         this.ticketDAO = ticketDAO;
     }
-
+    /**
+     * Methode de la gestion de l'arrivee d'un vehicule. Lorsque l’utilisateur entre, le systeme demande le type de vehicule (voiture ou moto) et le
+     * numero de la plaque d’immatriculation, puis laisse entrer l’utilisateur si une place est
+     * disponible. Il indique également à l’utilisateur ou se garer. 
+     * 
+     */
     public void processIncomingVehicle() {
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
@@ -111,7 +119,13 @@ public class ParkingService {
             }
         }
     }
-
+    /**
+     * Methode de la gestion de la sortie d'un vehicule.
+     * Lorsque le vehicule quitte le parking, l’utilisateur indique à nouveau son numero de plaque
+     * d’immatriculation. Le systeme calcule alors et affiche le prix en fonction de la duree de
+     * stationnement et du type de vehicule, puis revient au menu d’accueil.
+     * 
+     */
     public void processExitingVehicle() {
         try{
             String vehicleRegNumber = getVehichleRegNumber();

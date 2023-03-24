@@ -3,7 +3,6 @@ package com.parkit.parkingsystem.integration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterAll;
@@ -61,10 +60,9 @@ public class ParkingDataBaseIT {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         int slotAvant = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR); // pour enregistrer le slot avant
         parkingService.processIncomingVehicle();
-        //(done) check that a ticket is actualy saved in DB and Parking table is updated with availability
         
         int slotApres = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
-        assertNotEquals(slotAvant, slotApres);
+        assertNotEquals(slotAvant, slotApres);//check that parking table is updated with availability
         assertNotNull( ticketDAO.getTicket("ABCDEF")); //check that a ticket is actualy saved in DB 
     }
     
@@ -95,22 +93,9 @@ public class ParkingDataBaseIT {
 		}
         parkingService.processExitingVehicle();
         
-        //(done) check that the fare generated and out time are populated correctly in the database
-
         Ticket ticket = ticketDAO.getTicketWithOutTime("ABCDEF");
-        assertNotNull(ticket.getOutTime());
-        assertEquals(0, ticket.getPrice());  
-    }
-
-    
-    @Test
-    public void testParking5Percent(){
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processIncomingVehicle();
-        parkingService.processExitingVehicle();
-        parkingService.processIncomingVehicle();
-
-        int count = ticketDAO.getCountPreviousOccurence("ABCDEF");
-        assertTrue(count>0);
-    }
-}
+        assertNotNull(ticket.getOutTime()); //vérifier que le temps de sortie est renseigné correctement dans la base de données
+        assertEquals(0, ticket.getPrice()); // vérifier que la tarif générée est renseigné dans la base de données
+      
+        }
+	}

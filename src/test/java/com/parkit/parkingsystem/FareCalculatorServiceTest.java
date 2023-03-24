@@ -200,15 +200,15 @@ public class FareCalculatorServiceTest {
 	   	Date outTime = new Date();
         ticket.setOutTime(outTime);
 		ticket.setParkingSpot(parkingSpot);
-		ticket.setVehicleRegNumber("ABCDEF");
-		when(ticketDAO.getCountPreviousOccurence("ABCDEF")).thenReturn(2);
-        fareCalculatorService.calculateFare(ticket, ticketDAO);
-        double price = ticket.getPrice();
-        assertEquals(price,0.95 * Fare.CAR_RATE_PER_HOUR*0.5); 
+		ticket.setVehicleRegNumber("ABCDEF");  // on défini un ticket d'1H pour le vehicule ABCDEF
+		when(ticketDAO.getCountPreviousOccurence("ABCDEF")).thenReturn(2); // on créé un MOCK de ticketDAO qui va systematiquement répondre 2 pour le nombre d'occurence du véhicule
+        fareCalculatorService.calculateFare(ticket, ticketDAO);  // on envoie le ticket et le mock de ticketDAO au service de calcul du prix
+        double price = ticket.getPrice(); // on recupere le prix calculé
+        assertEquals(price,0.95 * Fare.CAR_RATE_PER_HOUR*0.5);  // on verifie que le prix correspond bien à 95% du prix normal d'une demi heure (car 30mn gratuite)
     }
     
     @Test
-    public void testParking5PercentBIKE(){
+    public void testParking5PercentBIKE(){ // idem que ci-dessus pour BIKE
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, true);
 		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
 	   	Date outTime = new Date();

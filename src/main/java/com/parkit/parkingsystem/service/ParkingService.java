@@ -9,8 +9,12 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
+/**
+ * Classe ParkingService qui gere les services du parking
+ */
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
@@ -26,12 +30,30 @@ public class ParkingService {
         this.parkingSpotDAO = parkingSpotDAO;
         this.ticketDAO = ticketDAO;
     }
-
+    /**
+     * Methode de la gestion de l'arrivee d'un vehicule. Lorsque l’utilisateur entre, le systeme demande le type de vehicule (voiture ou moto) et le
+     * numero de la plaque d’immatriculation, puis laisse entrer l’utilisateur si une place est
+     * disponible. Il indique également à l’utilisateur ou se garer. 
+     * 
+     */
     public void processIncomingVehicle() {
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
+                int nbPreviousOccurence = ticketDAO.getCountPreviousOccurence(vehicleRegNumber);
+                String messageDiscount = "";
+                if(nbPreviousOccurence>0) {
+                	messageDiscount = "Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.";
+                }
+                //verifie si le vehicule n'est pas déjà garé et non sorti
+                int countParkedVehicule = ticketDAO.getCountParkedVehicle(vehicleRegNumber);
+                if (countParkedVehicule>0) {
+                	System.out.println("Merci de sortir le vehicule avant de le rentrer à nouveau");
+                	return;
+                }
+                
+
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
@@ -45,6 +67,7 @@ public class ParkingService {
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
+               	System.out.println(messageDiscount);
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
@@ -96,7 +119,13 @@ public class ParkingService {
             }
         }
     }
-
+    /**
+     * Methode de la gestion de la sortie d'un vehicule.
+     * Lorsque le vehicule quitte le parking, l’utilisateur indique à nouveau son numero de plaque
+     * d’immatriculation. Le systeme calcule alors et affiche le prix en fonction de la duree de
+     * stationnement et du type de vehicule, puis revient au menu d’accueil.
+     * 
+     */
     public void processExitingVehicle() {
         try{
             String vehicleRegNumber = getVehichleRegNumber();
@@ -108,7 +137,8 @@ public class ParkingService {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
+                DecimalFormat df = new DecimalFormat("###.##");
+                System.out.println("Please pay the parking fare:" + df.format(ticket.getPrice()) + "€");
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");

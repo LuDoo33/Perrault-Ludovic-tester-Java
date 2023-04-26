@@ -2,30 +2,46 @@ package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
+import java.time.Duration;
+import java.util.Date;
 
 public class FareCalculatorService {
 
-    public void calculateFare(Ticket ticket){
+    public void calculateFare(Ticket ticket, Boolean isRecurrent){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
 
-        int inHour = ticket.getInTime().getHours();
-        int outHour = ticket.getOutTime().getHours();
+        double duration;
+        double price;
+        Date inHour = ticket.getInTime();
+        Date outHour = ticket.getOutTime();
+        Duration difference = Duration.between(inHour.toInstant(), outHour.toInstant());
 
-        //TODO: Some tests are failing here. Need to check if this logic is correct
-        int duration = outHour - inHour;
+        //free if less than 30 minutes
+        if(difference.toMinutes() <= 30) {
+            duration = 0;
+        }
+        //if more than 30 but less than 45 minutes
+        else if (difference.toMinutes() <= 45) {
+            duration = 0.75;
+        }
+        else
+        {
+            duration = difference.toHours();
+        }
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
-                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                price = duration * Fare.CAR_RATE_PER_HOUR;
                 break;
             }
             case BIKE: {
-                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+                price = duration * Fare.BIKE_RATE_PER_HOUR;
                 break;
             }
-            default: throw new IllegalArgumentException("Unkown Parking Type");
+            default: throw new IllegalArgumentException("Unknown Parking Type");
         }
+        ticket.setPrice(isRecurrent? price * 95 / 100 : price);
     }
 }

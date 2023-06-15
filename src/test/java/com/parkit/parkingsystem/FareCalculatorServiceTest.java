@@ -8,6 +8,8 @@ import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,6 +31,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
+    @DisplayName("Doit calculer le tarif pour une voiture avec une durée de stationnement d'1H")
     public void calculateFareCar(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
@@ -43,6 +46,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
+    @DisplayName("Doit calculer le tarif pour une moto avec une durée de stationnement d'1H")
     public void calculateFareBike(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
@@ -57,6 +61,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
+    @DisplayName("Doit lancer une NullPointerException pour un type de stationnement inconnu")
     public void calculateFareUnkownType(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
@@ -70,6 +75,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
+    @DisplayName("Doit lancer une IllegalArgumentException pour une durée de stationnement dans le futur")
     public void calculateFareBikeWithFutureInTime(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
@@ -83,6 +89,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
+    @DisplayName("Doit calculer le tarif pour une moto avec une durée de stationnement de moins d'1H")
     public void calculateFareBikeWithLessThanOneHourParkingTime(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time should give 3/4th parking fare
@@ -97,6 +104,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
+    @DisplayName("Doit calculer le tarif pour une voiture avec une durée de stationnement de moins d'1H")
     public void calculateFareCarWithLessThanOneHourParkingTime(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time should give 3/4th parking fare
@@ -111,6 +119,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
+    @DisplayName("Doit calculer le tarif pour une voiture avec une durée de stationnement de plus d'1 jour")
     public void calculateFareCarWithMoreThanADayParkingTime(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour

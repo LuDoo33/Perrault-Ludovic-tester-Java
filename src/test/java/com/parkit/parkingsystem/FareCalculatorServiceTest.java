@@ -126,4 +126,44 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
         assertEquals(0, ticket.getPrice());
     }
+    
+    @Test
+    @DisplayName("Doit calculer le tarif avec remise de 5% pour une voiture")
+    public void calculateFareCarWithDiscount() {
+    	
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000)); // 1 hour ago
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setDiscount(true);
+
+        fareCalculatorService.calculateFare(ticket, ticket.isDiscount());
+
+        double expectedPriceCar = 1.5 * 0.95;
+        assertEquals(expectedPriceCar, ticket.getPrice(), 0.001);
+    }
+
+    @Test
+    @DisplayName("Doit calculer le tarif avec remise de 5% pour une moto")
+    public void calculateFareBikeWithDiscount() {
+    	
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000)); // 1 hour ago
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setDiscount(true);
+
+        fareCalculatorService.calculateFare(ticket, ticket.isDiscount());
+
+        double expectedPriceBike = 1.0 * 0.95;
+        assertEquals(expectedPriceBike, ticket.getPrice(), 0.001);
+    }
 }

@@ -4,9 +4,13 @@ import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
 public class FareCalculatorService {
-    private static final double FREE_PARKING_DURATION_IN_MILLIS = 30 * 60 * 1000;  // 30 minutes en millisecondes
+    private static final double FREE_PARKING_DURATION_IN_MILLIS = 30 * 60 * 1000; // 30 minutes en millisecondes
 
     public void calculateFare(Ticket ticket) {
+        calculateFare(ticket, false);
+    }
+
+    public void calculateFare(Ticket ticket, boolean discount) {
         if (ticket == null) {
             throw new IllegalArgumentException("Ticket cannot be null");
         }
@@ -21,18 +25,26 @@ public class FareCalculatorService {
             ticket.setPrice(0);
         } else {
             double durationInHours = durationInMilliseconds / (60 * 60 * 1000);
+            double ratePerHour;
+
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
-                    ticket.setPrice(durationInHours * Fare.CAR_RATE_PER_HOUR);
+                    ratePerHour = Fare.CAR_RATE_PER_HOUR;
                     break;
                 }
                 case BIKE: {
-                    ticket.setPrice(durationInHours * Fare.BIKE_RATE_PER_HOUR);
+                    ratePerHour = Fare.BIKE_RATE_PER_HOUR;
                     break;
                 }
                 default:
                     throw new IllegalArgumentException("Unknown Parking Type");
             }
+
+            double totalPrice = durationInHours * ratePerHour;
+            if (discount) {
+                totalPrice *= 0.95; // 5% de remise pour les utilisateurs récurrents
+            }
+            ticket.setPrice(totalPrice);
         }
     }
 }

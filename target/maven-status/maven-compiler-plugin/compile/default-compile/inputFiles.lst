@@ -1,0 +1,13 @@
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/model/Ticket.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/dao/TicketDAO.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/constants/Fare.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/dao/ParkingSpotDAO.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/model/ParkingSpot.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/App.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/util/InputReaderUtil.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/config/DataBaseConfig.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/service/ParkingService.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/constants/DBConstants.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/service/InteractiveShell.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/constants/ParkingType.java
+/Users/bertrandbloch/Developer/Java/parkingsystem/src/main/java/com/parkit/parkingsystem/service/FareCalculatorService.java

@@ -2,6 +2,8 @@ package com.parkit.parkingsystem.model;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.math.BigDecimal;
+
 
 public class Ticket {
     private int id;
@@ -11,6 +13,8 @@ public class Ticket {
     private Date inTime;
     private Date outTime;
     private boolean discount; // Ajout de la variable discount
+
+
 
     public int getId() {
         return id;

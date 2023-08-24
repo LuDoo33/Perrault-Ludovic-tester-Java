@@ -48,6 +48,7 @@ public class TicketDAO {
             PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
+            System.out.println("Executing SQL: " + ps); // Ajout du log
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 ticket = new Ticket();
@@ -62,22 +63,36 @@ public class TicketDAO {
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
         }catch (Exception ex){
-            logger.error("Error fetching next available slot",ex);
+            logger.error("Erreur lors de la récupération du ticket",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
             return ticket;
         }
     }
 
-    public boolean updateTicket(Ticket ticket) {
+    public boolean updateTicket(@org.jetbrains.annotations.NotNull Ticket ticket) {
         Connection con = null;
+
+        // Log des valeurs qui seront mises à jour
+        logger.info("Mise à jour du ticket avec l'ID: " + ticket.getId());
+        logger.info("Définition du PRIX à: " + ticket.getPrice());
+        logger.info("Définition de OUT_TIME à: " + ticket.getOutTime());
+
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
             ps.setDouble(1, ticket.getPrice());
             ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
             ps.setInt(3,ticket.getId());
-            ps.execute();
+
+            int rowsUpdated = ps.executeUpdate(); // Utilisation de executeUpdate() pour obtenir le nombre de lignes mises à jour
+
+            // Log du résultat de la mise à jour
+            if (rowsUpdated > 0) {
+                logger.info("Ticket mis à jour avec succès !");
+            } else {
+                logger.warn("Aucune ligne n'a été mise à jour. Vérifiez si l'ID du ticket existe.");
+            }
             return true;
         }catch (Exception ex){
             logger.error("Error saving ticket info",ex);
@@ -86,4 +101,26 @@ public class TicketDAO {
         }
         return false;
     }
+    public int getNbTicket(String vehicleRegNumber) {
+        Connection con = null;
+        int count = 0;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM TICKET WHERE VEHICLE_REG_NUMBER = ?");
+            ps.setString(1, vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                count = rs.getInt(1);
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        } catch (Exception ex) {
+            logger.error("Erreur lors de la récupération du nombre de tickets", ex);
+        } finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return count;
+    }
 }
+
+

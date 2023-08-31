@@ -136,14 +136,16 @@ public class ParkingDataBaseIT {
     @DisplayName("Teste la sortie d'un utilisateur récurrent du parking, vérifie le calcul du tarif avec la remise et la disponibilité de la place de parking")
     public void testParkingLotExitRecurringUser() throws Exception {
         double currentRatePerHour = Fare.getCarRatePerHour();
-        String vehicleRegNumber = "AZERTY";
+        String vehicleRegNumber = "ABCDEF";
 
-        // Mock inputReaderUtil to always return "AZERTY" for vehicle registration number and "1" for vehicle type
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(vehicleRegNumber);
         when(inputReaderUtil.readSelection()).thenReturn(1);
 
         // Simulate a previous ticket for the vehicle to mark it as a recurring user
         Ticket previousTicket = new Ticket();
+        previousTicket.setInTime(new Date());
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
+        previousTicket.setParkingSpot(parkingSpot);
         previousTicket.setVehicleRegNumber(vehicleRegNumber);
         ticketDAO.saveTicket(previousTicket);
 

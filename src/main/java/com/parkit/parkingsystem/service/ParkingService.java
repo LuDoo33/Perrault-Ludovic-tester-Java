@@ -34,7 +34,7 @@ public class ParkingService {
 
             // Check if the vehicle is recurrent
             if (ticketDAO.getNbTicket(vehicleRegNumber) > 0) {
-                System.out.println("Bienvenue, cher utilisateur récurrent!");
+                System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de notre parking, vous allez obtenir une remise de 5% !");
             } else {
                 System.out.println("Bienvenue dans notre parking!");
             }

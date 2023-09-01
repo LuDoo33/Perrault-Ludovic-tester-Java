@@ -17,15 +17,22 @@ public class FareCalculatorService {
     public void calculateFare(Ticket ticket) {
         try {
             validate(ticket);
-
-            double durationInHours = getDurationInHours(ticket);
+    
+            long durationInMillis = ticket.getOutTime().getTime() - ticket.getInTime().getTime();
+            double durationInHours = durationInMillis / (1000.0 * 60.0 * 60.0);
+            
+            if (durationInHours <= 0.5) {
+                ticket.setPrice(0);
+                return;
+            }
+    
             double rate = getRate(ticket);
-
             ticket.setPrice(durationInHours * rate);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
 
     private void validate(Ticket ticket) throws Exception {
         if (ticket == null || ticket.getParkingSpot() == null) {

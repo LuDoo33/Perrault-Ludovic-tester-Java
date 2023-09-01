@@ -117,4 +117,9 @@ public class ParkingService {
             logger.error("Unable to process exiting vehicle",e);
         }
     }
+
+	public Object getDurationInHours(Ticket ticket) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

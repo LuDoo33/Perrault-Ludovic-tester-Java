@@ -34,9 +34,9 @@ public class ParkingService {
 
             // Check if the vehicle is recurrent
             if (ticketDAO.getNbTicket(vehicleRegNumber) > 0) {
-                System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de notre parking, vous allez obtenir une remise de 5% !");
+                System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de notre parking, vous allez obtenir une remise de 5% !" + "\n");
             } else {
-                System.out.println("Bienvenue dans notre parking!");
+                System.out.println("Bienvenue dans notre parking!" + "\n");
             }
 
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
@@ -128,7 +128,8 @@ public class ParkingService {
                 Ticket updatedTicket = ticketDAO.getTicket(vehicleRegNumber); // Récupérez à nouveau le ticket de la base de données
                 System.out.println("InTime after update: " + updatedTicket.getInTime());
                 System.out.println("OutTime after update: " + updatedTicket.getOutTime());
-                System.out.println("État de disponibilité après mise à jour en DB: " + updatedTicket.getParkingSpot().isAvailable());
+               // System.out.println("État de disponibilité après mise à jour en DB: " + updatedTicket.getParkingSpot().isAvailable());
+                System.out.println("Merci de votre visite et au plaisir de vous revoir !"+ "\n");
             } else {
                 System.out.println("Unable to update ticket information. Error occurred");
             }

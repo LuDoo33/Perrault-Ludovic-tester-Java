@@ -1,0 +1,22 @@
+
+e
+java:S2184"HCast one of the operands of this multiplication operation to a "double".(Ì†8†‡ª“¢1
+g
+java:S2184)"ECast one of the operands of this subtraction operation to a "double".(Š’‹şÿÿÿÿ8‡‡ª“¢1
+U	java:S106"9Replace this use of System.out or System.err by a logger.(Àï•£8œ‡ª“¢1
+Z	java:S106"9Replace this use of System.out or System.err by a logger.(› Ç¤üÿÿÿÿ8œ‡ª“¢1
+U	java:S106"9Replace this use of System.out or System.err by a logger.(·¬ù¶8œ‡ª“¢1
+U	java:S106"9Replace this use of System.out or System.err by a logger.(Àï•£8‡ª“¢1
+U	java:S106""9Replace this use of System.out or System.err by a logger.(•û»8Ÿ‡ª“¢1
+Z	java:S106#"9Replace this use of System.out or System.err by a logger.(×Üèáúÿÿÿÿ8Ÿ‡ª“¢1
+Z	java:S106*"9Replace this use of System.out or System.err by a logger.(ıÜÌÚûÿÿÿÿ8¡‡ª“¢1
+U	java:S106."9Replace this use of System.out or System.err by a logger.(©ìàÌ8¡‡ª“¢1
+U	java:S1062"9Replace this use of System.out or System.err by a logger.(÷—«Ã8¡‡ª“¢1
+U	java:S106H"9Replace this use of System.out or System.err by a logger.(¦ÍÔŒ8£‡ª“¢1
+U	java:S106K"9Replace this use of System.out or System.err by a logger.(Å8£‡ª“¢1
+U	java:S106N"9Replace this use of System.out or System.err by a logger.(ÿÛ†¬8£‡ª“¢1
+N
+java:S1128	"1Remove this unused import 'java.math.BigDecimal'.(êêŠ8¤‡ª“¢1
+P
+java:S1128
+"3Remove this unused import 'java.math.RoundingMode'.(¿ì†‹8¤‡ª“¢1

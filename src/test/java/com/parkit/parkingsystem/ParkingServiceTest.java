@@ -73,7 +73,7 @@ public class ParkingServiceTest {
         when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
         when(ticketDAO.getNbTicket("ABCDEF")).thenReturn(2);  // Pour simuler un utilisateur récurrent
         when(ticketDAO.updateTicket(ticket)).thenReturn(true);
-        when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);  // Vous pouvez ajouter des conditions plus spécifiques si nécessaire
+        when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
         doNothing().when(fareCalculatorService).calculateFare(any(Ticket.class), eq(true));  // Simulez le calcul du tarif
 

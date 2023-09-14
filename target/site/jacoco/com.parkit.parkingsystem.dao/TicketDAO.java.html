@@ -48,7 +48,7 @@ import java.sql.Timestamp;
 <span class="fc" id="L48">            PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);</span>
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 <span class="fc" id="L50">            ps.setString(1,vehicleRegNumber);</span>
-<span class="fc" id="L51">            System.out.println(&quot;Executing SQL: &quot; + ps); // Ajout du log</span>
+          //  System.out.println(&quot;Executing SQL: &quot; + ps); // Ajout du log
 <span class="fc" id="L52">            ResultSet rs = ps.executeQuery();</span>
 <span class="fc bfc" id="L53" title="All 2 branches covered.">            if(rs.next()){</span>
 <span class="fc" id="L54">                ticket = new Ticket();</span>

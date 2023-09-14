@@ -72,12 +72,6 @@ public class TicketDAO {
 
     public boolean updateTicket(@org.jetbrains.annotations.NotNull Ticket ticket) {
         Connection con = null;
-
-        // Log des valeurs qui seront mises à jour
-        logger.info("Mise à jour du ticket avec l'ID: " + ticket.getId());
-        logger.info("Définition du PRIX à: " + ticket.getPrice());
-        logger.info("Définition de OUT_TIME à: " + ticket.getOutTime());
-
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);

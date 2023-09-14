@@ -52,7 +52,6 @@ public class ParkingService {
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
-                System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
             }
@@ -108,12 +107,8 @@ public class ParkingService {
         try{
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-            System.out.println("État de disponibilité avant traitement : " + ticket.getParkingSpot().isAvailable());
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            System.out.println("InTime before update: " + ticket.getInTime());
-            System.out.println("OutTime before update: " + ticket.getOutTime());
-            System.out.println("État de disponibilité après traitement mais avant mise à jour en DB: " + ticket.getParkingSpot().isAvailable());
 
             // Vérifie si le véhicule est récurrent et ajuste le tarif
             boolean isRecurrentUser = ticketDAO.getNbTicket(vehicleRegNumber) > 1;
@@ -126,9 +121,6 @@ public class ParkingService {
                 System.out.println("Please pay the parking fare:" + ticket.getPrice());
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
                 Ticket updatedTicket = ticketDAO.getTicket(vehicleRegNumber); // Récupérez à nouveau le ticket de la base de données
-                System.out.println("InTime after update: " + updatedTicket.getInTime());
-                System.out.println("OutTime after update: " + updatedTicket.getOutTime());
-               // System.out.println("État de disponibilité après mise à jour en DB: " + updatedTicket.getParkingSpot().isAvailable());
                 System.out.println("Merci de votre visite et au plaisir de vous revoir !"+ "\n");
             } else {
                 System.out.println("Unable to update ticket information. Error occurred");

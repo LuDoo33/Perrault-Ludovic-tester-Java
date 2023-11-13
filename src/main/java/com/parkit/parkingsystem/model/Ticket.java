@@ -9,17 +9,7 @@ public class Ticket {
 	private double price;
 	private Date inTime;
 	private Date outTime;
-	public int nombreDeTickets = 0;
-
-	public Ticket() {
-		nombreDeTickets++;
-	}
 	
-	public int nbOfTickets() {
-		return nombreDeTickets;
-		
-	}
-
 	public int getId() {
 		return id;
 	}

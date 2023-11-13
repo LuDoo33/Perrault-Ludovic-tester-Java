@@ -72,7 +72,6 @@ public class TicketDAO {
 				ticket.setOutTime(rs.getTimestamp(5));
 				logger.debug("test logger geTimeOut dans getTicket");
 				logger.debug(ticket.getOutTime());
-				ticket.nbOfTickets();
 			}
 			dataBaseConfig.closeResultSet(rs);
 			dataBaseConfig.closePreparedStatement(ps);
@@ -109,21 +108,8 @@ public class TicketDAO {
 
 	public int getNbTicket(String vehicleRegNb) {
 		logger.debug("Je rentre dans la méthode getNbTicket");
-		logger.debug(vehicleRegNb);
+		
 
-		Ticket geTicketsNumber = getTicket(vehicleRegNb);
-		// int nbOfTickets = geTicketsNumber.nbOfTickets();
-		logger.debug(vehicleRegNb);
-
-		int nbOfTickets = geTicketsNumber.nombreDeTickets;
-//		String vehiculeAlreadyEntered = geTicketsNumber.getVehicleRegNumber();
-
-		/*
-		 * if (vehicleRegNb == geTicketsNumber.getVehicleRegNumber()) { nbOfTickets++; }
-		 */
-		logger.debug(nbOfTickets);
-
-		return nbOfTickets;
 
 	}
 }

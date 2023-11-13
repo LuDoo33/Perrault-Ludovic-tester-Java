@@ -14,16 +14,26 @@ public class DataBaseConfig {
 	// Pour se connecter à une BDD il faut instancier un objet de la classe
 	// Connection JDBC
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
-		
-		// émet un message avec le niveau de gravité INFO, correspond à des messages d'informations
-		
+
+		// émet un message avec le niveau de gravité INFO, correspond à des messages
+		// d'informations
+
 		logger.info("Create DB connection");
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		// DriverManager classe qui agit comme une interface entre utilisateur et pilotes.
+		Connection connection = null;
+		// DriverManager classe qui agit comme une interface entre utilisateur et
+		// pilotes.
 		// Il gère l'établissement d'une connexion entre une bdd et le pilote approprié.
-		return DriverManager.getConnection(
-				// préciser sous forme d'URL la base à accéder , nom user + password   
-				"jdbc:mysql://localhost:3306/prod", "root", "rootroot");
+		try {
+			connection = DriverManager.getConnection(
+					// préciser sous forme d'URL la base à accéder , nom user + password
+					"jdbc:mysql://127.0.0.1:3306/prod", "root", "rootroot");
+
+		} catch (SQLException e) {
+			logger.error("Connection denied");
+			//throw new Exception("");
+		}
+		return connection;
 	}
 
 	public void closeConnection(Connection con) {

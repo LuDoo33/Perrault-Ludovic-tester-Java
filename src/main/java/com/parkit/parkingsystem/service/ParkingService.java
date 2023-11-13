@@ -19,7 +19,7 @@ public class ParkingService {
 
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
-    private  TicketDAO ticketDAO;
+    private TicketDAO ticketDAO;
 
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
         this.inputReaderUtil = inputReaderUtil;
@@ -27,7 +27,12 @@ public class ParkingService {
         this.ticketDAO = ticketDAO;
     }
 
+    //méthode qui sert à attribuer une place aux nouvelles voitures entrantes,
+    //génère un ticket et une heure d'entrée, récupère plaque immatriculation
+    //enregistre ticket généré dans bdd
     public void processIncomingVehicle() {
+		logger.info("Je rentre dans la méthode processIncomingVehicle()");
+
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
@@ -45,21 +50,24 @@ public class ParkingService {
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
-                System.out.println("Generated Ticket and saved in DB");
-                System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
-                System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
+                logger.debug("Generated Ticket and saved in DB");
+                logger.debug("Please park your vehicle in spot number:"+parkingSpot.getId());
+                logger.debug("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
             }
         }catch(Exception e){
             logger.error("Unable to process incoming vehicle",e);
-        }
+           }
     }
-
+    
+    // méthode qui permet de lire les données entrées par le clavier depuis la classe inputReaderUtil
     private String getVehichleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
-
+    
+//retourne un objet de type ParkingSpot avec le numero de la place disponible, le type de vehicule, 
     public ParkingSpot getNextParkingNumberIfAvailable(){
+		logger.info("Je rentre dans la méthode getNextParkingNumberIfAvailable()");
         int parkingNumber=0;
         ParkingSpot parkingSpot = null;
         try{
@@ -96,18 +104,24 @@ public class ParkingService {
             }
         }
     }
-
+//méthode qui permet de calculer le prix du ticket du vehicule sortant 
+    
     public void processExitingVehicle() {
+		logger.info("Je rentre dans la méthode processExitingVehicle()");
         try{
             String vehicleRegNumber = getVehichleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+            
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket);
+            logger.debug(outTime);
+            fareCalculatorService.calculateFareCar(ticket);
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
+                logger.debug(ticketDAO.getNbTicket(vehicleRegNumber));
+                
                 System.out.println("Please pay the parking fare:" + ticket.getPrice());
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{

@@ -5,25 +5,27 @@ import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.service.ParkingService;
+import com.parkit.parkingsystem.util.InputReaderUtil;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
 
 //classe qui permet de rechercher données dans bdd classe intermédiaire/ surcouche
 // DAO => Data Access Object
 public class TicketDAO {
-
 	private static final Logger logger = LogManager.getLogger("TicketDAO");
-
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-	public static int nombreDeTickets = 0;
-
 	public boolean saveTicket(Ticket ticket) {
+		logger.info("création d'un nouveau ticket dans saveTicket()");
 		Connection con = null;
 		try {
 			con = dataBaseConfig.getConnection();
@@ -34,8 +36,10 @@ public class TicketDAO {
 			ps.setString(2, ticket.getVehicleRegNumber());
 			ps.setDouble(3, ticket.getPrice());
 			ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
-			ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
-
+			ps.setTimestamp(5, (ticket.getOutTime() == null) ? null 
+					: (new Timestamp(ticket.getOutTime().getTime())));
+			logger.debug("test logger geTimeOut dans saveTicket");
+			logger.debug(ticket.getOutTime());
 			return ps.execute();
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
@@ -47,8 +51,10 @@ public class TicketDAO {
 	}
 
 	public Ticket getTicket(String vehicleRegNumber) {
+		logger.info("getTicket() récupération du ticket généré");
 		Connection con = null;
 		Ticket ticket = null;
+
 		try {
 			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
@@ -64,6 +70,9 @@ public class TicketDAO {
 				ticket.setPrice(rs.getDouble(3));
 				ticket.setInTime(rs.getTimestamp(4));
 				ticket.setOutTime(rs.getTimestamp(5));
+				logger.debug("test logger geTimeOut dans getTicket");
+				logger.debug(ticket.getOutTime());
+				ticket.nbOfTickets();
 			}
 			dataBaseConfig.closeResultSet(rs);
 			dataBaseConfig.closePreparedStatement(ps);
@@ -71,19 +80,22 @@ public class TicketDAO {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
 			dataBaseConfig.closeConnection(con);
-			nombreDeTickets++;
-
 			return ticket;
 		}
 	}
 
 	public boolean updateTicket(Ticket ticket) {
+		logger.debug("updateTicket() modification du ticket généré pour insérer heure de sortie & prix");
+
 		Connection con = null;
 		try {
 			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
+
 			ps.setDouble(1, ticket.getPrice());
+
 			ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
+
 			ps.setInt(3, ticket.getId());
 			ps.execute();
 			return true;
@@ -95,16 +107,23 @@ public class TicketDAO {
 		return false;
 	}
 
-	public int getNbTicket(Ticket ticket) {
-		// récupérer le ticket dans la bdd à l'aide de la commande SQL GET_TICKET
-		// comprend aussi vehicleRegNumber à récupérer
-		// compter nb tickets en fonction du vehicule
-		
-		ticket = new Ticket();
-		ticket.getVehicleRegNumber();
+	public int getNbTicket(String vehicleRegNb) {
+		logger.debug("Je rentre dans la méthode getNbTicket");
+		logger.debug(vehicleRegNb);
 
-		// System.out.println(nombreDeTickets);
-		return nombreDeTickets;
+		Ticket geTicketsNumber = getTicket(vehicleRegNb);
+		// int nbOfTickets = geTicketsNumber.nbOfTickets();
+		logger.debug(vehicleRegNb);
+
+		int nbOfTickets = geTicketsNumber.nombreDeTickets;
+//		String vehiculeAlreadyEntered = geTicketsNumber.getVehicleRegNumber();
+
+		/*
+		 * if (vehicleRegNb == geTicketsNumber.getVehicleRegNumber()) { nbOfTickets++; }
+		 */
+		logger.debug(nbOfTickets);
+
+		return nbOfTickets;
 
 	}
 }

@@ -36,8 +36,7 @@ public class TicketDAO {
 			ps.setString(2, ticket.getVehicleRegNumber());
 			ps.setDouble(3, ticket.getPrice());
 			ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
-			ps.setTimestamp(5, (ticket.getOutTime() == null) ? null 
-					: (new Timestamp(ticket.getOutTime().getTime())));
+			ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
 			logger.debug("test logger geTimeOut dans saveTicket");
 			logger.debug(ticket.getOutTime());
 			return ps.execute();
@@ -108,8 +107,30 @@ public class TicketDAO {
 
 	public int getNbTicket(String vehicleRegNb) {
 		logger.debug("Je rentre dans la méthode getNbTicket");
-		
+		Connection con = null;
+		int records = 0;
 
+		try {
+			con = dataBaseConfig.getConnection();
+//	        requete SQL paramétrée grace à ps
+			PreparedStatement ps = con.prepareStatement(DBConstants.GET_COUNT_FOR_VEHICLE);
+//			utiliser param vehicleRegNb ds requete SQL
+			ps.setString(1, vehicleRegNb);
+			ResultSet rs = ps.executeQuery();
 
+			while (rs.next()) {
+				records = rs.getInt("COUNT");
+				logger.debug("Nombre de tickets pour le véhicule " + vehicleRegNb + " : " + records);
+			}
+
+			dataBaseConfig.closeResultSet(rs);
+			dataBaseConfig.closePreparedStatement(ps);
+
+		} catch (Exception ex) {
+			logger.error("Error fetching next available slot", ex);
+		} finally {
+			dataBaseConfig.closeConnection(con);
+			return records;
+		}
 	}
 }

@@ -3,9 +3,6 @@ package com.parkit.parkingsystem.service;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 public class FareCalculatorService {
 
     public void calculateFare(Ticket ticket){

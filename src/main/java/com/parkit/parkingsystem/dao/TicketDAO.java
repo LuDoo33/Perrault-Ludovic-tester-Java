@@ -71,25 +71,25 @@ public class TicketDAO {
         }
     }
 
-    public List<Integer> getAllTickets(String vehicleRegNumber) {
+    public Integer getnumberOfTickets(String vehicleRegNumber) {
         Connection con = null;
-        List<Integer> ticketId = new ArrayList<>();
+        Integer ticketsCount = 0;
         try {
             con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.GET_ALL_TICKET);
+            PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKETS);
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
             ResultSet rs = ps.executeQuery();
-            do{
-                ticketId.add(rs.getInt(1));
-            }while (rs.next());
+            if(rs.next()) {
+                ticketsCount = rs.getInt(1);
+            }
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return ticketId;
+            return ticketsCount;
         }
     }
 

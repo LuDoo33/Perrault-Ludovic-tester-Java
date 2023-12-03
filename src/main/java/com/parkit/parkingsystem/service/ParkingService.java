@@ -9,6 +9,7 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -48,9 +49,9 @@ public class ParkingService {
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
 
-                List<Integer> allTickets = ticketDAO.getAllTickets(vehicleRegNumber);
+                Integer allTickets = ticketDAO.getnumberOfTickets(vehicleRegNumber);
 
-                if(allTickets.size() > 1) {
+                if(allTickets > 1) {
                     System.out.println("Happy to see you again ! As a regular user of our parking you will have a 5% discount");
                 }
 
@@ -112,12 +113,14 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket, ticketDAO.getAllTickets(ticket.getVehicleRegNumber()).size() > 1);
+            fareCalculatorService.calculateFare(ticket, ticketDAO.getnumberOfTickets(ticket.getVehicleRegNumber()) > 1);
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
+                DecimalFormat df = new DecimalFormat("#.##");
+                String price = df.format(ticket.getPrice());
+                System.out.println("Please pay the parking fare:" + price);
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");

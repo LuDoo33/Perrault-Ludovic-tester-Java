@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TicketDAO {
 
@@ -69,6 +71,28 @@ public class TicketDAO {
         }
     }
 
+    public List<Integer> getAllTickets(String vehicleRegNumber) {
+        Connection con = null;
+        List<Integer> ticketId = new ArrayList<>();
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.GET_ALL_TICKET);
+            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+            ps.setString(1,vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            do{
+                ticketId.add(rs.getInt(1));
+            }while (rs.next());
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        }catch (Exception ex){
+            logger.error("Error fetching next available slot",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+            return ticketId;
+        }
+    }
+
     public boolean updateTicket(Ticket ticket) {
         Connection con = null;
         try {
@@ -87,26 +111,4 @@ public class TicketDAO {
         return false;
     }
 
-    public Integer getNbTickets(String vehicleRegNumber) {
-        Connection con = null;
-        Integer nbTickets = null;
-        try {
-            con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.GET_NUMBER_OF_TICKET);
-            ps.setString(1,vehicleRegNumber);
-            ResultSet rs = ps.executeQuery();
-
-            do {
-                nbTickets++;
-            }
-            while(rs.next());
-            dataBaseConfig.closeResultSet(rs);
-            dataBaseConfig.closePreparedStatement(ps);
-        }catch (Exception ex){
-            logger.error("Error fetching next available slot",ex);
-        }finally {
-            dataBaseConfig.closeConnection(con);
-            return nbTickets;
-        }
-    }
 }

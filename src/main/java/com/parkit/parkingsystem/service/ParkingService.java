@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
+import java.util.List;
 
 public class ParkingService {
 
@@ -35,7 +36,6 @@ public class ParkingService {
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
-                Integer nbrTickets = ticketDAO.getNbTickets(vehicleRegNumber);
 
                 Date inTime = new Date();
                 Ticket ticket = new Ticket();
@@ -46,13 +46,13 @@ public class ParkingService {
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
-                if(nbrTickets > 0) {
-                    ticket.setRegularUser(true);
-                    System.out.println("Happy to see you again ! As a regular user of our parking you will have a 5% discount");
-                } else {
-                    ticket.setRegularUser(false);
-                }
                 ticketDAO.saveTicket(ticket);
+
+                List<Integer> allTickets = ticketDAO.getAllTickets(vehicleRegNumber);
+
+                if(allTickets.size() > 1) {
+                    System.out.println("Happy to see you again ! As a regular user of our parking you will have a 5% discount");
+                }
 
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
@@ -112,7 +112,7 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket, false);
+            fareCalculatorService.calculateFare(ticket, ticketDAO.getAllTickets(ticket.getVehicleRegNumber()).size() > 1);
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);

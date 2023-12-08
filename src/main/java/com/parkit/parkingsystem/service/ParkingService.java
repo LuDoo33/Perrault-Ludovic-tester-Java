@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.List;
 
 public class ParkingService {
 
@@ -119,7 +118,7 @@ public class ParkingService {
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
                 DecimalFormat df = new DecimalFormat("#.##");
-                String price = df.format(ticket.getPrice());
+                String price = df.format(Float.parseFloat(Double.toString(ticket.getPrice())));
                 System.out.println("Please pay the parking fare:" + price);
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{

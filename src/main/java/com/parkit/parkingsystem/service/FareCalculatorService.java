@@ -14,10 +14,12 @@ public class FareCalculatorService {
         long outHour = ticket.getOutTime().getTime();
         double durationInMilliseconds = outHour - inHour;
 
-        //Convert milliseconds to minutes
+        // Convert milliseconds to hour
         double duration = durationInMilliseconds/3600000;
 
         if(duration > 0.5) {
+            // Remove the first free half hour
+            duration = duration - 0.5;
             double price;
             switch (ticket.getParkingSpot().getParkingType()){
                 case CAR: {

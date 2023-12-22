@@ -37,7 +37,6 @@ public class ParkingServiceTest {
     private Ticket ticket;
 
     private String vehicleRegNumber;
-    private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
 
@@ -92,7 +91,7 @@ public class ParkingServiceTest {
             verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
 
             // Additional assertions based on the business logic in the method
-            assertEquals(false, parkingSpot.isAvailable());
+            assertFalse(parkingSpot.isAvailable());
         } catch (Exception e) {
             fail("Exception not expected: " + e.getMessage());
         }
@@ -116,7 +115,7 @@ public class ParkingServiceTest {
             verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
 
             // Additional assertions based on the business logic in the method
-            assertEquals(false, parkingSpot.isAvailable());
+            assertFalse(parkingSpot.isAvailable());
         } catch (Exception e) {
             fail("Exception not expected: " + e.getMessage());
         }
@@ -144,7 +143,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void getNextSpotNoPlaceAvailableKo() throws Exception{
+    public void getNextSpotNoPlaceAvailableKo(){
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
 
         try {

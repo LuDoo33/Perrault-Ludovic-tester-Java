@@ -150,7 +150,7 @@ public class ParkingServiceTest {
         try {
             parkingService.getNextParkingNumberIfAvailable();
         } catch (Exception e) {
-            assertTrue(e.getMessage().contains("Error fetching next available parking slot"));
+            assertTrue(e.getMessage().contains("Error fetching parking number from DB. Parking slots might be full"));
         }
     }
 

@@ -65,7 +65,7 @@ public class ParkingServiceTest {
     @Test
     public void processExitingVehicle(){
         when(ticketDAO.getnumberOfTickets(anyString())).thenReturn(1);
-        when(ticketDAO.getTicket(vehicleRegNumber)).thenReturn(ticket);
+        when(ticketDAO.getTicket(vehicleRegNumber, false)).thenReturn(ticket);
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 
         parkingService.processExitingVehicle();

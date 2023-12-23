@@ -39,12 +39,17 @@ public class TicketDAO {
         }
     }
 
-    public Ticket getTicket(String vehicleRegNumber) {
+    public Ticket getTicket(String vehicleRegNumber, Boolean closed) {
         Connection con = null;
         Ticket ticket = null;
+        PreparedStatement ps;
         try {
             con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
+            if(closed) {
+                ps = con.prepareStatement(DBConstants.GET_LAST_TICKET);
+            } else {
+                ps = con.prepareStatement(DBConstants.GET_TICKET);
+            }
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
             ResultSet rs = ps.executeQuery();

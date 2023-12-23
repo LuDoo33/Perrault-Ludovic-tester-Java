@@ -143,6 +143,24 @@ public class ParkingServiceTest {
     }
 
     @Test
+    public void processIncomingVehicleWrongTypeKo() throws Exception{
+        parkingSpot.setId(1);
+        when(inputReaderUtil.readSelection()).thenReturn(5);
+
+        try{
+            parkingService.processIncomingVehicle();
+        } catch (Exception e){
+            assertTrue(outputStreamCaptor.toString()
+                    .trim().contains("Error parsing user input for type of vehicle"));
+        }
+
+        // Verifying the interactions
+        verify(parkingSpotDAO, times(0)).updateParking(parkingSpot);
+        verify(ticketDAO, times(0)).saveTicket(any(Ticket.class));
+
+    }
+
+    @Test
     public void getNextSpotNoPlaceAvailableKo(){
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
 

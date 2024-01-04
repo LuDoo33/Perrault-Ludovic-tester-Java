@@ -31,8 +31,8 @@ public class ParkingDataBaseIT {
     @Mock
     private static InputReaderUtil inputReaderUtil;
     private final String VEHICULE_REG_NUMBER = "ABCDEF";
-    private final Date IN_TIME = new Date(2023, Calendar.OCTOBER, 20, 01, 00);
-    private final Date OUT_TIME = new Date(2023, Calendar.OCTOBER, 20, 02, 00);
+    private final Date IN_TIME = new Date(2023, Calendar.OCTOBER, 20, 1, 0);
+    private final Date OUT_TIME = new Date(2023, Calendar.OCTOBER, 20, 2, 0);
 
     @BeforeAll
     static void setUp() {

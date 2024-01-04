@@ -18,8 +18,8 @@ public class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
     private Ticket ticket;
-    private final Date IN_TIME = new Date(2023, Calendar.OCTOBER, 20, 01, 00);
-    private final Date OUT_TIME = new Date(2023, Calendar.OCTOBER, 20, 02, 00);
+    private final Date IN_TIME = new Date(2023, Calendar.OCTOBER, 20, 1, 0);
+    private final Date OUT_TIME = new Date(2023, Calendar.OCTOBER, 20, 2, 0);
 
     @BeforeAll
     static void setUp() {
@@ -67,7 +67,7 @@ public class FareCalculatorServiceTest {
 
     @Test
     public void calculateFareBikeWithFutureInTime(){
-        Date outTime = new Date(2022, Calendar.OCTOBER, 20, 01, 00); // outTime one year before inTime
+        Date outTime = new Date(2022, Calendar.OCTOBER, 20, 1, 0); // outTime one year before inTime
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
         ticket.setInTime(IN_TIME);
@@ -78,7 +78,7 @@ public class FareCalculatorServiceTest {
 
     @Test
     public void calculateFareBikeWithLessThanOneHourParkingTime(){
-        Date outTime = new Date(2023, Calendar.OCTOBER, 20, 01, 45); // 45 minutes should result 25% of the rate per hour
+        Date outTime = new Date(2023, Calendar.OCTOBER, 20, 1, 45); // 45 minutes should result 25% of the rate per hour
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
         ticket.setInTime(IN_TIME);
@@ -91,7 +91,7 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareCarWithLessThanOneHourParkingTime(){
 
-        Date outTime = new Date(2023, Calendar.OCTOBER, 20, 01, 45); // 45 minutes should result 25% of the rate per hour
+        Date outTime = new Date(2023, Calendar.OCTOBER, 20, 1, 45); // 45 minutes should result 25% of the rate per hour
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
         ticket.setInTime(IN_TIME);
@@ -105,7 +105,7 @@ public class FareCalculatorServiceTest {
     public void calculateFareCarWithMoreThanADayParkingTime(){
         Date inTime = new Date(2023,10, 19, 00, 00);
         inTime.setTime(inTime.getTime());//24 hours parking time should give 24 (- 0.5 free) * parking fare per hour
-        Date outTime = new Date(2023, Calendar.OCTOBER, 20, 00, 00);
+        Date outTime = new Date(2023, Calendar.OCTOBER, 20, 0, 0);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
         ticket.setInTime(inTime);
@@ -117,7 +117,7 @@ public class FareCalculatorServiceTest {
 
     @Test
     public void calculateFareCarWithLessThan30minutesParkingTime(){
-        Date outTime = new Date(2023, Calendar.OCTOBER, 20, 01, 30);
+        Date outTime = new Date(2023, Calendar.OCTOBER, 20, 1, 30);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
         ticket.setInTime(IN_TIME);
@@ -129,7 +129,7 @@ public class FareCalculatorServiceTest {
 
     @Test
     public void calculateFareBikeWithLessThan30minutesParkingTime(){
-        Date outTime = new Date(2023, Calendar.OCTOBER, 20, 01, 30);
+        Date outTime = new Date(2023, Calendar.OCTOBER, 20, 1, 30);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
         ticket.setInTime(IN_TIME);

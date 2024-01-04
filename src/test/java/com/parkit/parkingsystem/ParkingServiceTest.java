@@ -39,8 +39,8 @@ public class ParkingServiceTest {
 
     private String vehicleRegNumber;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-    private final Date IN_TIME = new Date(2023, Calendar.OCTOBER, 20, 01, 00);
-    private final Date OUT_TIME = new Date(2023, Calendar.OCTOBER, 20, 02, 00);
+    private final Date IN_TIME = new Date(2023, Calendar.OCTOBER, 20, 1, 0);
+    private final Date OUT_TIME = new Date(2023, Calendar.OCTOBER, 20, 2, 0);
 
 
     @BeforeEach
@@ -147,7 +147,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicleWrongTypeKo() throws Exception{
+    public void processIncomingVehicleWrongTypeKo(){
         parkingSpot.setId(1);
         when(inputReaderUtil.readSelection()).thenReturn(5);
 

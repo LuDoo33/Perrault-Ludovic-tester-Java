@@ -14,6 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -28,6 +31,8 @@ public class ParkingDataBaseIT {
     @Mock
     private static InputReaderUtil inputReaderUtil;
     private final String VEHICULE_REG_NUMBER = "ABCDEF";
+    private final Date IN_TIME = new Date(2023, Calendar.OCTOBER, 20, 01, 00);
+    private final Date OUT_TIME = new Date(2023, Calendar.OCTOBER, 20, 02, 00);
 
     @BeforeAll
     static void setUp() {
@@ -47,14 +52,14 @@ public class ParkingDataBaseIT {
 
     @AfterAll
    static void tearDown(){
-
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test
     public void testParkingACar(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
-        parkingService.processIncomingVehicle();
+        parkingService.processIncomingVehicle(IN_TIME);
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
 
         assertNotNull(ticketDAO.getTicket(VEHICULE_REG_NUMBER, false));
@@ -67,9 +72,9 @@ public class ParkingDataBaseIT {
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
-        parkingService.processExitingVehicle();
+        parkingService.processExitingVehicle(OUT_TIME);
 
-        assertNotNull(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getOutTime().getTime());
+        assertNotNull(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getOutTime());
         assertNotNull(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getPrice());
     }
 

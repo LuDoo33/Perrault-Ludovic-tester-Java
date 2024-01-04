@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.PrintStream;
+import java.util.Calendar;
 import java.util.Date;
 
 import static junit.framework.Assert.*;
@@ -38,6 +39,8 @@ public class ParkingServiceTest {
 
     private String vehicleRegNumber;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+    private final Date IN_TIME = new Date(2023, Calendar.OCTOBER, 20, 01, 00);
+    private final Date OUT_TIME = new Date(2023, Calendar.OCTOBER, 20, 02, 00);
 
 
     @BeforeEach
@@ -48,7 +51,7 @@ public class ParkingServiceTest {
 
             parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
             ticket = new Ticket();
-            ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));
+            ticket.setInTime(IN_TIME);
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("ABCDEF");
 
@@ -63,12 +66,12 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processExitingVehicle(){
+    public void processExitingVehicleOk(){
         when(ticketDAO.getnumberOfTickets(anyString())).thenReturn(1);
         when(ticketDAO.getTicket(vehicleRegNumber, false)).thenReturn(ticket);
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 
-        parkingService.processExitingVehicle();
+        parkingService.processExitingVehicle(OUT_TIME);
 
         verify(ticketDAO, Mockito.times(1)).getnumberOfTickets(anyString());
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
@@ -84,7 +87,7 @@ public class ParkingServiceTest {
             when(inputReaderUtil.readSelection()).thenReturn(1);
 
             // Calling the method to test
-            parkingService.processIncomingVehicle();
+            parkingService.processIncomingVehicle(IN_TIME);
 
             // Verifying the interactions
             verify(parkingSpotDAO, times(1)).updateParking(parkingSpot);
@@ -108,7 +111,7 @@ public class ParkingServiceTest {
             when(inputReaderUtil.readSelection()).thenReturn(2);
 
             // Calling the method to test
-            parkingService.processIncomingVehicle();
+            parkingService.processIncomingVehicle(IN_TIME);
 
             // Verifying the interactions
             verify(parkingSpotDAO, times(1)).updateParking(parkingSpot);
@@ -133,9 +136,10 @@ public class ParkingServiceTest {
             when(ticketDAO.getnumberOfTickets(anyString())).thenReturn(3);
 
             // Calling the method to test
-            parkingService.processIncomingVehicle();
+            parkingService.processIncomingVehicle(IN_TIME);
 
             // Verifying the interactions
+            verify(inputReaderUtil, times(1)).readSelection();
             verify(parkingSpotDAO, times(1)).updateParking(parkingSpot);
             verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
             assertTrue(outputStreamCaptor.toString()
@@ -148,7 +152,7 @@ public class ParkingServiceTest {
         when(inputReaderUtil.readSelection()).thenReturn(5);
 
         try{
-            parkingService.processIncomingVehicle();
+            parkingService.processIncomingVehicle(IN_TIME);
         } catch (Exception e){
             assertTrue(outputStreamCaptor.toString()
                     .trim().contains("Error parsing user input for type of vehicle"));

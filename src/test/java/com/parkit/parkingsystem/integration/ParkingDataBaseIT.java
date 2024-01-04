@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.parkit.parkingsystem.constants.Fare.CAR_RATE_PER_HOUR;
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -75,7 +76,7 @@ public class ParkingDataBaseIT {
         parkingService.processExitingVehicle(OUT_TIME);
 
         assertNotNull(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getOutTime());
-        assertNotNull(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getPrice());
+        assertEquals(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getPrice(), 0.50*CAR_RATE_PER_HOUR);
     }
 
 }

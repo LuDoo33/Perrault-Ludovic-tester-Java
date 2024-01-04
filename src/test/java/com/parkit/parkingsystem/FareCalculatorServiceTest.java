@@ -103,7 +103,7 @@ public class FareCalculatorServiceTest {
 
     @Test
     public void calculateFareCarWithMoreThanADayParkingTime(){
-        Date inTime = new Date(2023,10, 19, 00, 00);
+        Date inTime = new Date(2023,10, 19, 0, 0);
         inTime.setTime(inTime.getTime());//24 hours parking time should give 24 (- 0.5 free) * parking fare per hour
         Date outTime = new Date(2023, Calendar.OCTOBER, 20, 0, 0);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);

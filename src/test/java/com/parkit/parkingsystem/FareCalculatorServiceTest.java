@@ -119,24 +119,26 @@ public class FareCalculatorServiceTest {
     public void calculateFareCarWithLessThan30minutesParkingTime(){
         Date outTime = new Date(2023, Calendar.OCTOBER, 20, 1, 30);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-
         ticket.setInTime(IN_TIME);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
+
         fareCalculatorService.calculateFare(ticket,false );
-        assertEquals( (0) , ticket.getPrice());
+
+        assertTrue( ticket.getPrice() == 0);
     }
 
     @Test
     public void calculateFareBikeWithLessThan30minutesParkingTime(){
         Date outTime = new Date(2023, Calendar.OCTOBER, 20, 1, 30);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
-
         ticket.setInTime(IN_TIME);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
+
         fareCalculatorService.calculateFare(ticket, false);
-        assertEquals( (0) , ticket.getPrice());
+
+        assertTrue(ticket.getPrice() == 0);
     }
 
     @Test

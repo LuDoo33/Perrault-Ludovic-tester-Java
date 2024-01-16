@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class ParkingService {
@@ -53,7 +54,7 @@ public class ParkingService {
 
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
-                System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
+                System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+ inTime);
             }
         }catch(Exception e){
             logger.error("Unable to process incoming vehicle",e);

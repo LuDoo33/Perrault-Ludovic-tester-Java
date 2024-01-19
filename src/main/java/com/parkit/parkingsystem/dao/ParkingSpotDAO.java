@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ParkingSpotDAO {
 	private static final Logger logger = LogManager.getLogger("ParkingSpotDAO");
@@ -22,7 +23,7 @@ public class ParkingSpotDAO {
 		Connection con = null;
 		int result = -1;
 		try {
-			con = dataBaseConfig.getConnection();
+
 			PreparedStatement ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT);
 			ps.setString(1, parkingType.toString());
 			ResultSet rs = ps.executeQuery();
@@ -31,7 +32,9 @@ public class ParkingSpotDAO {
 			}
 			dataBaseConfig.closeResultSet(rs);
 			dataBaseConfig.closePreparedStatement(ps);
-		} catch (Exception ex) {
+		} catch (SQLException e) {
+			logger.error("Problème de connexion à la base de donnée.", e);
+		}catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
 			dataBaseConfig.closeConnection(con);

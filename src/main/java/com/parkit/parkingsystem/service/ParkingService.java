@@ -32,7 +32,7 @@ public class ParkingService {
 	// enregistre ticket généré dans bdd
 	public void processIncomingVehicle() {
 		logger.info("Je rentre dans la méthode processIncomingVehicle()");
-
+		int id = 0;
 		try {
 			ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 			if (parkingSpot != null && parkingSpot.getId() > 0) {
@@ -42,14 +42,14 @@ public class ParkingService {
 															// false
 
 				Date inTime = new Date();
-				Ticket ticket = new Ticket();
+				Ticket ticket = new Ticket(id, parkingSpot, vehicleRegNumber, 0, inTime, null);
 				// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-				// ticket.setId(ticketID);
+				/* ticket.setId(ticketID);
 				ticket.setParkingSpot(parkingSpot);
 				ticket.setVehicleRegNumber(vehicleRegNumber);
 				ticket.setPrice(0);
 				ticket.setInTime(inTime);
-				ticket.setOutTime(null);
+				ticket.setOutTime(null);*/
 				ticketDAO.saveTicket(ticket);
 				logger.debug("Generated Ticket and saved in DB");
 				logger.debug("Please park your vehicle in spot number:" + parkingSpot.getId());
@@ -81,8 +81,6 @@ public class ParkingService {
 				parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);
 				logger.debug(parkingSpot);
 				
-			} else {
-				throw new Exception("Error fetching parking number from DB. Parking slots might be full");
 			}
 		} catch (IllegalArgumentException ie) {
 			logger.error("Error parsing user input for type of vehicle", ie);

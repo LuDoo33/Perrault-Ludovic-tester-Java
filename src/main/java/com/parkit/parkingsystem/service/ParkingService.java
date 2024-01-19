@@ -9,9 +9,9 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.util.Date;
+
+import static com.parkit.parkingsystem.constants.Fare.DECIMAL_FORMAT;
 
 public class ParkingService {
 
@@ -115,8 +115,7 @@ public class ParkingService {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                DecimalFormat df = new DecimalFormat("#.##");
-                String price = df.format(Float.parseFloat(Double.toString(ticket.getPrice())));
+                String price = DECIMAL_FORMAT.format(ticket.getPrice()).toString();
                 System.out.println("Please pay the parking fare:" + price);
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{

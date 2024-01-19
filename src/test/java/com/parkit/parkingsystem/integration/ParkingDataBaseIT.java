@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static com.parkit.parkingsystem.constants.Fare.CAR_RATE_PER_HOUR;
+import static com.parkit.parkingsystem.constants.Fare.DECIMAL_FORMAT;
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -77,6 +78,22 @@ public class ParkingDataBaseIT {
 
         assertNotNull(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getOutTime());
         assertEquals(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getPrice(), 0.50*CAR_RATE_PER_HOUR);
+    }
+
+    @Test
+    public void testParkingLotExitRecurringUser(){
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+        // Add a ticket with the same vehicle reg number in the db
+        parkingService.processIncomingVehicle(IN_TIME);
+        parkingService.processExitingVehicle(OUT_TIME);
+
+        // Process incoming and exiting the same vehicle with 1,5 hour duration
+        parkingService.processIncomingVehicle(new Date(2023, Calendar.OCTOBER, 21, 1, 0));
+        parkingService.processExitingVehicle(new Date(2023, Calendar.OCTOBER, 21, 2, 30));
+
+        // Check if the right price (with the discount) is saved in the DB
+        assertEquals(DECIMAL_FORMAT.format(0.95 * CAR_RATE_PER_HOUR).toString(), DECIMAL_FORMAT.format(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getPrice()));
     }
 
 }

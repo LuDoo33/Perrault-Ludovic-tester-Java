@@ -13,21 +13,31 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.mockito.Mockito.when;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import static com.parkit.parkingsystem.constants.Fare.CAR_RATE_PER_HOUR;
+import static com.parkit.parkingsystem.constants.Fare.DECIMAL_FORMAT;
+import static junit.framework.Assert.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
 
-    private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+    final private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static ParkingSpotDAO parkingSpotDAO;
     private static TicketDAO ticketDAO;
     private static DataBasePrepareService dataBasePrepareService;
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
+    private final String VEHICULE_REG_NUMBER = "ABCDEF";
+    private final Date IN_TIME = new Date(2023, Calendar.OCTOBER, 20, 1, 0);
+    private final Date OUT_TIME = new Date(2023, Calendar.OCTOBER, 20, 2, 0);
 
     @BeforeAll
-    private static void setUp() throws Exception{
+    static void setUp() {
         parkingSpotDAO = new ParkingSpotDAO();
         parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
         ticketDAO = new TicketDAO();
@@ -36,30 +46,54 @@ public class ParkingDataBaseIT {
     }
 
     @BeforeEach
-    private void setUpPerTest() throws Exception {
+    void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(VEHICULE_REG_NUMBER);
         dataBasePrepareService.clearDataBaseEntries();
     }
 
     @AfterAll
-    private static void tearDown(){
-
+   static void tearDown(){
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test
     public void testParkingACar(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processIncomingVehicle();
+
+        parkingService.processIncomingVehicle(IN_TIME);
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
+
+        assertNotNull(ticketDAO.getTicket(VEHICULE_REG_NUMBER, false));
+        assertFalse(ticketDAO.getTicket(VEHICULE_REG_NUMBER, false).getParkingSpot().isAvailable()); // Ensure parking spot is marked as unavailable
+
     }
 
     @Test
     public void testParkingLotExit(){
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processExitingVehicle();
-        //TODO: check that the fare generated and out time are populated correctly in the database
+
+        parkingService.processExitingVehicle(OUT_TIME);
+
+        assertNotNull(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getOutTime());
+        assertEquals(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getPrice(), 0.50*CAR_RATE_PER_HOUR);
+    }
+
+    @Test
+    public void testParkingLotExitRecurringUser(){
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+        // Add a ticket with the same vehicle reg number in the db
+        parkingService.processIncomingVehicle(IN_TIME);
+        parkingService.processExitingVehicle(OUT_TIME);
+
+        // Process incoming and exiting the same vehicle with 1,5 hour duration
+        parkingService.processIncomingVehicle(new Date(2023, Calendar.OCTOBER, 21, 1, 0));
+        parkingService.processExitingVehicle(new Date(2023, Calendar.OCTOBER, 21, 2, 30));
+
+        // Check if the right price (with the discount) is saved in the DB
+        assertEquals(DECIMAL_FORMAT.format(0.95 * CAR_RATE_PER_HOUR).toString(), DECIMAL_FORMAT.format(ticketDAO.getTicket(VEHICULE_REG_NUMBER, true).getPrice()));
     }
 
 }

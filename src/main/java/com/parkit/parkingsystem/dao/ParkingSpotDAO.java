@@ -23,9 +23,10 @@ public class ParkingSpotDAO {
 		Connection con = null;
 		int result = -1;
 		try {
-
+			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT);
 			ps.setString(1, parkingType.toString());
+			logger.debug(ps);	
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				result = rs.getInt(1);

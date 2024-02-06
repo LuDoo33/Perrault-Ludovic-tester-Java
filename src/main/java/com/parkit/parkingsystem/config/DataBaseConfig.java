@@ -27,7 +27,7 @@ public class DataBaseConfig {
 		try {
 			connection = DriverManager.getConnection(
 					// préciser sous forme d'URL la base à accéder , nom user + password
-					"jdbc:mysql://127.0.0.1:3306/prod", "root", "rootroot");
+					"jdbc:mysql://127.0.0.1:3306/prod", "root", "qajjouimane");
 
 		} catch (SQLException e) {
 			logger.error("Connection denied");

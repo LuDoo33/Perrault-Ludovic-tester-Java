@@ -44,12 +44,7 @@ public class ParkingService {
 				Date inTime = new Date();
 				Ticket ticket = new Ticket(id, parkingSpot, vehicleRegNumber, 0, inTime, null);
 				// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-				/* ticket.setId(ticketID);
-				ticket.setParkingSpot(parkingSpot);
-				ticket.setVehicleRegNumber(vehicleRegNumber);
-				ticket.setPrice(0);
-				ticket.setInTime(inTime);
-				ticket.setOutTime(null);*/
+				logger.debug(ticket);
 				ticketDAO.saveTicket(ticket);
 				logger.debug("Generated Ticket and saved in DB");
 				logger.debug("Please park your vehicle in spot number:" + parkingSpot.getId());
@@ -114,26 +109,26 @@ public class ParkingService {
 		logger.info("Je rentre dans la méthode processExitingVehicle()");
 		try {
 			String vehicleRegNumber = getVehichleRegNumber();
+			logger.debug(vehicleRegNumber);
 			Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+			logger.debug(ticket);
 
 			Date outTime = new Date();
 			ticket.setOutTime(outTime);
 			logger.debug(outTime);
 			
 			int nbOfTickets = ticketDAO.getNbTicket(vehicleRegNumber);
-			/*if (nbOfTickets > 1) {
-				fareCalculatorService.calculateFare(ticket, true);
+			logger.debug(nbOfTickets);
 
-			} else {
-
-				fareCalculatorService.calculateFare(ticket, false);
-			}*/
-			if (ticketDAO.updateTicket(ticket) && (nbOfTickets > 1)) {
+			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
 				parkingSpot.setAvailable(true);
 				parkingSpotDAO.updateParking(parkingSpot);
-				fareCalculatorService.calculateFare(ticket, true);
-
+				 if(nbOfTickets >= 1) {
+				        fareCalculatorService.calculateFare(ticket, true);
+				    } else {
+				        fareCalculatorService.calculateFare(ticket, false);
+				    }
 				logger.debug(ticketDAO.getNbTicket(vehicleRegNumber));
 
 				System.out.println("Please pay the parking fare:" + ticket.getPrice());
@@ -141,7 +136,7 @@ public class ParkingService {
 						"Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
 			} else {
 				System.out.println("Unable to update ticket information. Error occurred");
-				fareCalculatorService.calculateFare(ticket, false);
+				//fareCalculatorService.calculateFare(ticket, false);
 
 			}
 		} catch (Exception e) {

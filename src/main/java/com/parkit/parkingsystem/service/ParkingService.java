@@ -85,7 +85,7 @@ public class ParkingService {
 		return parkingSpot;
 	}
 
-	private ParkingType getVehichleType() {
+	public ParkingType getVehichleType() {
 		System.out.println("Please select vehicle type from menu");
 		System.out.println("1 CAR");
 		System.out.println("2 BIKE");
@@ -136,7 +136,6 @@ public class ParkingService {
 						"Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
 			} else {
 				System.out.println("Unable to update ticket information. Error occurred");
-				//fareCalculatorService.calculateFare(ticket, false);
 
 			}
 		} catch (Exception e) {

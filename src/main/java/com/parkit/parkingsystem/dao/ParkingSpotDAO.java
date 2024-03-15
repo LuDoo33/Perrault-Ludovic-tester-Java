@@ -39,7 +39,7 @@ public class ParkingSpotDAO {
 
     public boolean updateParking(ParkingSpot parkingSpot){
         //update the availability fo that parking slot
-        Connection con = null;
+        Connection con = null; 
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT);

@@ -54,7 +54,7 @@ public class ParkingService {
 					System.out.println(
 							"Heureux de vous revoir ! En tant qu'utilisateur régulier de notre parking, vous allez obtenir une remise de 5%. ");
 				}
-
+ 
 				ticketDAO.saveTicket(ticket);
 
 				System.out.println("Generated Ticket and saved in DB");

@@ -43,7 +43,7 @@ public class FareCalculatorService {
 		return fare;
 	}
 
-	public void calculateFare(Ticket ticket, boolean discount) {
+	public void calculateFareWithDiscount(Ticket ticket, boolean discount) {
 		double fare = calculateFarePerType(ticket);
 
 		double timeSpentInHours = calculateTime(ticket) / 60;
@@ -59,11 +59,11 @@ public class FareCalculatorService {
 
 	}
 
-	public void calculateFare(Ticket ticket) {
+	public void calculateFareDiscountToFalse(Ticket ticket) {
 
 		FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
-		fareCalculatorService.calculateFare(ticket, false);
+		fareCalculatorService.calculateFareWithDiscount(ticket, false);
 
 	}
 }

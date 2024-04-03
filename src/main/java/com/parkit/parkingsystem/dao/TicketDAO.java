@@ -30,8 +30,7 @@ public class TicketDAO {
 		try {
 			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);
-			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-			// ps.setInt(1,ticket.getId());
+		
 			ps.setInt(1, ticket.getParkingSpot().getId());
 			ps.setString(2, ticket.getVehicleRegNumber());
 			ps.setDouble(3, ticket.getPrice());
@@ -42,6 +41,7 @@ public class TicketDAO {
 			return ps.execute();
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
+		    ex.printStackTrace();
 		} finally {
 			dataBaseConfig.closeConnection(con);
 			return false;
@@ -76,8 +76,35 @@ public class TicketDAO {
 			return ticket;
 		}
 	}
+	public Ticket getLastTicket(String vehicleRegNumber) {
+		logger.info("getTicket() récupération du ticket généré");
+		Connection con = null;
+		Ticket ticket = null;
 
-	public boolean updateTicket(Ticket ticket) {
+		try {
+			con = dataBaseConfig.getConnection();
+			PreparedStatement ps = con.prepareStatement(DBConstants.GET_LAST_TICKET);
+			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+			ps.setString(1, vehicleRegNumber);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)), false);
+				ticket = new Ticket(rs.getInt(2), parkingSpot, vehicleRegNumber, rs.getDouble(3), rs.getTimestamp(4), rs.getTimestamp(5));
+		
+				logger.debug("test logger geTimeOut dans getTicket");
+				logger.debug(ticket.getOutTime());
+			}
+			dataBaseConfig.closeResultSet(rs);
+			dataBaseConfig.closePreparedStatement(ps);
+		} catch (Exception ex) {
+			logger.error("Error fetching next available slot", ex);
+		} finally {
+			dataBaseConfig.closeConnection(con);
+			return ticket;
+		}
+	}
+
+	public boolean updateTicket(Ticket ticket) throws ClassNotFoundException {
 		logger.debug("updateTicket() modification du ticket généré pour insérer heure de sortie & prix");
 
 		Connection con = null;
@@ -86,15 +113,21 @@ public class TicketDAO {
 			PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
 
 			ps.setDouble(1, ticket.getPrice());
+		    logger.debug("Price set successfully");
 
-			ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
+		    ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
+		    logger.debug("OutTime set successfully");
 
-			ps.setInt(3, ticket.getId());
-			ps.execute();
+		    ps.setInt(3, ticket.getId());
+		    logger.debug("ID set successfully");
+
+		    ps.execute();
+		    logger.debug("Update executed successfully");
+
 			return true;
-		} catch (Exception ex) {
-			logger.error("Error saving ticket info", ex);
-		} finally {
+		} catch (SQLException | NullPointerException ex) {
+		    logger.error("Error saving ticket info", ex);
+		}finally {
 			dataBaseConfig.closeConnection(con);
 		}
 		return false;

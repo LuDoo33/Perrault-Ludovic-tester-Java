@@ -10,6 +10,8 @@ public class Ticket {
 	private Date inTime;
 	private Date outTime;
 	
+	public Ticket() {}
+	
 	public Ticket(int id, ParkingSpot parkingSpot, String vehicleRegNumber, double price, Date inTime, Date outTime) {
 		this.id = id++;
 		this.parkingSpot = parkingSpot;
@@ -65,6 +67,11 @@ public class Ticket {
 
 	public void setOutTime(Date outTime) {
 		this.outTime = outTime;
+	}
+	@Override
+	public String toString() {
+		return "Ticket [id=" + id + ", parkingSpot=" + parkingSpot + ", vehicleRegNumber=" + vehicleRegNumber
+				+ ", price=" + price + ", inTime=" + inTime + ", outTime=" + outTime + "]";
 	}
 
 }

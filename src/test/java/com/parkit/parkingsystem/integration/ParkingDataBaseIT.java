@@ -53,8 +53,6 @@ public class ParkingDataBaseIT {
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
 		dataBaseTestConfig.getConnection();
-
-
 	}
 
 	@BeforeEach
@@ -62,13 +60,6 @@ public class ParkingDataBaseIT {
 		logger.info("Je rentre dans la méthode setUpPerTest() dans @BeforeEach");
 		dataBasePrepareService.clearDataBaseEntries();
 		dataBasePrepareService.initDataBase();
-	}
-
-	@AfterAll
-	private static void tearDown(){
-		//  	fermer connection a la bdd
-		//supprimer données dans bdd
-
 	}
 
 	@Test
@@ -89,7 +80,6 @@ public class ParkingDataBaseIT {
 
 		boolean updatedParking = parkingSpotDAO.updateParking(geTicketSaved.getParkingSpot());
 		assertTrue(updatedParking);
-
 		//TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
 	}
 

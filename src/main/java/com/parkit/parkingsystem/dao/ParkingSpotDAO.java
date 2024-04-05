@@ -17,7 +17,6 @@ public class ParkingSpotDAO {
 
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-//Connexion a la bdd pour obtenir numéro de la prochaine place disponible retourne un entier
 
 	public int getNextAvailableSlot(ParkingType parkingType) {
 		Connection con = null;
@@ -43,10 +42,8 @@ public class ParkingSpotDAO {
 		return result;
 	}
 
-//méthode qui retourne un booléen selon disponibilité de la place 
 	
 	public boolean updateParking(ParkingSpot parkingSpot) {
-		// update the availability fo that parking slot
 		Connection con = null;
 		try {
 			con = dataBaseConfig.getConnection();

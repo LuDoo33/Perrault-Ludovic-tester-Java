@@ -23,40 +23,17 @@
 				"auth-model": "native"
 			}
 		},
-		"mysql8-18e04b5c405-2b1f27b138665bb9": {
+		"mysql8-18e61814991-7ea7f34e55786632": {
 			"provider": "mysql",
 			"driver": "mysql8",
-			"name": "prod 2",
+			"name": "test",
 			"save-password": true,
 			"configuration": {
 				"host": "localhost",
 				"port": "3306",
-				"database": "prod",
-				"url": "jdbc:mysql://localhost:3306/prod",
-				"configurationType": "URL",
-				"home": "mysql_client",
-				"type": "dev",
-				"closeIdleConnection": true,
-				"properties": {
-					"rewriteBatchedStatements": "true",
-					"connectTimeout": "20000",
-					"enabledTLSProtocols": "TLSv1,TLSv1.1,TLSv1.2,TLSv1.3"
-				},
-				"auth-model": "native",
-				"handlers": {}
-			}
-		},
-		"mysql8-18e04b9df98-1972d59ed3862da0": {
-			"provider": "mysql",
-			"driver": "mysql8",
-			"name": "prod 3",
-			"save-password": true,
-			"configuration": {
-				"host": "localhost",
-				"port": "3306",
-				"database": "prod",
-				"url": "jdbc:mysql://localhost:3306/prod",
-				"configurationType": "URL",
+				"database": "test",
+				"url": "jdbc:mysql://localhost:3306/test",
+				"configurationType": "MANUAL",
 				"home": "mysql_client",
 				"type": "dev",
 				"closeIdleConnection": true,

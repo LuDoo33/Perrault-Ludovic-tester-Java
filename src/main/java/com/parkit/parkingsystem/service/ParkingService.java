@@ -36,12 +36,13 @@ public class ParkingService {
 				String vehicleRegNumber = getVehicleRegNumber();
 				parkingSpot.setAvailable(false);
 				parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as
-					 	 	 								// false
- 
+															// false
+
 				Date inTime = new Date();
+			//	inTime = (new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
 				Ticket ticket = new Ticket();
-				// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-				// ticket.setId(ticketID);
+				int ticketID = 2;
+				ticket.setId(ticketID);
 				ticket.setParkingSpot(parkingSpot);
 				ticket.setVehicleRegNumber(vehicleRegNumber);
 				ticket.setPrice(0);
@@ -54,7 +55,7 @@ public class ParkingService {
 					System.out.println(
 							"Heureux de vous revoir ! En tant qu'utilisateur régulier de notre parking, vous allez obtenir une remise de 5%. ");
 				}
- 
+
 				ticketDAO.saveTicket(ticket);
 
 				System.out.println("Generated Ticket and saved in DB");
@@ -62,7 +63,7 @@ public class ParkingService {
 				System.out.println("Recorded in-time for vehicle number: " + vehicleRegNumber + " is: " + inTime);
 			}
 		} catch (Exception e) {
-			logger.error("Unable to process incoming vehicle", e);
+			logger.error("Unable to process incoming vehicle", e); 
 		}
 	}
 

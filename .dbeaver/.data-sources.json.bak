@@ -20,8 +20,24 @@
 					"connectTimeout": "20000",
 					"enabledTLSProtocols": "TLSv1,TLSv1.1,TLSv1.2,TLSv1.3"
 				},
-				"auth-model": "native",
-				"handlers": {}
+				"auth-model": "native"
+			}
+		},
+		"mysql8-18e61814991-7ea7f34e55786632": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "test",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "test",
+				"url": "jdbc:mysql://localhost:3306/test",
+				"configurationType": "MANUAL",
+				"home": "mysql_client",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
 			}
 		}
 	},

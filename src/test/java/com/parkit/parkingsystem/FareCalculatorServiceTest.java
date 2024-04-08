@@ -19,7 +19,6 @@ public class FareCalculatorServiceTest {
 
 	private static FareCalculatorService fareCalculatorService;
 	private Ticket ticket;
-	// boolean discount = false;
 
 	@BeforeAll
 	private static void setUp() {
@@ -126,8 +125,7 @@ public class FareCalculatorServiceTest {
 		ticket.setOutTime(outTime);
 		ticket.setParkingSpot(parkingSpot);
 		fareCalculatorService.calculateFare(ticket);
-		assertEquals(0.0 * Fare.CAR_FREE_RATE_FOR_MINUTES, ticket.getPrice());
-
+		assertEquals(0.0, ticket.getPrice());
 	}
 
 	@Test
@@ -141,7 +139,7 @@ public class FareCalculatorServiceTest {
 		ticket.setOutTime(outTime);
 		ticket.setParkingSpot(parkingSpot);
 		fareCalculatorService.calculateFare(ticket);
-		assertEquals(0.0 * Fare.BIKE_FREE_RATE_FOR_MINUTES, ticket.getPrice());
+		assertEquals(0.0, ticket.getPrice());
 
 	}
 
@@ -158,7 +156,6 @@ public class FareCalculatorServiceTest {
 
 		fareCalculatorService.calculateFare(ticket, true);
 		assertEquals(1.0 * (Fare.CAR_RATE_PER_HOUR - (Fare.CAR_RATE_PER_HOUR * 5 / 100)), ticket.getPrice());
-
 	}
 
 	@Test

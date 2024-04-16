@@ -18,8 +18,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-//classe qui permet de rechercher données dans bdd classe intermédiaire/ surcouche
-// DAO => Data Access Object
+
 public class TicketDAO {
 	private static final Logger logger = LogManager.getLogger("TicketDAO");
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
@@ -84,7 +83,6 @@ public class TicketDAO {
 		try {
 			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.GET_LAST_TICKET);
-			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			ps.setString(1, vehicleRegNumber);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
@@ -140,9 +138,7 @@ public class TicketDAO {
 
 		try {
 			con = dataBaseConfig.getConnection();
-//	        requete SQL paramétrée grace à ps
 			PreparedStatement ps = con.prepareStatement(DBConstants.GET_COUNT_FOR_VEHICLE);
-//			utiliser param vehicleRegNb ds requete SQL
 			ps.setString(1, vehicleRegNb);
 			ResultSet rs = ps.executeQuery();
 

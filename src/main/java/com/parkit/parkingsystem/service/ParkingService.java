@@ -28,9 +28,7 @@ public class ParkingService {
 		this.ticketDAO = ticketDAO;
 	}
 
-	// méthode qui sert à attribuer une place aux nouvelles voitures entrantes,
-	// génère un ticket et une heure d'entrée, récupère plaque immatriculation
-	// enregistre ticket généré dans bdd
+
 	public void processIncomingVehicle() {
 		logger.info("Je rentre dans la méthode processIncomingVehicle()");
 		int id = 0;
@@ -39,12 +37,10 @@ public class ParkingService {
 			if (parkingSpot != null && parkingSpot.getId() > 0) {
 				String vehicleRegNumber = getVehichleRegNumber();
 				parkingSpot.setAvailable(false);
-				parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as
-															// false
+				parkingSpotDAO.updateParking(parkingSpot);
 
 				Date inTime = new Date();
 				Ticket ticket = new Ticket(id, parkingSpot, vehicleRegNumber, 0, inTime, null);
-				// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 				logger.debug(ticket);
 				ticketDAO.saveTicket(ticket);
 				logger.debug("Generated Ticket and saved in DB");
@@ -58,14 +54,11 @@ public class ParkingService {
 		}
 	}
 
-	// méthode qui permet de lire les données entrées par le clavier depuis la
-	// classe inputReaderUtil
 	private String getVehichleRegNumber() throws Exception {
 		System.out.println("Please type the vehicle registration number and press enter key");
 		return inputReaderUtil.readVehicleRegistrationNumber();
 	}
 
-//retourne un objet de type ParkingSpot avec le numero de la place disponible, le type de vehicule, 
 	public ParkingSpot getNextParkingNumberIfAvailable() {
 		logger.info("Je rentre dans la méthode getNextParkingNumberIfAvailable()");
 		int parkingNumber = 0;
@@ -106,7 +99,6 @@ public class ParkingService {
 		}
 		}
 	}
-//méthode qui permet de calculer le prix du ticket du vehicule sortant 
 
 	public void processExitingVehicle() {
 		logger.info("Je rentre dans la méthode processExitingVehicle()");

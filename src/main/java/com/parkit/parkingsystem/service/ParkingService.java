@@ -38,6 +38,7 @@ public class ParkingService {
 				String vehicleRegNumber = getVehichleRegNumber();
 				parkingSpot.setAvailable(false);
 				parkingSpotDAO.updateParking(parkingSpot);
+
 				Date inTime = new Date();
 				Ticket ticket = new Ticket(id, parkingSpot, vehicleRegNumber, 0, inTime, null);
 				logger.debug(ticket);
@@ -53,7 +54,6 @@ public class ParkingService {
 		}
 	}
 
-	
 	private String getVehichleRegNumber() throws Exception {
 		System.out.println("Please type the vehicle registration number and press enter key");
 		return inputReaderUtil.readVehicleRegistrationNumber();

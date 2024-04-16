@@ -7,16 +7,14 @@ import java.sql.*;
 
 public class DataBaseConfig {
 
-
 	private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
-	
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
 
 		logger.info("Create DB connection");
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection connection = null;
-		
+
 		try {
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/prod", "root", "qajjouimane");

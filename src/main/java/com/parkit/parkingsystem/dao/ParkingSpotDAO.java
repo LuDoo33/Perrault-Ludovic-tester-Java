@@ -42,7 +42,6 @@ public class ParkingSpotDAO {
 		return result;
 	}
 
-	
 	public boolean updateParking(ParkingSpot parkingSpot) {
 		Connection con = null;
 		try {

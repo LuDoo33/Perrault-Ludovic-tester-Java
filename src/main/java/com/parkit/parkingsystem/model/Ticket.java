@@ -12,7 +12,8 @@ public class Ticket {
 	
 	public Ticket() {}
 	
-	public Ticket(int id, ParkingSpot parkingSpot, String vehicleRegNumber, double price, Date inTime, Date outTime) {
+	public Ticket(int id, ParkingSpot parkingSpot, String vehicleRegNumber, 
+			double price, Date inTime, Date outTime) {
 		this.id = id++;
 		this.parkingSpot = parkingSpot;
 		this.vehicleRegNumber = vehicleRegNumber;

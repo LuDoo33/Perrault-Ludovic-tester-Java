@@ -71,7 +71,7 @@ public class ParkingService {
 			if (parkingNumber > 0) {
 				parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);
 				logger.debug(parkingSpot);
-				
+
 			}
 		} catch (IllegalArgumentException ie) {
 			logger.error("Error parsing user input for type of vehicle", ie);
@@ -109,27 +109,27 @@ public class ParkingService {
 			logger.debug(ticket);
 			logger.debug(ticket.getOutTime());
 			if (ticket != null) {
-			    Date outTime = new Date();
-			    ticket.setOutTime(outTime);
-			    logger.debug(outTime);
+				Date outTime = new Date();
+				ticket.setOutTime(outTime);
+				logger.debug(outTime);
 
 			} else {
 				logger.debug("Ticket or outTime is null");
 			}
-			
+
 			int nbOfTickets = ticketDAO.getNbTicket(vehicleRegNumber);
 			logger.debug(nbOfTickets);
-			
+
 			if(nbOfTickets > 1) {
-		        fareCalculatorService.calculateFareWithDiscount(ticket, true);
-		    } else {
-		        fareCalculatorService.calculateFareDiscountToFalse(ticket);
-		    }
+				fareCalculatorService.calculateFareWithDiscount(ticket, true);
+			} else {
+				fareCalculatorService.calculateFareDiscountToFalse(ticket);
+			}
 			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
 				parkingSpot.setAvailable(true);
 				parkingSpotDAO.updateParking(parkingSpot);
-				 
+
 				logger.debug(ticketDAO.getNbTicket(vehicleRegNumber));
 
 				System.out.println("Please pay the parking fare:" + ticket.getPrice());

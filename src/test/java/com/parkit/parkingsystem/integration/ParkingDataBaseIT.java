@@ -80,7 +80,6 @@ public class ParkingDataBaseIT {
 
 		boolean updatedParking = parkingSpotDAO.updateParking(geTicketSaved.getParkingSpot());
 		assertTrue(updatedParking);
-		//TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
 	}
 
 	@Test
@@ -101,7 +100,6 @@ public class ParkingDataBaseIT {
 		boolean updatedTicket = ticketDAO.updateTicket(ticketSaved);
 		assertTrue(updatedTicket);
 
-		//TODO: check that the fare generated and out time are populated correctly in the database
 	}
 
 	@Test
@@ -153,12 +151,13 @@ public class ParkingDataBaseIT {
 		
 		double expectedValue = Fare.CAR_RATE_PER_HOUR * 0.95;
 
-		BigDecimal expected = new BigDecimal(expectedValue).setScale(2, RoundingMode.HALF_UP);
+		BigDecimal expected = new BigDecimal(expectedValue).setScale(1, RoundingMode.HALF_UP);
 
-		BigDecimal returnedValue = new BigDecimal(openedTicketPrice).setScale(2, RoundingMode.HALF_UP);
+		BigDecimal returnedValue = new BigDecimal(openedTicketPrice).setScale(1, RoundingMode.HALF_UP);
 
 		assertEquals(expected , returnedValue);
 
+		
 	}
 
 

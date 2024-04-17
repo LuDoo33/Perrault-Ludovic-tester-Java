@@ -153,7 +153,8 @@ public class ParkingServiceTest {
 
 		when(inputReaderUtil.readSelection()).thenReturn(3);
 
-		assertThrows(IllegalArgumentException.class, () -> parkingService.getVehichleType(), "Entered input is invalid");
+		assertThrows(IllegalArgumentException.class, () -> parkingService.getVehichleType(),
+				"Entered input is invalid");
 		assertNull(parkingService.getNextParkingNumberIfAvailable());
 	}
 

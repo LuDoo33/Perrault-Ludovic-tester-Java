@@ -34,7 +34,8 @@ public class TicketDAO {
 			ps.setString(2, ticket.getVehicleRegNumber());
 			ps.setDouble(3, ticket.getPrice());
 			ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
-			ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
+			ps.setTimestamp(5, (ticket.getOutTime() == null) ? null :
+				(new Timestamp(ticket.getOutTime().getTime())));
 			logger.debug("test logger geTimeOut dans saveTicket");
 			logger.debug(ticket.getOutTime());
 			return ps.execute();
@@ -59,8 +60,11 @@ public class TicketDAO {
 			ps.setString(1, vehicleRegNumber);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)), false);
-				ticket = new Ticket(rs.getInt(2), parkingSpot, vehicleRegNumber, rs.getDouble(3), rs.getTimestamp(4), rs.getTimestamp(5));
+				ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), 
+						ParkingType.valueOf(rs.getString(6)), false);
+				
+				ticket = new Ticket(rs.getInt(2), parkingSpot, vehicleRegNumber, 
+						rs.getDouble(3), rs.getTimestamp(4), rs.getTimestamp(5));
 		
 				logger.debug("test logger geTimeOut dans getTicket");
 				logger.debug(ticket.getOutTime());

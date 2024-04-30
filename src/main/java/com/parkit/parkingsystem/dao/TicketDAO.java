@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem.dao;
+ package com.parkit.parkingsystem.dao;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
@@ -25,7 +25,7 @@ public class TicketDAO {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-            //ps.setInt(1,ticket.getId());
+            ps.setInt(1,ticket.getId()); 
             ps.setInt(1,ticket.getParkingSpot().getId());
             ps.setString(2, ticket.getVehicleRegNumber());
             ps.setDouble(3, ticket.getPrice());
@@ -36,9 +36,9 @@ public class TicketDAO {
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return false;
         }
-    }
+        return false;
+    } 
 
     public Ticket getTicket(String vehicleRegNumber) {
         Connection con = null;
@@ -56,7 +56,7 @@ public class TicketDAO {
                 ticket.setId(rs.getInt(2));
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(rs.getDouble(3));
-                ticket.setInTime(rs.getTimestamp(4));
+                ticket.setInTime(rs.getTimestamp(4));  
                 ticket.setOutTime(rs.getTimestamp(5));
             }
             dataBaseConfig.closeResultSet(rs);
@@ -65,8 +65,8 @@ public class TicketDAO {
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return ticket;
         }
+        return ticket;
     }
 
     public boolean updateTicket(Ticket ticket) {
@@ -85,5 +85,32 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+    
+    public int getNbTicket(String vehicleRegNumber) {
+    	Connection con = null;
+    	int nbTicket = 0;
+    	
+    	try {
+    		con = dataBaseConfig.getConnection();
+    		PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKET);
+    		ps.setString(1, vehicleRegNumber);
+    		ResultSet rs = ps.executeQuery();
+    		
+    		while(rs.next()) {
+    			nbTicket = rs.getInt(2);
+    			logger.debug("vehicleRegNumber :"+ vehicleRegNumber + "nbTicket :"+ nbTicket);
+    		}
+    		
+    		dataBaseConfig.closeResultSet(rs);
+    		dataBaseConfig.closePreparedStatement(ps);
+    		
+    	}catch(Exception ex) {
+    		logger.error("Error fetching vehicle, count not available", ex);
+    	}finally {
+    		dataBaseConfig.closeConnection(con);
+    	}
+    	return nbTicket;
+    	
     }
 }

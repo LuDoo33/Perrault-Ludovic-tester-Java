@@ -10,10 +10,11 @@ public class Ticket {
     private double price;
     private Date inTime;
     private Date outTime;
+  
 
     public int getId() {
         return id;
-    }
+    } 
 
     public void setId(int id) {
         this.id = id;
@@ -58,4 +59,6 @@ public class Ticket {
     public void setOutTime(Date outTime) {
         this.outTime = outTime;
     }
+    
+  
 }

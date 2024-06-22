@@ -32,6 +32,10 @@ public class ParkingService {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
+                int numberOfEntry = ticketDAO.getNbTicket(vehicleRegNumber); //check if the vehicle registration number is new in the database
+                if(numberOfEntry >= 1) {
+                	System.out.println("Welcome back! As a regular user of our car park, you will receive a 5% discount.");
+                }
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
@@ -103,7 +107,12 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket);
+            int numberOfEntry = ticketDAO.getNbTicket(vehicleRegNumber); //check if the vehicle registration number is new in the database
+            if(numberOfEntry >= 2) {
+            	fareCalculatorService.calculateFare(ticket,true);
+            }else {
+            	fareCalculatorService.calculateFare(ticket);
+            }
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);

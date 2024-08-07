@@ -1,3 +1,21 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.debug.settings.onBuildFailureProceed": true,
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "MySQL90",
+            "database": "Data",
+            "username": "LuDo",
+            "socketPath": "B:\\DL\\Projet 5\\Perrault-Ludovic-tester-Java\\resources\\Data.sql",
+            "askForPassword": true
+        }
+    ]
 }

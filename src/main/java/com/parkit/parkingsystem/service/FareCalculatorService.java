@@ -1,5 +1,8 @@
 package com.parkit.parkingsystem.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
@@ -56,6 +59,8 @@ public class FareCalculatorService {
             System.out.println("En tant qu’utilisateur régulier de notre parking, vous allez obtenir une remise de 5%");
         }
 
-        ticket.setPrice(price);
+        // Arrondir le prix à 2 décimales
+        BigDecimal roundedPrice = new BigDecimal(price).setScale(2, RoundingMode.HALF_UP);
+        ticket.setPrice(roundedPrice.doubleValue());
     }
 }

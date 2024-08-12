@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 <span class="nc" id="L17">        logger.info(&quot;Create DB connection&quot;);</span>
 <span class="nc" id="L18">        Class.forName(&quot;com.mysql.cj.jdbc.Driver&quot;);</span>
 <span class="nc" id="L19">        return DriverManager.getConnection(</span>
-<span class="nc" id="L20">                &quot;jdbc:mysql://localhost:3306/prod?serverTimezone=UTC&quot;,&quot;root&quot;,&quot;root&quot;);</span>
+                &quot;jdbc:mysql://localhost:3306/prod?serverTimezone=UTC&quot;,&quot;root&quot;,&quot;root&quot;);
     }
 
     public void closeConnection(Connection con){
@@ -27,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 <span class="nc" id="L27">                logger.info(&quot;Closing DB connection&quot;);</span>
 <span class="nc" id="L28">            } catch (SQLException e) {</span>
 <span class="nc" id="L29">                logger.error(&quot;Error while closing connection&quot;,e);</span>
-            }
+<span class="nc" id="L30">            }</span>
         }
 <span class="nc" id="L32">    }</span>
 
@@ -38,7 +38,7 @@ import org.apache.logging.log4j.Logger;
 <span class="nc" id="L38">                logger.info(&quot;Closing Prepared Statement&quot;);</span>
 <span class="nc" id="L39">            } catch (SQLException e) {</span>
 <span class="nc" id="L40">                logger.error(&quot;Error while closing prepared statement&quot;,e);</span>
-            }
+<span class="nc" id="L41">            }</span>
         }
 <span class="nc" id="L43">    }</span>
 
@@ -49,7 +49,7 @@ import org.apache.logging.log4j.Logger;
 <span class="nc" id="L49">                logger.info(&quot;Closing Result Set&quot;);</span>
 <span class="nc" id="L50">            } catch (SQLException e) {</span>
 <span class="nc" id="L51">                logger.error(&quot;Error while closing result set&quot;,e);</span>
-            }
+<span class="nc" id="L52">            }</span>
         }
 <span class="nc" id="L54">    }</span>
 }

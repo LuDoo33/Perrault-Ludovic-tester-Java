@@ -75,21 +75,26 @@ public class ParkingService {
         int parkingNumber = 0;
         ParkingSpot parkingSpot = null;
         try {
-            ParkingType parkingType = getVehicleType();
+            ParkingType parkingType = getVehicleType(); // Cette méthode peut lancer une IllegalArgumentException
             parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
-            System.out.println(parkingNumber);
+            
             if (parkingNumber > 0) {
                 parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);
             } else {
+                // Lancer une exception si le numéro de parking est invalide
                 throw new Exception("Erreur lors de la récupération du numéro de parking depuis la base de données. Les places de parking pourraient être complètes");
             }
         } catch (IllegalArgumentException ie) {
+            // Log l'erreur et relancer l'exception pour que le test puisse la capturer
             logger.error("Erreur lors de l'analyse de l'entrée de l'utilisateur pour le type de véhicule", ie);
+            throw ie; // Relancer l'exception pour que le test puisse vérifier le comportement
         } catch (Exception e) {
+            // Log l'erreur
             logger.error("Erreur lors de la récupération du prochain emplacement de parking disponible", e);
         }
         return parkingSpot;
     }
+    
 
     private ParkingType getVehicleType() {
         System.out.println("Veuillez sélectionner le type de véhicule dans le menu");
@@ -124,7 +129,7 @@ public class ParkingService {
             if (ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
-                parkingSpotDAO.updateParking(parkingSpot);
+                parkingSpotDAO.updateParking(parkingSpot); // Assurez-vous que cette ligne est atteinte
                 System.out.println("Veuillez payer le tarif de stationnement : " + ticket.getPrice());
                 System.out.println("Heure de sortie enregistrée pour le numéro de véhicule : " + ticket.getVehicleRegNumber() + " est : " + outTime);
             } else {

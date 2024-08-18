@@ -1,0 +1,4 @@
+# Created at 2024-08-18T23:57:25.384
+Boot Manifest-JAR contains absolute paths in classpath 'B:\DL\Projet 005\Perrault-Ludovic-tester-Java\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+

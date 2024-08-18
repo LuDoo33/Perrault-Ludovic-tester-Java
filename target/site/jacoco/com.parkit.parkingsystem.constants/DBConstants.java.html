@@ -5,27 +5,31 @@
     // Requête pour obtenir le prochain numéro de parking disponible
     public static final String GET_NEXT_PARKING_SPOT = 
         &quot;SELECT MIN(PARKING_NUMBER) FROM parking WHERE AVAILABLE = TRUE AND TYPE = ?&quot;;
-        
+
     // Requête pour mettre à jour la disponibilité d'un espace de parking
     public static final String UPDATE_PARKING_SPOT = 
         &quot;UPDATE parking SET available = ? WHERE PARKING_NUMBER = ?&quot;;
-        
+
     // Requête pour enregistrer un nouveau ticket
     public static final String SAVE_TICKET = 
         &quot;INSERT INTO ticket (PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) VALUES (?, ?, ?, ?, ?)&quot;;
-        
+
     // Requête pour mettre à jour le ticket (prix et heure de sortie)
     public static final String UPDATE_TICKET = 
         &quot;UPDATE ticket SET PRICE = ?, OUT_TIME = ? WHERE ID = ?&quot;;
-        
+
     // Requête pour récupérer le ticket le plus récent pour un véhicule
     public static final String GET_TICKET = 
         &quot;SELECT t.PARKING_NUMBER, t.ID, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE &quot; +
         &quot;FROM ticket t JOIN parking p ON p.parking_number = t.parking_number &quot; +
         &quot;WHERE t.VEHICLE_REG_NUMBER = ? ORDER BY t.IN_TIME DESC LIMIT 1&quot;;
-        
+
     // Requête pour compter le nombre de tickets pour un véhicule
     public static final String GET_TICKET_COUNT = 
         &quot;SELECT COUNT(*) FROM ticket WHERE VEHICLE_REG_NUMBER = ?&quot;;
+
+    // Requête pour obtenir un espace de parking par ID
+    public static final String GET_PARKING_SPOT = 
+        &quot;SELECT * FROM parking WHERE PARKING_NUMBER = ?&quot;;
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

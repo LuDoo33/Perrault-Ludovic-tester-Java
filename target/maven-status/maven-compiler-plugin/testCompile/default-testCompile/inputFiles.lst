@@ -1,5 +1,6 @@
-B:\DL\Projet 5\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\FareCalculatorServiceTest.java
-B:\DL\Projet 5\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\integration\config\DataBaseTestConfig.java
-B:\DL\Projet 5\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\integration\ParkingDataBaseIT.java
-B:\DL\Projet 5\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\integration\service\DataBasePrepareService.java
-B:\DL\Projet 5\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\ParkingServiceTest.java
+B:\DL\Projet 005\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\dao\TicketDAOTest.java
+B:\DL\Projet 005\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\FareCalculatorServiceTest.java
+B:\DL\Projet 005\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\integration\config\DataBaseTestConfig.java
+B:\DL\Projet 005\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\integration\ParkingDataBaseIT.java
+B:\DL\Projet 005\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\integration\service\DataBasePrepareService.java
+B:\DL\Projet 005\Perrault-Ludovic-tester-Java\src\test\java\com\parkit\parkingsystem\ParkingServiceTest.java

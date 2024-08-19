@@ -13,11 +13,26 @@ public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
+    private String url = "jdbc:mysql://localhost:3306/prod?serverTimezone=UTC";
+    private String user = "root";
+    private String password = "root";
+
+    public void setDatabaseUrl(String url) {
+        this.url = url;
+    }
+
+    public void setDatabaseUser(String user) {
+        this.user = user;
+    }
+
+    public void setDatabasePassword(String password) {
+        this.password = password;
+    }
+
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         logger.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/prod?serverTimezone=UTC","root","root");
+        return DriverManager.getConnection(url, user, password);
     }
 
     public void closeConnection(Connection con){

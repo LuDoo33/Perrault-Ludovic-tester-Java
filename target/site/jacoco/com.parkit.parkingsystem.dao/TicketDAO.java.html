@@ -73,10 +73,10 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L73">                ticket.setInTime(rs.getTimestamp(4));</span>
 <span class="fc" id="L74">                ticket.setOutTime(rs.getTimestamp(5));</span>
             }
-<span class="nc" id="L76">        } catch (ClassNotFoundException e) {</span>
+<span class="pc" id="L76">        } catch (ClassNotFoundException e) {</span>
 <span class="nc" id="L77">            logger.error(&quot;Class not found error while fetching ticket&quot;, e);</span>
-<span class="nc" id="L78">        } catch (SQLException e) {</span>
-<span class="nc" id="L79">            logger.error(&quot;SQL error while fetching ticket&quot;, e);</span>
+<span class="fc" id="L78">        } catch (SQLException e) {</span>
+<span class="fc" id="L79">            logger.error(&quot;SQL error while fetching ticket&quot;, e);</span>
 <span class="nc" id="L80">        } catch (Exception ex) {</span>
 <span class="nc" id="L81">            logger.error(&quot;Unexpected error while fetching ticket&quot;, ex);</span>
         } finally {
@@ -126,7 +126,7 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="pc bpc" id="L126" title="1 of 2 branches missed.">            if (rs.next()) {</span>
 <span class="fc" id="L127">                count = rs.getInt(1);</span>
             }
-<span class="nc" id="L129">        } catch (ClassNotFoundException e) {</span>
+<span class="pc" id="L129">        } catch (ClassNotFoundException e) {</span>
 <span class="nc" id="L130">            logger.error(&quot;Class not found error while counting tickets&quot;, e);</span>
 <span class="nc" id="L131">        } catch (SQLException e) {</span>
 <span class="nc" id="L132">            logger.error(&quot;SQL error while counting tickets&quot;, e);</span>

@@ -14,6 +14,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <mockito.version>4.8.1</mockito.version>
+        <spring.version>5.3.26</spring.version> <!-- Assurez-vous que cette version est compatible avec votre Spring -->
     </properties>
 
     <dependencies>
@@ -57,12 +58,26 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- Mockito Core -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Spring Test -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- H2 Database for in-memory tests -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.2.220</version>
             <scope>test</scope>
         </dependency>
 
@@ -121,6 +136,26 @@
                     <excludes>
                         <exclude>**/*IT.java</exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Failsafe Plugin for running integration tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>**/*IT.java</include>
+                    </includes>
                 </configuration>
             </plugin>
 

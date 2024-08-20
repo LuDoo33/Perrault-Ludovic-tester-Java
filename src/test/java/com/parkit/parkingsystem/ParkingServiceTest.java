@@ -85,12 +85,12 @@ public class ParkingServiceTest {
         // Arrange
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
         Ticket ticket = new Ticket();
-        ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000))); // 1 hour ago
+        ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000))); // 1 heure
         ticket.setParkingSpot(parkingSpot);
         ticket.setVehicleRegNumber("ABCDEF");
 
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
-        when(ticketDAO.getNbTicket(anyString())).thenReturn(2); // Indicate this is a regular user
+        when(ticketDAO.getNbTicket(anyString())).thenReturn(2); // Indicate si utilisateur régulier
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false); // Simuler une erreur d'update
 
         // Act
@@ -155,16 +155,15 @@ public class ParkingServiceTest {
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
         when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(true);
-        when(ticketDAO.getNbTicket(anyString())).thenReturn(1); // Regular user
+        when(ticketDAO.getNbTicket(anyString())).thenReturn(1); // Utilisateur regulier
 
         // Act
         parkingService.processIncomingVehicle();
 
         // Assert
-        verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class)); // Verify parking spot update
-        verify(ticketDAO, times(1)).saveTicket(any(Ticket.class)); // Verify ticket save
-        // Check that messages are printed (using System.out.println) if needed
-        // or check logs if you capture logs in your tests
+        verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class)); // Verifier parking spot 
+        verify(ticketDAO, times(1)).saveTicket(any(Ticket.class)); // Verifier ticket
+        
     }
 
     /* LuDo Parking Service >90% */

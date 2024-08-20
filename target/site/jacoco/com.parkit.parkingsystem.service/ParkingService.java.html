@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ParkingService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.service</a> &gt; <span class="el_source">ParkingService.java</span></div><h1>ParkingService.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.service;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ParkingService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.service</a> &gt; <span class="el_source">ParkingService.java</span></div><h1>ParkingService.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.service;
 
 import java.util.Date;
 
@@ -31,8 +31,8 @@ public class ParkingService {
 
     // Constructeur sans FareCalculatorService pour les tests
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
-<span class="fc" id="L34">        this(inputReaderUtil, parkingSpotDAO, ticketDAO, new FareCalculatorService());</span>
-<span class="fc" id="L35">    }</span>
+<span class="nc" id="L34">        this(inputReaderUtil, parkingSpotDAO, ticketDAO, new FareCalculatorService());</span>
+<span class="nc" id="L35">    }</span>
 
     public void processIncomingVehicle() {
         try {
@@ -61,9 +61,9 @@ public class ParkingService {
 <span class="fc" id="L61">                System.out.println(&quot;Veuillez garer votre véhicule au numéro d'emplacement : &quot; + parkingSpot.getId());</span>
 <span class="fc" id="L62">                System.out.println(&quot;Heure d'arrivée enregistrée pour le numéro de véhicule : &quot; + vehicleRegNumber + &quot; est : &quot; + inTime);</span>
             }
-<span class="fc" id="L64">        } catch (Exception e) {</span>
-<span class="fc" id="L65">            logger.error(&quot;Impossible de traiter le véhicule entrant&quot;, e);</span>
-<span class="fc" id="L66">        }</span>
+<span class="pc" id="L64">        } catch (Exception e) {</span>
+<span class="nc" id="L65">            logger.error(&quot;Impossible de traiter le véhicule entrant&quot;, e);</span>
+        }
 <span class="fc" id="L67">    }</span>
 
     private String getVehicleRegNumber() throws Exception {
@@ -80,7 +80,7 @@ public class ParkingService {
             
 <span class="fc bfc" id="L81" title="All 2 branches covered.">            if (parkingNumber &gt; 0) {</span>
 <span class="fc" id="L82">                parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);</span>
-            } else {
+<span class="fc" id="L83">            } else {</span>
                 // Lancer une exception si le numéro de parking est invalide
 <span class="fc" id="L85">                throw new Exception(&quot;Erreur lors de la récupération du numéro de parking depuis la base de données. Les places de parking pourraient être complètes&quot;);</span>
             }
@@ -91,7 +91,7 @@ public class ParkingService {
 <span class="fc" id="L91">        } catch (Exception e) {</span>
             // Log l'erreur
 <span class="fc" id="L93">            logger.error(&quot;Erreur lors de la récupération du prochain emplacement de parking disponible&quot;, e);</span>
-<span class="fc" id="L94">        }</span>
+        }
 <span class="fc" id="L95">        return parkingSpot;</span>
     }
     
@@ -121,7 +121,7 @@ public class ParkingService {
 
             // Vérifier si le véhicule est un utilisateur régulier
 <span class="fc" id="L123">            int numTickets = ticketDAO.getNbTicket(vehicleRegNumber);</span>
-<span class="fc bfc" id="L124" title="All 2 branches covered.">            boolean discount = numTickets &gt; 1;</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">            boolean discount = numTickets &gt; 1;</span>
 
             // Calculer le tarif avec ou sans réduction en fonction du statut de l'utilisateur
 <span class="fc" id="L127">            fareCalculatorService.calculateFare(ticket, discount);</span>
@@ -137,7 +137,7 @@ public class ParkingService {
             }
 <span class="fc" id="L138">        } catch (Exception e) {</span>
 <span class="fc" id="L139">            logger.error(&quot;Impossible de traiter le véhicule sortant&quot;, e);</span>
-<span class="fc" id="L140">        }</span>
+        }
 <span class="fc" id="L141">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

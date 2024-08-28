@@ -40,11 +40,11 @@ public class TicketDAO {
             int result = ps.executeUpdate();
             return (result > 0);
         } catch (ClassNotFoundException e) {
-            logger.error("Class not found error while saving ticket", e);
+            logger.error("Erreur de classe non trouvée lors de l'enregistrement du ticket", e);
         } catch (SQLException e) {
-            logger.error("SQL error while saving ticket", e);
+            logger.error("Erreur SQL lors de l'enregistrement du ticket", e);
         } catch (Exception ex) {
-            logger.error("Unexpected error while saving ticket", ex);
+            logger.error("Erreur inattendue lors de l'enregistrement du ticket", ex);
         } finally {
             // Fermeture des ressources
             dataBaseConfig.closePreparedStatement(ps);
@@ -74,11 +74,11 @@ public class TicketDAO {
                 ticket.setOutTime(rs.getTimestamp(5));
             }
         } catch (ClassNotFoundException e) {
-            logger.error("Class not found error while fetching ticket", e);
+            logger.error("Erreur de classe non trouvée lors de la récupération du ticket", e);
         } catch (SQLException e) {
-            logger.error("SQL error while fetching ticket", e);
+            logger.error("Erreur SQL lors de la récupération du ticket", e);
         } catch (Exception ex) {
-            logger.error("Unexpected error while fetching ticket", ex);
+            logger.error("Erreur inattendue lors de la récupération du ticket", ex);
         } finally {
             // Fermeture des ressources
             dataBaseConfig.closeResultSet(rs);
@@ -100,11 +100,11 @@ public class TicketDAO {
             int result = ps.executeUpdate();
             return (result > 0);
         } catch (ClassNotFoundException e) {
-            logger.error("Class not found error while updating ticket", e);
+            logger.error("Erreur de classe non trouvée lors de la mise à jour du ticket", e);
         } catch (SQLException e) {
-            logger.error("SQL error while updating ticket", e);
+            logger.error("Erreur SQL lors de la mise à jour du ticket", e);
         } catch (Exception ex) {
-            logger.error("Unexpected error while updating ticket", ex);
+            logger.error("Erreur inattendue lors de la mise à jour du ticket", ex);
         } finally {
             // Fermeture des ressources
             dataBaseConfig.closePreparedStatement(ps);
@@ -127,11 +127,11 @@ public class TicketDAO {
                 count = rs.getInt(1);
             }
         } catch (ClassNotFoundException e) {
-            logger.error("Class not found error while counting tickets", e);
+            logger.error("Erreur de classe non trouvée lors du comptage des tickets", e);
         } catch (SQLException e) {
-            logger.error("SQL error while counting tickets", e);
+            logger.error("Erreur SQL lors du comptage des tickets", e);
         } catch (Exception ex) {
-            logger.error("Unexpected error while counting tickets", ex);
+            logger.error("Erreur inattendue lors du comptage des tickets", ex);
         } finally {
             // Fermeture des ressources
             dataBaseConfig.closeResultSet(rs);

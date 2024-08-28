@@ -159,6 +159,7 @@ public class FareCalculatorServiceTest {
 
    
 /* LuDo Client régulier = 5% de remise */
+//#region Etape 3
 @Test
     public void calculateFareCarWithDiscount() {
         // Créer un objet Date pour l'heure actuelle

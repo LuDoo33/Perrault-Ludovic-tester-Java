@@ -58,7 +58,7 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleTest() throws Exception {
-        // Arrange
+        // Préparer
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
         Ticket ticket = new Ticket();
         ticket.setParkingSpot(parkingSpot);
@@ -70,10 +70,10 @@ public class ParkingServiceTest {
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
         when(ticketDAO.getNbTicket(anyString())).thenReturn(2); // Utilisateur régulier
 
-        // Act
+        // Agir
         parkingService.processExitingVehicle();
 
-        // Assert
+        // Vérifier
         verify(ticketDAO, times(1)).updateTicket(any(Ticket.class));
         verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
         verify(fareCalculatorService, times(1)).calculateFare(any(Ticket.class), eq(true));
@@ -82,7 +82,7 @@ public class ParkingServiceTest {
     /* LuDo - Etape 5 - Parking service test >90% */
     @Test
     public void processExitingVehicleTestUnableUpdate() throws Exception {
-        // Arrange
+        // Préparer
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
         Ticket ticket = new Ticket();
         ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000))); // 1 heure
@@ -93,23 +93,23 @@ public class ParkingServiceTest {
         when(ticketDAO.getNbTicket(anyString())).thenReturn(2); // Indicate si utilisateur régulier
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false); // Simuler une erreur d'update
 
-        // Act
+        // Agir
         parkingService.processExitingVehicle();
 
-        // Assert
+        // vérifier
         verify(parkingSpotDAO, never()).updateParking(any(ParkingSpot.class)); // Vérifier que updateParking n'est pas appelé
         verify(ticketDAO, times(1)).updateTicket(any(Ticket.class)); // Vérifier que updateTicket est bien appelé
     }
 
     @Test
     public void testGetNextParkingNumberIfAvailable() throws Exception {
-        // Arrange
+        // Préparer
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
 
-        // Act
+        // Agir
         ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 
-        // Assert
+        // Vérifier
         assertNotNull(parkingSpot);
         assertEquals(1, parkingSpot.getId());
         assertEquals(ParkingType.CAR, parkingSpot.getParkingType());
@@ -119,32 +119,32 @@ public class ParkingServiceTest {
 
     @Test
     public void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
-        // Arrange
+        // Préparer
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0); // Simule un numéro de parking invalide ou indisponible
 
-        // Act
+        // Agir
         ParkingSpot result = parkingService.getNextParkingNumberIfAvailable(); // Utilise le type de véhicule par défaut ou valide
 
-        // Assert
+        // Vérifier
         assertNull(result); // Vérifie que le résultat est nul, indiquant qu'aucun espace de stationnement n'est disponible
     }
 
     @Test
     public void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
-        // Arrange
+        // Préparer
         // Simule que aucune place n'est disponible
         when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(0); 
 
-        // Act
+        // Agir
         ParkingSpot result = parkingService.getNextParkingNumberIfAvailable(); // Pas d'argument, car la méthode ne prend pas de paramètre
 
-        // Assert
+        // Vérifier
         assertNull(result); // Vérifie que le résultat est nul, car aucune place n'est disponible
     }
 
     @Test
     public void testProcessIncomingVehicle() throws Exception {
-        // Arrange
+        // Préparer
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
         Ticket ticket = new Ticket();
         ticket.setParkingSpot(parkingSpot);
@@ -157,10 +157,10 @@ public class ParkingServiceTest {
         when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(true);
         when(ticketDAO.getNbTicket(anyString())).thenReturn(1); // Utilisateur regulier
 
-        // Act
+        // Agir
         parkingService.processIncomingVehicle();
 
-        // Assert
+        // Vérifier
         verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class)); // Verifier parking spot 
         verify(ticketDAO, times(1)).saveTicket(any(Ticket.class)); // Verifier ticket
         
@@ -169,51 +169,51 @@ public class ParkingServiceTest {
     /* LuDo Parking Service >90% */
     @Test
     public void testProcessIncomingVehicleWhenNoAvailableParkingSpot() throws Exception {
-        // Arrange
+        // Préparer
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0); // Simule aucune place disponible
 
-        // Act
+        // Agir
         parkingService.processIncomingVehicle();
 
-        // Assert
+        // Vérifier
         verify(parkingSpotDAO, never()).updateParking(any(ParkingSpot.class));
         verify(ticketDAO, never()).saveTicket(any(Ticket.class));
     }
     @Test
 public void testGetNextParkingNumberIfAvailableWithInvalidType() {
-    // Arrange
+    // Préparer
     when(inputReaderUtil.readSelection()).thenReturn(3); // Valeur invalide
     
-    // Act & Assert
+    // // Agir et vérifier
     IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
         parkingService.getNextParkingNumberIfAvailable();
     });
 
-    // Optionally check the message of the thrown exception
+    // Vérifier éventuellement le message de l'exception levée
     assertEquals("L'entrée saisie est invalide", thrown.getMessage());
 }
 @Test
 public void testProcessExitingVehicleWhenTicketNotFound() throws Exception {
-    // Arrange
+    // Préparer
     when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABC123");
     when(ticketDAO.getTicket("ABC123")).thenReturn(null);
 
-    // Act
+    // Agir
     parkingService.processExitingVehicle();
 
-    // Assert
+    // Vérifier
     verify(parkingSpotDAO, never()).updateParking(any(ParkingSpot.class));
     verify(ticketDAO, never()).updateTicket(any(Ticket.class));
 }
 @Test
 public void processIncomingVehicleTestWithNoAvailableParkingSpot() {
-    // Arrange
+    // Préparer
     when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0); // Simule aucune place disponible
 
-    // Act
+    // Agir
     parkingService.processIncomingVehicle();
 
-    // Assert
+    // Vérifier
     verify(parkingSpotDAO, never()).updateParking(any(ParkingSpot.class));
     verify(ticketDAO, never()).saveTicket(any(Ticket.class));
 }

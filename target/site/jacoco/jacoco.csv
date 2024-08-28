@@ -9,6 +9,6 @@ parking-system,com.parkit.parkingsystem.constants,Fare,3,0,0,0,1,0,1,0,1,0
 parking-system,com.parkit.parkingsystem.constants,ParkingType,0,24,0,0,0,3,0,1,0,1
 parking-system,com.parkit.parkingsystem.constants,DBConstants,3,0,0,0,1,0,1,0,1,0
 parking-system,com.parkit.parkingsystem.util,InputReaderUtil,45,9,4,0,15,2,5,1,3,1
-parking-system,com.parkit.parkingsystem.dao,TicketDAO,67,261,5,5,22,68,5,7,0,7
+parking-system,com.parkit.parkingsystem.dao,TicketDAO,72,256,5,5,24,66,5,7,0,7
 parking-system,com.parkit.parkingsystem.dao,ParkingSpotDAO,14,197,0,8,6,51,0,10,0,6
 parking-system,com.parkit.parkingsystem.config,DataBaseConfig,68,16,6,0,27,5,10,2,7,2

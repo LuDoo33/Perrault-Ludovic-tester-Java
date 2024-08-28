@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TicketDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.dao</a> &gt; <span class="el_source">TicketDAO.java</span></div><h1>TicketDAO.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.dao;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TicketDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.dao</a> &gt; <span class="el_source">TicketDAO.java</span></div><h1>TicketDAO.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,11 +40,11 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L40">            int result = ps.executeUpdate();</span>
 <span class="pc bpc" id="L41" title="1 of 2 branches missed.">            return (result &gt; 0);</span>
 <span class="nc" id="L42">        } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L43">            logger.error(&quot;Class not found error while saving ticket&quot;, e);</span>
+<span class="nc" id="L43">            logger.error(&quot;Erreur de classe non trouvée lors de l'enregistrement du ticket&quot;, e);</span>
 <span class="nc" id="L44">        } catch (SQLException e) {</span>
-<span class="nc" id="L45">            logger.error(&quot;SQL error while saving ticket&quot;, e);</span>
+<span class="nc" id="L45">            logger.error(&quot;Erreur SQL lors de l'enregistrement du ticket&quot;, e);</span>
 <span class="nc" id="L46">        } catch (Exception ex) {</span>
-<span class="nc" id="L47">            logger.error(&quot;Unexpected error while saving ticket&quot;, ex);</span>
+<span class="nc" id="L47">            logger.error(&quot;Erreur inattendue lors de l'enregistrement du ticket&quot;, ex);</span>
         } finally {
             // Fermeture des ressources
 <span class="fc" id="L50">            dataBaseConfig.closePreparedStatement(ps);</span>
@@ -74,11 +74,11 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L74">                ticket.setOutTime(rs.getTimestamp(5));</span>
             }
 <span class="pc" id="L76">        } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L77">            logger.error(&quot;Class not found error while fetching ticket&quot;, e);</span>
-<span class="fc" id="L78">        } catch (SQLException e) {</span>
-<span class="fc" id="L79">            logger.error(&quot;SQL error while fetching ticket&quot;, e);</span>
+<span class="nc" id="L77">            logger.error(&quot;Erreur de classe non trouvée lors de la récupération du ticket&quot;, e);</span>
+<span class="nc" id="L78">        } catch (SQLException e) {</span>
+<span class="nc" id="L79">            logger.error(&quot;Erreur SQL lors de la récupération du ticket&quot;, e);</span>
 <span class="nc" id="L80">        } catch (Exception ex) {</span>
-<span class="nc" id="L81">            logger.error(&quot;Unexpected error while fetching ticket&quot;, ex);</span>
+<span class="nc" id="L81">            logger.error(&quot;Erreur inattendue lors de la récupération du ticket&quot;, ex);</span>
         } finally {
             // Fermeture des ressources
 <span class="fc" id="L84">            dataBaseConfig.closeResultSet(rs);</span>
@@ -100,11 +100,11 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L100">            int result = ps.executeUpdate();</span>
 <span class="pc bpc" id="L101" title="1 of 2 branches missed.">            return (result &gt; 0);</span>
 <span class="nc" id="L102">        } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L103">            logger.error(&quot;Class not found error while updating ticket&quot;, e);</span>
+<span class="nc" id="L103">            logger.error(&quot;Erreur de classe non trouvée lors de la mise à jour du ticket&quot;, e);</span>
 <span class="nc" id="L104">        } catch (SQLException e) {</span>
-<span class="nc" id="L105">            logger.error(&quot;SQL error while updating ticket&quot;, e);</span>
+<span class="nc" id="L105">            logger.error(&quot;Erreur SQL lors de la mise à jour du ticket&quot;, e);</span>
 <span class="nc" id="L106">        } catch (Exception ex) {</span>
-<span class="nc" id="L107">            logger.error(&quot;Unexpected error while updating ticket&quot;, ex);</span>
+<span class="nc" id="L107">            logger.error(&quot;Erreur inattendue lors de la mise à jour du ticket&quot;, ex);</span>
         } finally {
             // Fermeture des ressources
 <span class="fc" id="L110">            dataBaseConfig.closePreparedStatement(ps);</span>
@@ -127,11 +127,11 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L127">                count = rs.getInt(1);</span>
             }
 <span class="pc" id="L129">        } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L130">            logger.error(&quot;Class not found error while counting tickets&quot;, e);</span>
+<span class="nc" id="L130">            logger.error(&quot;Erreur de classe non trouvée lors du comptage des tickets&quot;, e);</span>
 <span class="nc" id="L131">        } catch (SQLException e) {</span>
-<span class="nc" id="L132">            logger.error(&quot;SQL error while counting tickets&quot;, e);</span>
+<span class="nc" id="L132">            logger.error(&quot;Erreur SQL lors du comptage des tickets&quot;, e);</span>
 <span class="nc" id="L133">        } catch (Exception ex) {</span>
-<span class="nc" id="L134">            logger.error(&quot;Unexpected error while counting tickets&quot;, ex);</span>
+<span class="nc" id="L134">            logger.error(&quot;Erreur inattendue lors du comptage des tickets&quot;, ex);</span>
         } finally {
             // Fermeture des ressources
 <span class="fc" id="L137">            dataBaseConfig.closeResultSet(rs);</span>

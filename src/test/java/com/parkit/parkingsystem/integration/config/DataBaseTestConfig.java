@@ -1,17 +1,22 @@
 package com.parkit.parkingsystem.integration.config;
 
-import com.parkit.parkingsystem.config.DataBaseConfig;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import com.parkit.parkingsystem.config.DataBaseConfig;
 
 public class DataBaseTestConfig extends DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
 
     public Connection getConnection() throws ClassNotFoundException, SQLException {
-        logger.info("Create DB connection");
+        logger.info("Création de la base de donnée");
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/test","root","rootroot");
@@ -21,9 +26,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
         if(con!=null){
             try {
                 con.close();
-                logger.info("Closing DB connection");
+                logger.info("Fermeture de la connexion à la base de données");
             } catch (SQLException e) {
-                logger.error("Error while closing connection",e);
+                logger.error("Erreur lors de la fermeture de la connexion",e);
             }
         }
     }
@@ -32,9 +37,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
         if(ps!=null){
             try {
                 ps.close();
-                logger.info("Closing Prepared Statement");
+                logger.info("Fermeture Prepared Statement");
             } catch (SQLException e) {
-                logger.error("Error while closing prepared statement",e);
+                logger.error("Erreur fermeture prepared statement",e);
             }
         }
     }
@@ -43,9 +48,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
         if(rs!=null){
             try {
                 rs.close();
-                logger.info("Closing Result Set");
+                logger.info("Fermeture Result Set");
             } catch (SQLException e) {
-                logger.error("Error while closing result set",e);
+                logger.error("Erreur lors de la fermeture result set",e);
             }
         }
     }
